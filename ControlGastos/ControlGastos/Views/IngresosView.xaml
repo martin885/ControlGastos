@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ControlGastos.Views.IngresosView"
+             BindingContext="{Binding Main,Source={StaticResource Key=Locator}}">
+    <ContentPage.Content>
+        <StackLayout BindingContext="{Binding Ingresos}">
+            <StackLayout Margin="10" >
+                <Picker />
+                <Entry Placeholder="Origen del Ingreso"/>
+                <Entry Placeholder="Monto en pesos"/>
+           </StackLayout>
+            <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
+                <Image Source="Batman">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding AgregarIngresoCommand}"/>
+                    </Image.GestureRecognizers>
+                </Image>
+                <Image Source="Batman">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding QuitarIngresoCommand}"/>
+                    </Image.GestureRecognizers>
+                </Image>
+            </StackLayout>
+            <StackLayout Margin="10" 
+                         VerticalOptions="CenterAndExpand"
+                         HorizontalOptions="Center">
+                <StackLayout Orientation="Horizontal">
+                <Label Text="Ingresos Brutos de"/>
+                <Label Text="{Binding Mes}"/>
+                </StackLayout>
+                <Label Text="{Binding SumaIngreso}"/>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

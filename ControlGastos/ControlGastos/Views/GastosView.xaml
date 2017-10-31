@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ControlGastos.Views.GastosView"
+              BindingContext="{Binding Main,Source={StaticResource Key=Locator}}">
+    <ContentPage.Content>
+        <StackLayout BindingContext="{Binding Gastos}">
+            <Label Text="Página de Gastos" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
