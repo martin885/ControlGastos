@@ -8,13 +8,13 @@ using Xamarin.Forms;
 
 namespace ControlGastos.Behaviors
 {
-   public class DateSelected:Behavior<DatePicker>
+  public class SelectedItemPicker:Behavior<Picker>
     {
         public static readonly BindableProperty
          CommandProperty = BindableProperty.Create(
              propertyName: "Command",
              returnType: typeof(ICommand),
-             declaringType: typeof(DateSelected));
+             declaringType: typeof(SelectedItemPicker));
 
         public ICommand Command
         {
@@ -22,17 +22,17 @@ namespace ControlGastos.Behaviors
             set { SetValue(CommandProperty, value); }
         }
 
-        protected override void OnAttachedTo(DatePicker bindable)
+        protected override void OnAttachedTo(Picker bindable)
         {
             base.OnAttachedTo(bindable);
-            bindable.DateSelected += Bindable_Completed;
+            bindable.SelectedIndexChanged += Bindable_Completed;
             bindable.BindingContextChanged += Bindable_BindingContextChanged;
         }
 
 
         private void Bindable_BindingContextChanged(object sender, EventArgs e)
         {
-            var ey = sender as DatePicker;
+            var ey = sender as Picker;
             BindingContext = ey.BindingContext;
         }
 
@@ -43,10 +43,10 @@ namespace ControlGastos.Behaviors
             //var cd = ey.BindingContext as ProdSubDefinirViewModel;
             //cd.Complete.Execute(null);
         }
-        protected override void OnDetachingFrom(DatePicker bindable)
+        protected override void OnDetachingFrom(Picker bindable)
         {
             base.OnDetachingFrom(bindable);
-            bindable.DateSelected -= Bindable_Completed;
+            bindable.SelectedIndexChanged -= Bindable_Completed;
             bindable.BindingContextChanged -= Bindable_BindingContextChanged;
         }
     }

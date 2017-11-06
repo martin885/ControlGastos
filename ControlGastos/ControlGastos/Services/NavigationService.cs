@@ -17,6 +17,9 @@ namespace ControlGastos.Services
                 case "IngresosView":
                     await Application.Current.MainPage.Navigation.PushAsync(new IngresosView());
                     break;
+                case "BalanceView":
+                    await Application.Current.MainPage.Navigation.PushAsync(new BalanceView());
+                    break;
                 default:
                     break;
             }

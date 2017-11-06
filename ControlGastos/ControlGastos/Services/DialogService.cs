@@ -10,6 +10,13 @@ namespace ControlGastos.Services
             await Application.Current.MainPage.DisplayAlert(
                 Title, 
                 Message, 
+                "Acceptar");
+        }
+        public async Task ShowMessageCompleto(string Title, string Message)
+        {
+            await Application.Current.MainPage.DisplayAlert(
+                Title,
+                Message,
                 "Acceptar",
                 "Cancelar");
         }

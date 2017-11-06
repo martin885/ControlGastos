@@ -2,10 +2,68 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ControlGastos.Views.GastosView"
-              BindingContext="{Binding Main,Source={StaticResource Key=Locator}}">
+              BindingContext="{Binding Main,Source={StaticResource Key=Locator}}"
+             xmlns:local="clr-namespace:ControlGastos.Behaviors">
     <ContentPage.Content>
         <StackLayout BindingContext="{Binding Gastos}">
-            <Label Text="Página de Gastos" />
+            <StackLayout Margin="10" >
+                <Picker SelectedItem="{Binding SelectedItem,Mode=TwoWay}"
+                        ItemsSource="{Binding PickerCategorias}"
+                        Title="Seleccionar Categoría">
+                    <Picker.Behaviors>
+                        <local:SelectedItemPicker Command="{Binding SelectedItemChangedCommand}"/>
+                    </Picker.Behaviors>
+                </Picker>
+                <DatePicker Format="D"
+                            Date="{Binding Date}">
+                    <DatePicker.Behaviors>
+                        <local:DateSelected Command="{Binding DateSelectedCommand}"/>
+                    </DatePicker.Behaviors>
+                </DatePicker>
+                <Entry Placeholder="Origen del Ingreso" 
+                       Text="{Binding OrigenGasto,Mode=TwoWay}"/>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal"
+                         Margin="10">
+                <Entry Placeholder="Monto en pesos"
+                       HorizontalOptions="FillAndExpand"
+                       VerticalOptions="Center"
+                       Text="{Binding MontoGasto,Mode=TwoWay}"/>
+                <Image Source="Batman"
+                       HorizontalOptions="End"
+                       VerticalOptions="Center">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding AgregarGastoCommand}"/>
+                    </Image.GestureRecognizers>
+                </Image>
+            </StackLayout>
+            <StackLayout Margin="10" 
+                         VerticalOptions="CenterAndExpand"
+                         HorizontalOptions="Center">
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Gastos de"
+                       VerticalOptions="Center"/>
+                    <Label Text="{Binding Categoria}"
+                       VerticalOptions="Center"/>
+                    <Label Text="{Binding SumaGastoCategoria}" 
+                       FontSize="Large" 
+                       FontAttributes="Bold"
+                       VerticalOptions="Center"
+                       TextColor="Red"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Gastos de"
+                       VerticalOptions="Center"/>
+                    <Label Text="{Binding Mes}"
+                       VerticalOptions="Center"/>
+                    <Label Text="{Binding SumaGasto}" 
+                       FontSize="Large" 
+                       FontAttributes="Bold"
+                       VerticalOptions="Center"
+                       TextColor="Red"/>
+                </StackLayout>
+
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

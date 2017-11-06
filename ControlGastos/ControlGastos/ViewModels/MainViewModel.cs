@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace ControlGastos.ViewModels
 {
@@ -12,6 +13,7 @@ namespace ControlGastos.ViewModels
         public PaginaInicioViewModel PaginaInicio { get; set; }
         public GastosViewModel Gastos { get; set; }
         public IngresosViewModel Ingresos { get; set; }
+        public BalanceViewModel Balance { get; set; }
         #endregion
 
         #region Constructor

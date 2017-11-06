@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ControlGastos.Views.BalanceView"
+             BindingContext="{Binding Main,Source={StaticResource Key=Locator}}"
+             xmlns:local="clr-namespace:ControlGastos.Behaviors">
+    <ContentPage.Content>
+        <StackLayout BindingContext="{Binding Balance}">
+            <StackLayout Orientation="Horizontal"
+                         Margin="10">
+                <Picker Title="Mes" 
+                    ItemsSource="{Binding Meses}"
+                    HorizontalOptions="FillAndExpand"
+                        SelectedItem="{Binding SelectedItemMes,Mode=TwoWay}">
+                    <Picker.Behaviors>
+                        <local:SelectedItemPicker  Command="{Binding SelectedItemMesesCommand}"/>
+                    </Picker.Behaviors>
+                </Picker>
+                <Picker Title="  Año"
+                        ItemsSource="{Binding Años}"
+                        HorizontalOptions="End"
+                        SelectedItem="{Binding SelectedItemAño,Mode=TwoWay}">
+                    <Picker.Behaviors>
+                        <local:SelectedItemPicker Command="{Binding SelectedItemAñosCommand}"/>
+                    </Picker.Behaviors>
+                </Picker>
+            </StackLayout>
+            <ListView ItemsSource="{Binding CollectionBalance}"
+                      HasUnevenRows="True"
+                      SeparatorColor="Black">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Margin="10">
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="Fecha: "
+                                           VerticalOptions="Center"/>
+                                    <Label Text="{Binding Fecha}"
+                                           FontSize="Medium"
+                                           VerticalOptions="Center"/>
+                                </StackLayout>
+                                <Label Text="{Binding GastoIngreso}"
+                                       VerticalOptions="Center"/>
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="Origen: "
+                                           VerticalOptions="Center"/>
+                                    <Label Text="{Binding Origen}"
+                                           VerticalOptions="Center"/>
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="Monto: "
+                                           VerticalOptions="Center"/>
+                                <Label Text="{Binding Cantidad}" 
+                                       TextColor="{Binding ColorGastoIngreso}"
+                                       FontSize="Medium"
+                                       FontAttributes="Bold"
+                                       VerticalOptions="Center"/>
+                                </StackLayout>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+
+            </ListView>
+            <StackLayout Orientation="Horizontal"
+                         Margin="20"
+                         HorizontalOptions="StartAndExpand">
+                <Label Text="Balance: "
+                       VerticalOptions="Center"/>
+            <Label Text="{Binding BalanceTotal}"
+                   FontSize="Large"
+                   FontAttributes="Bold"
+                   TextColor="{Binding ColorBalance}"
+                   VerticalOptions="Center"/>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

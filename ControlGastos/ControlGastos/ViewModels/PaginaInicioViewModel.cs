@@ -44,6 +44,20 @@ namespace ControlGastos.ViewModels
             await navigationService.Navigate("IngresosView");
         }
 
+        public ICommand BalanceCommand
+        {
+            get
+            {
+                return new RelayCommand(Balance);
+            }
+        }
+        private async void Balance()
+        {
+            var mainViewModel = MainViewModel.GetInstance();
+            mainViewModel.Balance = new BalanceViewModel();
+            await navigationService.Navigate("BalanceView");
+        }
+
         #endregion
         #region Constructor
         public PaginaInicioViewModel()
