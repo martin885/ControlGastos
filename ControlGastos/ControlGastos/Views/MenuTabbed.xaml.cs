@@ -11,16 +11,15 @@ using Xamarin.Forms.Xaml;
 namespace ControlGastos.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class IngresosView : ContentPage
+    public partial class MenuTabbed : TabbedPage
     {
-        public IngresosView()
+        public MenuTabbed()
         {
             InitializeComponent();
+          
         }
-        protected override void OnAppearing()
-        {
-            var mainViewModel = MainViewModel.GetInstance();
-            mainViewModel.Ingresos = new IngresosViewModel();
-        }
+
+
+        
     }
 }

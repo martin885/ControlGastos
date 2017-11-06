@@ -143,7 +143,6 @@ namespace ControlGastos.ViewModels
         #region Métodos
         private void Cargas()
         {
-          
             ListaBalance = new List<Balance>();
            
             //Item Source del Picker de Meses

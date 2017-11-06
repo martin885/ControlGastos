@@ -69,6 +69,9 @@
     <Compile Include="Views\IngresosView.xaml.cs">
       <DependentUpon>IngresosView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MenuTabbed.xaml.cs">
+      <DependentUpon>MenuTabbed.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\PaginaInicio.xaml.cs">
       <DependentUpon>PaginaInicio.xaml</DependentUpon>
     </Compile>
@@ -134,6 +137,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\BalanceView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\MenuTabbed.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

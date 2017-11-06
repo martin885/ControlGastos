@@ -1,4 +1,5 @@
 ﻿
+using ControlGastos.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -11,5 +12,12 @@ namespace ControlGastos.Views
         {
             InitializeComponent();
         }
+        protected override void OnAppearing()
+        {
+            var mainViewModel = MainViewModel.GetInstance();
+            mainViewModel.Gastos = new GastosViewModel();
+            InitializeComponent();
+        }
+
     }
 }

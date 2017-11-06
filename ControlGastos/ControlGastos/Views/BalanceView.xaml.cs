@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ControlGastos.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,5 +17,13 @@ namespace ControlGastos.Views
 		{
 			InitializeComponent ();
 		}
-	}
+
+
+        protected override void OnAppearing()
+        {
+            var mainViewModel = MainViewModel.GetInstance();
+            mainViewModel.Balance = new BalanceViewModel();
+            InitializeComponent();  
+        }
+    }
 }
