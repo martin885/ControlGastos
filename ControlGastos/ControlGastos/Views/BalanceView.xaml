@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ControlGastos.Views.BalanceView"
              BindingContext="{Binding Main,Source={StaticResource Key=Locator}}"
-             xmlns:local="clr-namespace:ControlGastos.Behaviors">
+             xmlns:local="clr-namespace:ControlGastos.Behaviors"
+             NavigationPage.HasNavigationBar="False">
     <ContentPage.Content>
         <StackLayout BindingContext="{Binding Balance}">
             <StackLayout Orientation="Horizontal"
@@ -31,6 +32,11 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
+                            <ViewCell.ContextActions>
+                                
+                                <MenuItem Text="Edit" Command="{Binding EditCommand}" Clicked="MenuItem_Clicked"/> <!--La lógica(command ejecutado en el modelo) y la navegación(en code behind) van por separado-->
+                                <MenuItem Text="Delete" Command="{Binding DeleteCommand}" IsDestructive="True"/><!--La lógica(command ejecutado en el modelo) y la navegación(en code behind) van por separado-->
+                            </ViewCell.ContextActions>
                             <StackLayout Margin="10">
                                 <StackLayout Orientation="Horizontal">
                                     <Label Text="Fecha: "
@@ -50,7 +56,7 @@
                                 <StackLayout Orientation="Horizontal">
                                     <Label Text="Monto: "
                                            VerticalOptions="Center"/>
-                                <Label Text="{Binding Cantidad}" 
+                                    <Label Text="{Binding Cantidad}" 
                                        TextColor="{Binding ColorGastoIngreso}"
                                        FontSize="Medium"
                                        FontAttributes="Bold"
@@ -59,8 +65,7 @@
                             </StackLayout>
                         </ViewCell>
                     </DataTemplate>
-                </ListView.ItemTemplate>
-
+                    </ListView.ItemTemplate>
             </ListView>
             <StackLayout Orientation="Horizontal"
                          Margin="20"
@@ -72,6 +77,7 @@
                    FontAttributes="Bold"
                    TextColor="{Binding ColorBalance}"
                    VerticalOptions="Center"/>
+               
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

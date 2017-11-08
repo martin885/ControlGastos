@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ControlGastos.Views.EditView"
+              BindingContext="{Binding Main,Source={StaticResource Key=Locator}}"
+             NavigationPage.HasNavigationBar="False">
+    <ContentPage.Content>
+        <StackLayout BindingContext="{Binding Edit}">
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Dia: "
+                       VerticalOptions="Center"/>
+                <Entry Text="{Binding Dia,Mode=TwoWay}"
+                       FontSize="Medium"
+                       VerticalOptions="Center"
+                       HorizontalOptions="FillAndExpand"/>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Mes: "
+                       VerticalOptions="Center"/>
+                <Entry Text="{Binding Mes,Mode=TwoWay}"
+                       FontSize="Medium"
+                       VerticalOptions="Center"
+                       HorizontalOptions="FillAndExpand"/>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Dia: "
+                       VerticalOptions="Center"/>
+                <Entry Text="{Binding Anio,Mode=TwoWay}"
+                       FontSize="Medium"
+                       VerticalOptions="Center"
+                       HorizontalOptions="FillAndExpand"/>
+            </StackLayout>
+            <Label Text="{Binding GastoIngreso,Mode=TwoWay}"
+                   VerticalOptions="Center"/>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Origen: "
+                       VerticalOptions="Center"/>
+                <Entry Text="{Binding Origen,Mode=TwoWay}"
+                       VerticalOptions="Center"
+                       HorizontalOptions="FillAndExpand"/>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Monto: "
+                       VerticalOptions="Center"/>
+                <Entry Text="{Binding Cantidad,Mode=TwoWay}" 
+                       TextColor="{Binding ColorGastoIngreso,Mode=TwoWay}"
+                       FontSize="Medium"
+                       FontAttributes="Bold"
+                       VerticalOptions="Center"
+                       HorizontalOptions="FillAndExpand"/>
+            </StackLayout>
+            <Button Text="Guardar Cambio" 
+                    Command="{Binding GuardarCambioCommand}" 
+                    Clicked="Button_Clicked"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,5 +1,4 @@
-﻿using ControlGastos.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,14 +10,16 @@ using Xamarin.Forms.Xaml;
 namespace ControlGastos.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class MenuTabbed : TabbedPage
+    public partial class EditView : ContentPage
     {
-        public MenuTabbed()
+        public EditView()
         {
             InitializeComponent();
         }
 
-
-        
+        private void Button_Clicked(object sender, EventArgs e)
+        {
+            Navigation.PopAsync();
+        }
     }
 }

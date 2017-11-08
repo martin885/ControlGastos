@@ -23,7 +23,7 @@ namespace ControlGastos.Data
             connection = new SQLiteConnection(config.Platform,
             Path.Combine(config.DirectoryDB, "ControlGastos.db3"));
             //connection.DropTable<IngresosMes>();
-            //connection.CreateTable<IngresosMes>();
+            //connection.CreateTable<Gastos>();
             //connection.DropTable<Ingresos>();
             connection.CreateTable<Ingresos>();
             connection.CreateTable<Gastos>();

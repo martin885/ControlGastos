@@ -16,6 +16,7 @@ namespace ControlGastos.ViewModels
         public GastosViewModel Gastos { get; set; }
         public IngresosViewModel Ingresos { get; set; }
         public BalanceViewModel Balance { get; set; }
+        public EditViewModel Edit { get; set; }
         #endregion
 
 

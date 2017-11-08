@@ -2,12 +2,18 @@
 <TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:ControlGastos.Views"
-             BindingContext="{Binding Main,Source={StaticResource Key=Locator}}"
-             x:Class="ControlGastos.Views.MenuTabbed">
+             x:Class="ControlGastos.Views.MenuTabbed"
+            NavigationPage.HasNavigationBar="False">
 
-        
-    <local:BalanceView Title="Balance"/>
-    <local:GastosView Title="Gastos"/>
-    <local:IngresosView Title="Ingresos"/>
+    <NavigationPage Title="Balance" 
+                    Icon="Batman" >
+        <x:Arguments>
+            <local:BalanceView />
+        </x:Arguments>
+    </NavigationPage>
+    <local:GastosView Title="Gastos"
+                       Icon="Batman"/>
+    <local:IngresosView Title="Ingresos"
+                         Icon="Batman"/>
 
 </TabbedPage>

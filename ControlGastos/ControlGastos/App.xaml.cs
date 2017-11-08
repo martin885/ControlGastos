@@ -20,8 +20,7 @@ namespace ControlGastos
             
             //MainPage = new NavigationPage(new PaginaInicio());
 
-            MainPage = new MenuTabbed();
-
+            MainPage =new MenuTabbed();
         }
 
         protected override void OnStart()

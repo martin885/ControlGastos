@@ -56,12 +56,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Behaviors\ToggleBehavior.cs" />
     <Compile Include="ViewModels\BalanceViewModel.cs" />
+    <Compile Include="ViewModels\EditViewModel.cs" />
     <Compile Include="ViewModels\GastosViewModel.cs" />
     <Compile Include="ViewModels\IngresosViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\PaginaInicioViewModel.cs" />
     <Compile Include="Views\BalanceView.xaml.cs">
       <DependentUpon>BalanceView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EditView.xaml.cs">
+      <DependentUpon>EditView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\GastosView.xaml.cs">
       <DependentUpon>GastosView.xaml</DependentUpon>
@@ -143,6 +147,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\MenuTabbed.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\EditView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
