@@ -9,6 +9,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using ControlGastos.Services;
 using System.Globalization;
+using ControlGastos.Views;
 
 namespace ControlGastos.ViewModels
 {
@@ -41,21 +42,21 @@ namespace ControlGastos.ViewModels
 
         private async void GuardarCambio()
         {
-            IFormatProvider culture = new CultureInfo("fr-FR");
+            IFormatProvider culture = new CultureInfo("es-ES");
 
             Fecha = string.Format("{0}/{1}/{2}", Dia, Mes, Anio);
            
             if (!DateTime.TryParse(Fecha,out DateTime Result))
             {
-               await dialogService.ShowMessage("Error", "El formato de la fecha debe ser el siguiente: Día/Mes/Año");
+               await dialogService.ShowMessage("Error", "El formato elegido es incorrecto");
                 return;
             }
 
 
-            Fecha = DateTime.Parse(Fecha, culture).ToString("dd/MMMM/yyyy");
-            Dia = DateTime.Parse(Fecha).ToString("dd");
-            Mes = DateTime.Parse(Fecha).ToString("MMMM");
-            Anio = DateTime.Parse(Fecha).ToString("yyyy");
+            Fecha = DateTime.Parse(Fecha, culture).ToString("dd/MMMM/yyyy",culture);
+            Dia = DateTime.Parse(Fecha).ToString("dd",culture);
+            Mes = DateTime.Parse(Fecha).ToString("MMMM",culture);
+            Anio = DateTime.Parse(Fecha).ToString("yyyy",culture);
             balance.Dia = Dia;
             balance.Mes = Mes;
             balance.Anio = Anio;
@@ -71,6 +72,8 @@ namespace ControlGastos.ViewModels
             }
             var balanceViewModel = BalanceViewModel.GetInstance();
             balanceViewModel.Editar(balance);
+            var editView = EditView.GetInstance();
+           await editView.Navigation.PopAsync();
            //await navigationService.Back();
         }
         #endregion

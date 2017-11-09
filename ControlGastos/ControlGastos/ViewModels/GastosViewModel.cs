@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,12 +20,13 @@ namespace ControlGastos.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
         #endregion
 
-        #region Services
+        #region Services 
         DataService dataService;
         DialogService dialogService;
         #endregion
 
         #region Propiedades y Atributos
+        IFormatProvider culture;
         public string Mes { get; set; }
         public DateTime Date { get; set; }
         public string OrigenGasto { get; set; }
@@ -111,28 +113,46 @@ namespace ControlGastos.ViewModels
         private async void AgregarGasto()
         {
             //Crea el objeto Ingreso, lo agrego a la lista del mes, y después se hace la sumatoria de la lista
+           
             if (SelectedItem == null)
             {
-               await dialogService.ShowMessage("Error", "Se debe seleccionar una categoría");
+               await dialogService.ShowMessage("Error", 
+                   "Se debe seleccionar una categoría");
                 return;
             }
-
-
             Gastos = new Gastos();
-            ListaGastos.Add(Gastos);
-            Gastos.Anio = Date.ToString("yyyy");
-            Gastos.Mes = Date.ToString("MMMM");
-            Gastos.Dia = Date.ToString("dd");
+            Gastos.Anio = Date.ToString("yyyy",culture);
+            Gastos.Mes = Date.ToString("MMMM",culture);
+            Gastos.Dia = Date.ToString("dd",culture);
+
+            if (string.IsNullOrEmpty(OrigenGasto))
+            {
+                OrigenGasto = "Sin Origen";
+            }
             Gastos.GastoNombre = OrigenGasto;
             Gastos.Categoria = SelectedItem;
             if (MontoGasto == null)
             {
                 MontoGasto = 0.ToString();
             }
-            Gastos.GastosCantidad = MontoGasto;
+            if(!double.TryParse(MontoGasto,out double result))
+            {
+                await dialogService.ShowMessage("Error", "El contenido del monto debe ser un número");
+                MontoGasto = null;
+                return;
+            }
+            if (!MontoGasto.Contains("-"))
+            { 
+            Gastos.GastosCantidad =string.Format("-{0}",MontoGasto);
+            }
+            else
+            {
+                Gastos.GastosCantidad = string.Format("{0}", MontoGasto);
+            }
+            ListaGastos.Add(Gastos);
             //Realizar la sumatoria con los ingresos pertenecientes al mes y año elegido
-            SumaGasto = ListaGastos.Where(x => x.Mes == Gastos.Mes && x.Anio == Gastos.Anio).ToList().Sum(x => int.Parse(x.GastosCantidad)).ToString();
-            SumaGastoCategoria = ListaGastos.Where(x => x.Mes == Gastos.Mes && x.Anio == Gastos.Anio&&x.Categoria== SelectedItem).ToList().Sum(x => int.Parse(x.GastosCantidad)).ToString();
+            SumaGasto = ListaGastos.Where(x => x.Mes == Gastos.Mes && x.Anio == Gastos.Anio).ToList().Sum(x => double.Parse(x.GastosCantidad)).ToString();
+            SumaGastoCategoria = ListaGastos.Where(x => x.Mes == Gastos.Mes && x.Anio == Gastos.Anio&&x.Categoria== SelectedItem).ToList().Sum(x => double.Parse(x.GastosCantidad)).ToString();
             MontoGasto = null;
             dataService.Save(ListaGastos, true);
         }
@@ -146,7 +166,7 @@ namespace ControlGastos.ViewModels
 
         private void DateSelected()
         {
-            SumaGasto = ListaGastos.Where(x => x.Mes == Date.ToString("MMMM") && x.Anio == Date.ToString("yyyy")).ToList().Sum(x => int.Parse(x.GastosCantidad)).ToString();
+            SumaGasto = ListaGastos.Where(x => x.Mes == Date.ToString("MMMM",culture) && x.Anio == Date.ToString("yyyy",culture)).ToList().Sum(x => double.Parse(x.GastosCantidad)).ToString();
         }
         public ICommand SelectedItemChangedCommand
         {
@@ -159,13 +179,14 @@ namespace ControlGastos.ViewModels
         private void SelectedItemChanged()
         {
             Categoria = SelectedItem;
-            SumaGastoCategoria = ListaGastos.Where(x => x.Mes == Date.ToString("MMMM") && x.Anio == Date.ToString("yyyy") && x.Categoria == SelectedItem).ToList().Sum(x => int.Parse(x.GastosCantidad)).ToString();
+            SumaGastoCategoria = ListaGastos.Where(x => x.Mes == Date.ToString("MMMM",culture) && x.Anio == Date.ToString("yyyy",culture) && x.Categoria == SelectedItem).ToList().Sum(x => int.Parse(x.GastosCantidad)).ToString();
         }
         #endregion
 
         #region Constructor
         public GastosViewModel()
         {
+            culture = new CultureInfo("es-ES");
             dataService = new DataService();
             dialogService = new DialogService();
             Cargas();
@@ -176,19 +197,26 @@ namespace ControlGastos.ViewModels
         #region Métodos
         private void Cargas()
         {
-            Categoria = "Sin Seleccionar";
+         
+            Categoria = "SIN SELECCIONAR";
             PickerCategorias = new ObservableCollection<string>();
             PickerCategorias.Add("Ocio");
             PickerCategorias.Add("Servicios");
             PickerCategorias.Add("Alimentos");
-            Mes = DateTime.Now.ToString("MMMM");
+            Mes = DateTime.Now.ToString("MMMM",culture);
             Date = DateTime.Now;
             ListaGastos = new List<Gastos>();
             if (dataService.CheckTableIsEmpty<Gastos>())
             {
                 ListaGastos = dataService.Get<Gastos>(true);
-                SumaGastoCategoria = ListaGastos.Where(x => x.Mes == Date.ToString("MMMM") && x.Anio == Date.ToString("yyyy")&&x.Categoria==SelectedItem).ToList().Sum(x => int.Parse(x.GastosCantidad)).ToString();
-                SumaGasto = ListaGastos.Where(x => x.Mes == Date.ToString("MMMM") && x.Anio == Date.ToString("yyyy")).ToList().Sum(x => int.Parse(x.GastosCantidad)).ToString();
+                SumaGastoCategoria = ListaGastos.Where(x => x.Mes == Date.ToString("MMMM",culture) && x.Anio == Date.ToString("yyyy",culture)&&x.Categoria==SelectedItem).ToList().Sum(x => double.Parse(x.GastosCantidad)).ToString();
+                SumaGasto = ListaGastos.Where(x => x.Mes == Date.ToString("MMMM",culture) && x.Anio == Date.ToString("yyyy",culture)).ToList().Sum(x => double.Parse(x.GastosCantidad)).ToString();
+            }
+            else
+            {
+               
+                SumaGasto = "0";
+               
             }
         }
 

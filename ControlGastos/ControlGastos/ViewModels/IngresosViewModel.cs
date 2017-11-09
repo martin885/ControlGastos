@@ -22,9 +22,11 @@ namespace ControlGastos.ViewModels
 
         #region Services
         DataService dataService;
+        DialogService dialogService;
         #endregion
 
         #region Propiedades y Atributos
+        IFormatProvider culture;
         public string Mes { get; set; }
         public DateTime Date { get; set; }
         public string OrigenIngreso { get; set; }
@@ -75,23 +77,41 @@ namespace ControlGastos.ViewModels
             }
         }
 
-        private void AgregarIngreso()
+        private async void AgregarIngreso()
         {
             //Crea el objeto Ingreso, lo agrego a la lista del mes, y después se hace la sumatoria de la lista
             
             Ingresos = new Ingresos();
-            ListaIngresos.Add(Ingresos);
-            Ingresos.Anio = Date.ToString("yyyy");
-            Ingresos.Mes= Date.ToString("MMMM");
-            Ingresos.Dia = Date.ToString("dd");
+            culture = new CultureInfo("es-ES");
+            Ingresos.Anio = Date.ToString("yyyy",culture);
+            Ingresos.Mes= Date.ToString("MMMM", culture);
+            Ingresos.Dia = Date.ToString("dd", culture);
+            if (string.IsNullOrEmpty(OrigenIngreso))
+            {
+                OrigenIngreso = "Sin Origen";
+            }
             Ingresos.IngresoNombre = OrigenIngreso;
             if (MontoIngreso == null)
             {
                 MontoIngreso = 0.ToString();
             }
-            Ingresos.IngresoCantidad = MontoIngreso;
+            if (!double.TryParse(MontoIngreso, out double result))
+            {
+                await dialogService.ShowMessage("Error", "El contenido del monto debe ser un número");
+                MontoIngreso = null;
+                return;
+            }
+            if (MontoIngreso.Contains("-"))
+            {
+                Ingresos.IngresoCantidad = MontoIngreso.Replace("-", "");
+            }
+            else
+            {
+                Ingresos.IngresoCantidad = string.Format("{0}", MontoIngreso);
+            }
+            ListaIngresos.Add(Ingresos);
             //Realizar la sumatoria con los ingresos pertenecientes al mes y año elegido
-            SumaIngreso = ListaIngresos.Where(x=>x.Mes== Ingresos.Mes && x.Anio == Ingresos.Anio).ToList().Sum(x => int.Parse(x.IngresoCantidad)).ToString();
+            SumaIngreso = ListaIngresos.Where(x=>x.Mes== Ingresos.Mes && x.Anio == Ingresos.Anio).ToList().Sum(x => double.Parse(x.IngresoCantidad)).ToString();
             MontoIngreso = null;
             dataService.Save(ListaIngresos, true);
         }
@@ -105,7 +125,7 @@ namespace ControlGastos.ViewModels
 
         private void DateSelected()
         {
-            SumaIngreso = ListaIngresos.Where(x => x.Mes == Date.ToString("MMMM") && x.Anio == Date.ToString("yyyy")).ToList().Sum(x => int.Parse(x.IngresoCantidad)).ToString();
+            SumaIngreso = ListaIngresos.Where(x => x.Mes == Date.ToString("MMMM", culture) && x.Anio == Date.ToString("yyyy", culture)).ToList().Sum(x => double.Parse(x.IngresoCantidad)).ToString();
         }
         #endregion
 
@@ -113,6 +133,7 @@ namespace ControlGastos.ViewModels
         public IngresosViewModel()
         {
             dataService = new DataService();
+            dialogService = new DialogService();
 
             Cargas();
 
@@ -122,15 +143,18 @@ namespace ControlGastos.ViewModels
         #region Métodos
         private void Cargas()
         {
-            Mes = DateTime.Now.ToString("MMMM");
+            Mes = DateTime.Now.ToString("MMMM", culture);
             Date = DateTime.Now;
             ListaIngresos = new List<Ingresos>();
             if (dataService.CheckTableIsEmpty<Ingresos>())
             {
                ListaIngresos= dataService.Get<Ingresos>(true);
-               SumaIngreso = ListaIngresos.Where(x => x.Mes == Date.ToString("MMMM") && x.Anio == Date.ToString("yyyy")).ToList().Sum(x => int.Parse(x.IngresoCantidad)).ToString();
+               SumaIngreso = ListaIngresos.Where(x => x.Mes == Date.ToString("MMMM", culture) && x.Anio == Date.ToString("yyyy", culture)).ToList().Sum(x => double.Parse(x.IngresoCantidad)).ToString();
             }
-
+            else
+            {
+                SumaIngreso = "0";
+            }
         }
         #endregion
 

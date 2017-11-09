@@ -7,6 +7,12 @@
     <ContentPage.Content>
         <StackLayout BindingContext="{Binding Gastos}">
             <StackLayout Margin="10" >
+                <DatePicker Format="D"
+                            Date="{Binding Date}">
+                    <DatePicker.Behaviors>
+                        <local:DateSelected Command="{Binding DateSelectedCommand}"/>
+                    </DatePicker.Behaviors>
+                </DatePicker>
                 <Picker SelectedItem="{Binding SelectedItem,Mode=TwoWay}"
                         ItemsSource="{Binding PickerCategorias}"
                         Title="Seleccionar Categoría">
@@ -14,12 +20,6 @@
                         <local:SelectedItemPicker Command="{Binding SelectedItemChangedCommand}"/>
                     </Picker.Behaviors>
                 </Picker>
-                <DatePicker Format="D"
-                            Date="{Binding Date}">
-                    <DatePicker.Behaviors>
-                        <local:DateSelected Command="{Binding DateSelectedCommand}"/>
-                    </DatePicker.Behaviors>
-                </DatePicker>
                 <Entry Placeholder="Origen del Ingreso" 
                        Text="{Binding OrigenGasto,Mode=TwoWay}"/>
             </StackLayout>
@@ -28,6 +28,7 @@
                 <Entry Placeholder="Monto en pesos"
                        HorizontalOptions="FillAndExpand"
                        VerticalOptions="Center"
+                       Keyboard="Numeric"
                        Text="{Binding MontoGasto,Mode=TwoWay}"/>
                 <Image Source="Batman"
                        HorizontalOptions="End"

@@ -18,6 +18,7 @@ namespace ControlGastos.Views
         public BalanceView ()
 		{
 			InitializeComponent ();
+            instance = this;
 		}
 
 
@@ -28,11 +29,18 @@ namespace ControlGastos.Views
             InitializeComponent();
         }
 
-        private async void MenuItem_Clicked(object sender, EventArgs e)
-        {
-            //Navegación hacia la vista de edición, la lógica va con el command en el modelo de Balance
-           await Navigation.PushAsync(new EditView());
+        #region Singleton
 
+        static BalanceView instance;
+
+        public static BalanceView GetInstance()
+        {
+            if (instance == null)
+            {
+                return new BalanceView();
+            }
+            return instance;
         }
+        #endregion
     }
 }

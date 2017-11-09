@@ -21,6 +21,7 @@
                 <Entry Placeholder="Monto en pesos"
                        HorizontalOptions="FillAndExpand"
                        VerticalOptions="Center"
+                       Keyboard="Numeric"
                        Text="{Binding MontoIngreso,Mode=TwoWay}"/>
                 <Image Source="Batman"
                        HorizontalOptions="End"

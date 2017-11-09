@@ -54,12 +54,26 @@ namespace ControlGastos.Models
                 return new RelayCommand(Edit);
             }
         }
-
-
         private  void Edit()
         {
             var mainViewModel = MainViewModel.GetInstance();
             mainViewModel.Edit = new EditViewModel(this);
+            var balanceView = BalanceView.GetInstance();
+            balanceView.Navigation.PushAsync(new EditView());
+        }
+        public ICommand DeleteCommand
+        {
+            get
+            {
+                return new RelayCommand(Delete);
+            }
+        }
+
+
+        private void Delete()
+        {
+            var mainViewModel = MainViewModel.GetInstance();
+            mainViewModel.Delete = new DeleteViewModel(this);
         }
         #endregion
 

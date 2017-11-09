@@ -33,9 +33,11 @@
                     <DataTemplate>
                         <ViewCell>
                             <ViewCell.ContextActions>
-                                
-                                <MenuItem Text="Edit" Command="{Binding EditCommand}" Clicked="MenuItem_Clicked"/> <!--La lógica(command ejecutado en el modelo) y la navegación(en code behind) van por separado-->
-                                <MenuItem Text="Delete" Command="{Binding DeleteCommand}" IsDestructive="True"/><!--La lógica(command ejecutado en el modelo) y la navegación(en code behind) van por separado-->
+                                <MenuItem Text="Editar" 
+                                          Command="{Binding EditCommand}" />
+                                <MenuItem Text="Borrar" 
+                                          Command="{Binding DeleteCommand}" 
+                                          IsDestructive="True"/>
                             </ViewCell.ContextActions>
                             <StackLayout Margin="10">
                                 <StackLayout Orientation="Horizontal">
