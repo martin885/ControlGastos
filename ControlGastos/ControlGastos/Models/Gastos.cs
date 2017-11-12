@@ -24,6 +24,12 @@ namespace ControlGastos.Models
 
         public string Categoria{ get; set; }
 
+        public string ImagenFecha { get; set; }
+
+        public string ImagenOrigen { get; set; }
+
+        public string ImagenMonto { get; set; }
+
         public override int GetHashCode()
         {
             return GastosId;

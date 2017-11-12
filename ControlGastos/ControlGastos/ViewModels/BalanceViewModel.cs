@@ -224,7 +224,7 @@ namespace ControlGastos.ViewModels
 
             foreach (var meses in Meses)
             {
-                if (meses == DateTime.Now.ToString("MMMM",culture))
+                if (meses == DateTime.Now.ToString("MMM",culture))
                 {
                     foreach (var años in Años)
                     {
@@ -253,10 +253,13 @@ namespace ControlGastos.ViewModels
                             Mes = ListadeBalanceIngreso.Mes,
                             Anio = ListadeBalanceIngreso.Anio,
                             Fecha = string.Format("{0}/{1}/{2}", ListadeBalanceIngreso.Dia, ListadeBalanceIngreso.Mes, ListadeBalanceIngreso.Anio),
-                            GastoIngreso="Ingreso",
+                            ImagenFecha = "date",
+                            GastoIngreso ="Ingreso",
                             Cantidad = ListadeBalanceIngreso.IngresoCantidad,
+                            ImagenMonto="money",
                             ColorGastoIngreso=Color.Green,
-                            Origen = ListadeBalanceIngreso.IngresoNombre
+                            Origen = ListadeBalanceIngreso.IngresoNombre,
+                            ImagenOrigen="income"
                         };
                         if (!double.TryParse(Balance.Cantidad, out double result))
                         {
@@ -277,9 +280,11 @@ namespace ControlGastos.ViewModels
                             Mes= ListadeBalanceGastos.Mes,
                             Anio= ListadeBalanceGastos.Anio,
                             Fecha = string.Format("{0}/{1}/{2}",ListadeBalanceGastos.Dia, ListadeBalanceGastos.Mes, ListadeBalanceGastos.Anio),
-                            GastoIngreso=string.Format("Gasto: {0}",ListadeBalanceGastos.Categoria),
+                            ImagenFecha="date",
+                            GastoIngreso=ListadeBalanceGastos.Categoria,
                             Cantidad = string.Format("-{0}",ListadeBalanceGastos.GastosCantidad),
-                            ColorGastoIngreso=Color.Red,
+                            ImagenMonto = "money",
+                            ColorGastoIngreso =Color.Red,
                             Origen = ListadeBalanceGastos.GastoNombre
                         };
                         if (Balance.Cantidad.Contains("--"))
@@ -290,11 +295,26 @@ namespace ControlGastos.ViewModels
                         {
                             Balance.Cantidad = 0.ToString();     
                         }
+                        switch (Balance.GastoIngreso)
+                    {
+                        case "Servicios":
+                            Balance.ImagenOrigen = "servicios";
+                            break;
+                        case "Ocio":
+                            Balance.ImagenOrigen = "ocio";
+                            break;
+                        case "Provisiones":
+                            Balance.ImagenOrigen = "provisiones";
+                            break;
+                        default:
+                            Balance.ImagenOrigen = "Sin Imagen Disponible";
+                            break;
+                    }
                         ListaBalance.Add(Balance);
                     
                     }
                 }
-                CollectionBalance = new ObservableCollection<Balance>(ListaBalance.OrderBy(x => double.Parse(x.Fecha.Substring(0, 2))).ToList());
+                CollectionBalance = new ObservableCollection<Balance>(ListaBalance.OrderByDescending(x => double.Parse(x.Fecha.Substring(0, 2))).ToList());
 
             
 

@@ -7,56 +7,81 @@
              NavigationPage.HasNavigationBar="False">
     <ContentPage.Content>
         <StackLayout BindingContext="{Binding Balance}">
-            <StackLayout Orientation="Horizontal"
-                         Margin="10">
+            <Grid >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
                 <Picker Title="Mes" 
                     ItemsSource="{Binding Meses}"
                     HorizontalOptions="FillAndExpand"
-                        SelectedItem="{Binding SelectedItemMes,Mode=TwoWay}">
+                        SelectedItem="{Binding SelectedItemMes,Mode=TwoWay}"
+                        BackgroundColor="Transparent"
+                        Grid.Column="0">
                     <Picker.Behaviors>
                         <local:SelectedItemPicker  Command="{Binding SelectedItemMesesCommand}"/>
                     </Picker.Behaviors>
                 </Picker>
+                <Image Source="arrow" 
+                       Scale="0.75"
+                       VerticalOptions="Center"
+                       HorizontalOptions="End"
+                       Grid.Column="0"/> 
                 <Picker Title="  Año"
                         ItemsSource="{Binding Años}"
-                        HorizontalOptions="End"
-                        SelectedItem="{Binding SelectedItemAño,Mode=TwoWay}">
+                        HorizontalOptions="FillAndExpand"
+                        SelectedItem="{Binding SelectedItemAño,Mode=TwoWay}"
+                        BackgroundColor="Transparent"
+                        Grid.Column="1">
                     <Picker.Behaviors>
                         <local:SelectedItemPicker Command="{Binding SelectedItemAñosCommand}"/>
                     </Picker.Behaviors>
                 </Picker>
-            </StackLayout>
+                <Image Source="arrow" 
+                       Scale="0.75"
+                       VerticalOptions="Center"
+                       Grid.Column="1" 
+                       HorizontalOptions="End"/>
+            </Grid>
             <ListView ItemsSource="{Binding CollectionBalance}"
                       HasUnevenRows="True"
-                      SeparatorColor="Black">
+                      SeparatorColor="#f18624">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
                             <ViewCell.ContextActions>
                                 <MenuItem Text="Editar" 
-                                          Command="{Binding EditCommand}" />
+                                          Command="{Binding EditCommand}"/>
                                 <MenuItem Text="Borrar" 
                                           Command="{Binding DeleteCommand}" 
                                           IsDestructive="True"/>
                             </ViewCell.ContextActions>
+
                             <StackLayout Margin="10">
+                                
                                 <StackLayout Orientation="Horizontal">
-                                    <Label Text="Fecha: "
-                                           VerticalOptions="Center"/>
-                                    <Label Text="{Binding Fecha}"
-                                           FontSize="Medium"
-                                           VerticalOptions="Center"/>
-                                </StackLayout>
-                                <Label Text="{Binding GastoIngreso}"
-                                       VerticalOptions="Center"/>
-                                <StackLayout Orientation="Horizontal">
-                                    <Label Text="Origen: "
+                                    <Image Source="{Binding ImagenOrigen}"
                                            VerticalOptions="Center"/>
                                     <Label Text="{Binding Origen}"
                                            VerticalOptions="Center"/>
                                 </StackLayout>
                                 <StackLayout Orientation="Horizontal">
-                                    <Label Text="Monto: "
+                                    <Image Source="{Binding ImagenFecha}"
+                                           VerticalOptions="Center"/>
+                                    <Label Text="{Binding Dia}"
+                                           VerticalOptions="Center"/>
+                                    <Label Text="/"
+                                           VerticalOptions="Center"/>
+                                    <Label Text="{Binding Mes}"
+                                           VerticalOptions="Center"/>
+                                    <Label Text="/"
+                                           VerticalOptions="Center"/>
+                                    <Label Text="{Binding Anio}"
+                                           VerticalOptions="Center"/>
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal">
+                                    <Image Source="{Binding ImagenMonto}"
                                            VerticalOptions="Center"/>
                                     <Label Text="{Binding Cantidad}" 
                                        TextColor="{Binding ColorGastoIngreso}"
@@ -64,6 +89,7 @@
                                        FontAttributes="Bold"
                                        VerticalOptions="Center"/>
                                 </StackLayout>
+                                
                             </StackLayout>
                         </ViewCell>
                     </DataTemplate>

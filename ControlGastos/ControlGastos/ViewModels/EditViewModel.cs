@@ -53,9 +53,9 @@ namespace ControlGastos.ViewModels
             }
 
 
-            Fecha = DateTime.Parse(Fecha, culture).ToString("dd/MMMM/yyyy",culture);
+            Fecha = DateTime.Parse(Fecha, culture).ToString("dd/MMM/yyyy",culture);
             Dia = DateTime.Parse(Fecha).ToString("dd",culture);
-            Mes = DateTime.Parse(Fecha).ToString("MMMM",culture);
+            Mes = DateTime.Parse(Fecha).ToString("MMM",culture);
             Anio = DateTime.Parse(Fecha).ToString("yyyy",culture);
             balance.Dia = Dia;
             balance.Mes = Mes;

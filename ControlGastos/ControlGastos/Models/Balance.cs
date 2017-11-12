@@ -44,6 +44,12 @@ namespace ControlGastos.Models
         public string GastoIngreso { get; set; }
 
         public Color ColorGastoIngreso { get; set; }
+
+        public string ImagenFecha { get; set; }
+
+        public string ImagenOrigen { get; set; }
+
+        public string ImagenMonto { get; set; }
         #endregion
 
         #region Commands

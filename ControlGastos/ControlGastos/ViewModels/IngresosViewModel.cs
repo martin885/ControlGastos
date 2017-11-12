@@ -4,6 +4,7 @@ using ControlGastos.Services;
 using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
@@ -27,7 +28,7 @@ namespace ControlGastos.ViewModels
 
         #region Propiedades y Atributos
         IFormatProvider culture;
-        public string Mes { get; set; }
+       
         public DateTime Date { get; set; }
         public string OrigenIngreso { get; set; }
         Ingresos Ingresos { get; set; }
@@ -65,6 +66,38 @@ namespace ControlGastos.ViewModels
                 }
             }
         }
+        ObservableCollection<Ingresos> _collectionIngresos;
+        public ObservableCollection<Ingresos> CollectionIngresos
+        {
+            get
+            {
+                return _collectionIngresos;
+            }
+            set
+            {
+                if (_collectionIngresos != value)
+                {
+                    _collectionIngresos = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CollectionIngresos)));
+                }
+            }
+        }
+        public string _mes;
+        public string Mes
+        {
+            get
+            {
+                return _mes;
+            }
+            set
+            {
+                if (_mes != value)
+                {
+                    _mes = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Mes)));
+                }
+            }
+        }
         #endregion
 
         #region Commands
@@ -84,13 +117,15 @@ namespace ControlGastos.ViewModels
             Ingresos = new Ingresos();
             culture = new CultureInfo("es-ES");
             Ingresos.Anio = Date.ToString("yyyy",culture);
-            Ingresos.Mes= Date.ToString("MMMM", culture);
+            Ingresos.Mes= Date.ToString("MMM", culture);
             Ingresos.Dia = Date.ToString("dd", culture);
+            Ingresos.ImagenFecha = "date";
             if (string.IsNullOrEmpty(OrigenIngreso))
             {
                 OrigenIngreso = "Sin Origen";
             }
             Ingresos.IngresoNombre = OrigenIngreso;
+            Ingresos.ImagenOrigen = "income";
             if (MontoIngreso == null)
             {
                 MontoIngreso = 0.ToString();
@@ -109,11 +144,14 @@ namespace ControlGastos.ViewModels
             {
                 Ingresos.IngresoCantidad = string.Format("{0}", MontoIngreso);
             }
+            Ingresos.ImagenMonto = "money";
             ListaIngresos.Add(Ingresos);
             //Realizar la sumatoria con los ingresos pertenecientes al mes y año elegido
             SumaIngreso = ListaIngresos.Where(x=>x.Mes== Ingresos.Mes && x.Anio == Ingresos.Anio).ToList().Sum(x => double.Parse(x.IngresoCantidad)).ToString();
             MontoIngreso = null;
+            OrigenIngreso = null;
             dataService.Save(ListaIngresos, true);
+            CollectionIngresos = new ObservableCollection<Ingresos>(ListaIngresos.Where(x=>x.Mes==Ingresos.Mes && x.Anio == Ingresos.Anio).ToList());
         }
         public ICommand DateSelectedCommand
         {
@@ -125,7 +163,10 @@ namespace ControlGastos.ViewModels
 
         private void DateSelected()
         {
-            SumaIngreso = ListaIngresos.Where(x => x.Mes == Date.ToString("MMMM", culture) && x.Anio == Date.ToString("yyyy", culture)).ToList().Sum(x => double.Parse(x.IngresoCantidad)).ToString();
+            Mes = Date.ToString("MMMM");
+            SumaIngreso = ListaIngresos.Where(x => x.Mes == Date.ToString("MMM", culture) && 
+            x.Anio == Date.ToString("yyyy", culture)).ToList().Sum(x => double.Parse(x.IngresoCantidad)).ToString();
+            CollectionIngresos = new ObservableCollection<Ingresos>(ListaIngresos.Where(x => x.Mes == Date.ToString("MMM", culture) && x.Anio == Date.ToString("yyyy", culture)).ToList());
         }
         #endregion
 
@@ -149,7 +190,8 @@ namespace ControlGastos.ViewModels
             if (dataService.CheckTableIsEmpty<Ingresos>())
             {
                ListaIngresos= dataService.Get<Ingresos>(true);
-               SumaIngreso = ListaIngresos.Where(x => x.Mes == Date.ToString("MMMM", culture) && x.Anio == Date.ToString("yyyy", culture)).ToList().Sum(x => double.Parse(x.IngresoCantidad)).ToString();
+               SumaIngreso = ListaIngresos.Where(x => x.Mes == Date.ToString("MMM", culture) && x.Anio == Date.ToString("yyyy", culture)).ToList().Sum(x => double.Parse(x.IngresoCantidad)).ToString();
+               CollectionIngresos = new ObservableCollection<Ingresos>(ListaIngresos.Where(x => x.Mes == Date.ToString("MMM", culture) && x.Anio == Date.ToString("yyyy", culture)).ToList());
             }
             else
             {

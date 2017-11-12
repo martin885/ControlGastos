@@ -30,7 +30,7 @@
                        VerticalOptions="Center"
                        Keyboard="Numeric"
                        Text="{Binding MontoGasto,Mode=TwoWay}"/>
-                <Image Source="Batman"
+                <Image Source="plus"
                        HorizontalOptions="End"
                        VerticalOptions="Center">
                     <Image.GestureRecognizers>
@@ -38,6 +38,55 @@
                     </Image.GestureRecognizers>
                 </Image>
             </StackLayout>
+            <ListView ItemsSource="{Binding CollectionGastos}"
+                      HasUnevenRows="True"
+                      SeparatorColor="#f18624">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <ViewCell.ContextActions>
+                                <MenuItem Text="Editar" 
+                                          Command="{Binding EditCommand}"/>
+                                <MenuItem Text="Borrar" 
+                                          Command="{Binding DeleteCommand}" 
+                                          IsDestructive="True"/>
+                            </ViewCell.ContextActions>
+                        <StackLayout Margin="10">
+                            
+                                <StackLayout Orientation="Horizontal">
+                                    <Image Source="{Binding ImagenOrigen}"
+                                           VerticalOptions="Center"/>
+                                    <Label Text="{Binding GastoNombre}"
+                                           VerticalOptions="Center"/>
+                                </StackLayout>
+                            
+                                <StackLayout Orientation="Horizontal">
+                                    <Image Source="{Binding ImagenFecha}"
+                                           VerticalOptions="Center"/>
+                                    <Label Text="{Binding Dia}"
+                                           VerticalOptions="Center"/>
+                                    <Label Text="/"
+                                           VerticalOptions="Center"/>
+                                    <Label Text="{Binding Mes}"
+                                           VerticalOptions="Center"/>
+                                    <Label Text="/"
+                                           VerticalOptions="Center"/>
+                                    <Label Text="{Binding Anio}"
+                                           VerticalOptions="Center"/>
+                                </StackLayout>
+                            
+                                <StackLayout Orientation="Horizontal">
+                                    <Image Source="{Binding ImagenMonto}"
+                                           VerticalOptions="Center"/>
+                                    <Label Text="{Binding GastosCantidad}"
+                                           VerticalOptions="Center"/>
+                                </StackLayout>
+                            
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
             <StackLayout Margin="10" 
                          VerticalOptions="CenterAndExpand"
                          HorizontalOptions="Center">
