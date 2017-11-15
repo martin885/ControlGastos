@@ -30,7 +30,6 @@ namespace ControlGastos.ViewModels
         IFormatProvider culture;
        
         public DateTime Date { get; set; }
-        public string OrigenIngreso { get; set; }
         Ingresos Ingresos { get; set; }
        public List<Ingresos> ListaIngresos { get; set; }
         string _sumaIngreso;
@@ -98,6 +97,23 @@ namespace ControlGastos.ViewModels
                 }
             }
         }
+
+        string _origenIngreso;
+        public string OrigenIngreso
+        {
+            get
+            {
+                return _origenIngreso;
+            }
+            set
+            {
+                if (_origenIngreso != value)
+                {
+                    _origenIngreso = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(OrigenIngreso)));
+                }
+            }
+        }
         #endregion
 
         #region Commands
@@ -112,46 +128,53 @@ namespace ControlGastos.ViewModels
 
         private async void AgregarIngreso()
         {
-            //Crea el objeto Ingreso, lo agrego a la lista del mes, y después se hace la sumatoria de la lista
-            
-            Ingresos = new Ingresos();
-            culture = new CultureInfo("es-ES");
-            Ingresos.Anio = Date.ToString("yyyy",culture);
-            Ingresos.Mes= Date.ToString("MMM", culture);
-            Ingresos.Dia = Date.ToString("dd", culture);
-            Ingresos.ImagenFecha = "date";
-            if (string.IsNullOrEmpty(OrigenIngreso))
-            {
-                OrigenIngreso = "Sin Origen";
-            }
-            Ingresos.IngresoNombre = OrigenIngreso;
-            Ingresos.ImagenOrigen = "income";
-            if (MontoIngreso == null)
-            {
-                MontoIngreso = 0.ToString();
-            }
-            if (!double.TryParse(MontoIngreso, out double result))
-            {
-                await dialogService.ShowMessage("Error", "El contenido del monto debe ser un número");
+
+                //Crea el objeto Ingreso, lo agrego a la lista del mes, y después se hace la sumatoria de la lista
+
+                if (MontoIngreso == "0"||string.IsNullOrEmpty(MontoIngreso) ||string.IsNullOrWhiteSpace(MontoIngreso))
+                {
+                    await dialogService.ShowMessage("Error", "Debe asignar un valor mayor que cero");
+                    return;
+                }
+
+                Ingresos = new Ingresos();
+                Ingresos.Anio = Date.ToString("yyyy", culture);
+                Ingresos.Mes = Date.ToString("MMM", culture);
+                Ingresos.Dia = Date.ToString("dd", culture);
+                Ingresos.ImagenFecha = "date";
+                if (string.IsNullOrEmpty(OrigenIngreso))
+                {
+                    OrigenIngreso = "Sin Origen";
+                }
+                Ingresos.IngresoNombre = OrigenIngreso;
+                Ingresos.ImagenOrigen = "income";
+                if (MontoIngreso == null)
+                {
+                    MontoIngreso = 0.ToString();
+                }
+                if (!double.TryParse(MontoIngreso, out double result))
+                {
+                    await dialogService.ShowMessage("Error", "El contenido del monto debe ser un número");
+                    MontoIngreso = null;
+                    return;
+                }
+                if (MontoIngreso.Contains("-"))
+                {
+                    Ingresos.IngresoCantidad = MontoIngreso.Replace("-", "");
+                }
+                else
+                {
+                    Ingresos.IngresoCantidad = string.Format("{0}", MontoIngreso);
+                }
+                Ingresos.ImagenMonto = "money";
+                ListaIngresos.Add(Ingresos);
+                //Realizar la sumatoria con los ingresos pertenecientes al mes y año elegido
+                SumaIngreso = ListaIngresos.Where(x => x.Mes == Ingresos.Mes && x.Anio == Ingresos.Anio).ToList().Sum(x => double.Parse(x.IngresoCantidad)).ToString();
                 MontoIngreso = null;
-                return;
-            }
-            if (MontoIngreso.Contains("-"))
-            {
-                Ingresos.IngresoCantidad = MontoIngreso.Replace("-", "");
-            }
-            else
-            {
-                Ingresos.IngresoCantidad = string.Format("{0}", MontoIngreso);
-            }
-            Ingresos.ImagenMonto = "money";
-            ListaIngresos.Add(Ingresos);
-            //Realizar la sumatoria con los ingresos pertenecientes al mes y año elegido
-            SumaIngreso = ListaIngresos.Where(x=>x.Mes== Ingresos.Mes && x.Anio == Ingresos.Anio).ToList().Sum(x => double.Parse(x.IngresoCantidad)).ToString();
-            MontoIngreso = null;
-            OrigenIngreso = null;
-            dataService.Save(ListaIngresos, true);
-            CollectionIngresos = new ObservableCollection<Ingresos>(ListaIngresos.Where(x=>x.Mes==Ingresos.Mes && x.Anio == Ingresos.Anio).ToList());
+                OrigenIngreso = null;
+                dataService.Save(ListaIngresos, true);
+                CollectionIngresos = new ObservableCollection<Ingresos>(ListaIngresos.Where(x => x.Mes == Ingresos.Mes && x.Anio == Ingresos.Anio).ToList());
+
         }
         public ICommand DateSelectedCommand
         {
@@ -163,7 +186,7 @@ namespace ControlGastos.ViewModels
 
         private void DateSelected()
         {
-            Mes = Date.ToString("MMMM");
+            Mes = Date.ToString("MMMM",culture);
             SumaIngreso = ListaIngresos.Where(x => x.Mes == Date.ToString("MMM", culture) && 
             x.Anio == Date.ToString("yyyy", culture)).ToList().Sum(x => double.Parse(x.IngresoCantidad)).ToString();
             CollectionIngresos = new ObservableCollection<Ingresos>(ListaIngresos.Where(x => x.Mes == Date.ToString("MMM", culture) && x.Anio == Date.ToString("yyyy", culture)).ToList());
@@ -175,12 +198,28 @@ namespace ControlGastos.ViewModels
         {
             dataService = new DataService();
             dialogService = new DialogService();
+            culture = new CultureInfo("es-ES");
+            instance = this;
 
             Cargas();
 
         }
         #endregion
-        
+
+        #region Singleton
+
+        static IngresosViewModel instance;
+
+        public static IngresosViewModel GetInstance()
+        {
+            if (instance == null)
+            {
+                return new IngresosViewModel();
+            }
+            return instance;
+        }
+        #endregion
+
         #region Métodos
         private void Cargas()
         {
@@ -190,12 +229,45 @@ namespace ControlGastos.ViewModels
             if (dataService.CheckTableIsEmpty<Ingresos>())
             {
                ListaIngresos= dataService.Get<Ingresos>(true);
-               SumaIngreso = ListaIngresos.Where(x => x.Mes == Date.ToString("MMM", culture) && x.Anio == Date.ToString("yyyy", culture)).ToList().Sum(x => double.Parse(x.IngresoCantidad)).ToString();
-               CollectionIngresos = new ObservableCollection<Ingresos>(ListaIngresos.Where(x => x.Mes == Date.ToString("MMM", culture) && x.Anio == Date.ToString("yyyy", culture)).ToList());
+               SumaIngreso = ListaIngresos.Where(x => x.Mes == Date.ToString("MMM", culture) && 
+               x.Anio == Date.ToString("yyyy", culture)).ToList().Sum(x => double.Parse(x.IngresoCantidad)).ToString();
+               CollectionIngresos = new ObservableCollection<Ingresos>(ListaIngresos.Where(x => x.Mes == Date.ToString("MMM", culture) && 
+               x.Anio == Date.ToString("yyyy", culture)).ToList());
             }
             else
             {
                 SumaIngreso = "0";
+            }
+        }
+
+        public void Editar(Ingresos ingresos)
+        {
+            var ingresoAntiguo = ListaIngresos.Find(x => x.IngresoId == ingresos.IngresoId);
+            ingresoAntiguo = ingresos;
+            dataService.Update(ingresoAntiguo, true);
+            SumaIngreso = ListaIngresos.Where(x => x.Mes == Date.ToString("MMM", culture) &&
+                x.Anio == Date.ToString("yyyy", culture)).ToList().Sum(x => double.Parse(x.IngresoCantidad)).ToString();
+            CollectionIngresos = new ObservableCollection<Ingresos>(ListaIngresos.OrderByDescending(x => double.Parse(x.Dia)).ToList());
+        }
+
+        public async void Delete(Ingresos ingresos)
+        {
+            var confirmacion = await dialogService.ShowMessageConfirmacion("Mensaje", "Desea borrar este elemento?");
+
+            if (confirmacion)
+            {
+
+                var ingresoAntiguo = ListaIngresos.Find(x => x.IngresoId == ingresos.IngresoId);
+                dataService.Delete(ingresoAntiguo);
+                ListaIngresos.Remove(ingresoAntiguo);
+                SumaIngreso = ListaIngresos.Where(x => x.Mes == Date.ToString("MMM", culture) &&
+                x.Anio == Date.ToString("yyyy", culture)).ToList().Sum(x => double.Parse(x.IngresoCantidad)).ToString();
+
+                CollectionIngresos = new ObservableCollection<Ingresos>(ListaIngresos.OrderByDescending(x => double.Parse(x.Dia)).ToList());
+            }
+            else
+            {
+                return;
             }
         }
         #endregion

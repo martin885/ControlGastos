@@ -3,12 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ControlGastos.Views.IngresosView"
              BindingContext="{Binding Main,Source={StaticResource Key=Locator}}"
-             xmlns:local="clr-namespace:ControlGastos.Behaviors">
+             xmlns:local="clr-namespace:ControlGastos.Behaviors"
+             NavigationPage.HasNavigationBar="False">
     <ContentPage.Content>
         <StackLayout BindingContext="{Binding Ingresos}">
             <StackLayout Margin="10" >
                 <DatePicker Format="D"
-                            Date="{Binding Date}">
+                    Date="{Binding Date}">
                     <DatePicker.Behaviors>
                         <local:DateSelected Command="{Binding DateSelectedCommand}"/>
                     </DatePicker.Behaviors>
@@ -37,18 +38,29 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <StackLayout Margin="10">
+                            <ViewCell.ContextActions>
+                                <MenuItem Text="Editar" 
+                                          Command="{Binding EditCommand}"/>
+                                <MenuItem Text="Borrar" 
+                                          Command="{Binding DeleteCommand}" 
+                                          IsDestructive="True"/>
+                            </ViewCell.ContextActions>
+                            
+                            <StackLayout Margin="10,0,10,0"
+                                         Spacing="-10">
 
                                 <StackLayout Orientation="Horizontal">
                                     <Image Source="{Binding ImagenOrigen}"
-                                           VerticalOptions="Center"/>
+                                           VerticalOptions="Center"
+                                           Scale="0.75"/>
                                     <Label Text="{Binding IngresoNombre}"
                                            VerticalOptions="Center"/>
                                 </StackLayout>
 
                                 <StackLayout Orientation="Horizontal">
                                     <Image Source="{Binding ImagenFecha}"
-                                           VerticalOptions="Center"/>
+                                           VerticalOptions="Center"
+                                           Scale="0.75"/>
                                     <Label Text="{Binding Dia}"
                                            VerticalOptions="Center"/>
                                     <Label Text="/"
@@ -63,7 +75,8 @@
 
                                 <StackLayout Orientation="Horizontal">
                                     <Image Source="{Binding ImagenMonto}"
-                                           VerticalOptions="Center"/>
+                                           VerticalOptions="Center"
+                                           Scale="0.75"/>
                                     <Label Text="{Binding IngresoCantidad}"
                                            VerticalOptions="Center"/>
                                 </StackLayout>
@@ -74,8 +87,8 @@
                 </ListView.ItemTemplate>
             </ListView>
             <StackLayout Margin="10" 
-                         VerticalOptions="CenterAndExpand"
-                         HorizontalOptions="Center">
+                         VerticalOptions="EndAndExpand"
+                         HorizontalOptions="CenterAndExpand">
                 <StackLayout Orientation="Horizontal">
                 <Label Text="Ingresos Brutos de"
                        VerticalOptions="Center"/>

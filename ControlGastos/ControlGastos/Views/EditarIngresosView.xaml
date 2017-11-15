@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="ControlGastos.Views.EditView"
-              BindingContext="{Binding Main,Source={StaticResource Key=Locator}}"
+             x:Class="ControlGastos.Views.EditarIngresosView"
+             BindingContext="{Binding Main,Source={StaticResource Key=Locator}}"
              NavigationPage.HasNavigationBar="False">
     <ContentPage.Content>
-        <StackLayout  BindingContext="{Binding Edit}">
+        <StackLayout  BindingContext="{Binding EditarIngresos}">
             <StackLayout Orientation="Horizontal">
                 <Label Text="Dia: "
                        VerticalOptions="Center"/>
@@ -45,16 +45,14 @@
                 <Image Source="money"
                        VerticalOptions="Center"/>
                 <Entry Text="{Binding Cantidad,Mode=TwoWay}" 
-                       TextColor="{Binding ColorGastoIngreso,Mode=TwoWay}"
                        FontSize="Medium"
                        FontAttributes="Bold"
                        VerticalOptions="Center"
                        Keyboard="Numeric"
                        HorizontalOptions="FillAndExpand"/>
             </StackLayout>
-            <Button x:Name="BotonGuardar" 
-                Text="Guardar Cambio" 
-                  Command="{Binding GuardarCambioCommand}"
+            <Button  Text="Guardar Cambio" 
+                    Command="{Binding GuardarCambioCommand}"
                     VerticalOptions="EndAndExpand"
                     HorizontalOptions="Center"/>
         </StackLayout>

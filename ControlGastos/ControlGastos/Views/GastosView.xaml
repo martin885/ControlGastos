@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ControlGastos.Views.GastosView"
               BindingContext="{Binding Main,Source={StaticResource Key=Locator}}"
-             xmlns:local="clr-namespace:ControlGastos.Behaviors">
+             xmlns:local="clr-namespace:ControlGastos.Behaviors"
+             NavigationPage.HasNavigationBar="False">
     <ContentPage.Content>
         <StackLayout BindingContext="{Binding Gastos}">
             <StackLayout Margin="10" >
@@ -20,7 +21,7 @@
                         <local:SelectedItemPicker Command="{Binding SelectedItemChangedCommand}"/>
                     </Picker.Behaviors>
                 </Picker>
-                <Entry Placeholder="Origen del Ingreso" 
+                <Entry Placeholder="Origen del Gasto" 
                        Text="{Binding OrigenGasto,Mode=TwoWay}"/>
             </StackLayout>
             <StackLayout Orientation="Horizontal"
@@ -51,18 +52,21 @@
                                           Command="{Binding DeleteCommand}" 
                                           IsDestructive="True"/>
                             </ViewCell.ContextActions>
-                        <StackLayout Margin="10">
+                        <StackLayout Margin="10,0,10,0"
+                                     Spacing="-10">
                             
                                 <StackLayout Orientation="Horizontal">
                                     <Image Source="{Binding ImagenOrigen}"
-                                           VerticalOptions="Center"/>
+                                           VerticalOptions="Center"
+                                           Scale="0.75"/>
                                     <Label Text="{Binding GastoNombre}"
                                            VerticalOptions="Center"/>
                                 </StackLayout>
                             
                                 <StackLayout Orientation="Horizontal">
                                     <Image Source="{Binding ImagenFecha}"
-                                           VerticalOptions="Center"/>
+                                           VerticalOptions="Center"
+                                           Scale="0.75"/>
                                     <Label Text="{Binding Dia}"
                                            VerticalOptions="Center"/>
                                     <Label Text="/"
@@ -77,7 +81,8 @@
                             
                                 <StackLayout Orientation="Horizontal">
                                     <Image Source="{Binding ImagenMonto}"
-                                           VerticalOptions="Center"/>
+                                           VerticalOptions="Center"
+                                           Scale="0.75"/>
                                     <Label Text="{Binding GastosCantidad}"
                                            VerticalOptions="Center"/>
                                 </StackLayout>
@@ -89,7 +94,7 @@
             </ListView>
             <StackLayout Margin="10" 
                          VerticalOptions="CenterAndExpand"
-                         HorizontalOptions="Center">
+                         HorizontalOptions="CenterAndExpand">
                 <StackLayout Orientation="Horizontal">
                     <Label Text="Gastos de"
                        VerticalOptions="Center"/>

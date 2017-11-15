@@ -12,9 +12,18 @@
             <local:BalanceView />
         </x:Arguments>
     </NavigationPage>
-    <local:GastosView Title="Gastos"
-                       Icon="gastos"/>
-    <local:IngresosView Title="Ingresos"
-                         Icon="ingresos"/>
+    
+    <NavigationPage Title="Gastos" 
+                    Icon="gastos">
+        <x:Arguments>
+    <local:GastosView />
+        </x:Arguments>
+    </NavigationPage>
 
+    <NavigationPage Title="Ingresos"
+                    Icon="ingresos">
+        <x:Arguments>
+    <local:IngresosView />
+        </x:Arguments>
+    </NavigationPage>
 </TabbedPage>

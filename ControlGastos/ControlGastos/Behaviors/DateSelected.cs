@@ -38,7 +38,14 @@ namespace ControlGastos.Behaviors
 
         private void Bindable_Completed(object sender, EventArgs e)
         {
-            Command.Execute(null);
+            try
+            {
+                Command.Execute(null);
+            }
+            catch
+            {
+                return;
+            }
             //var ey = sender as Entry;
             //var cd = ey.BindingContext as ProdSubDefinirViewModel;
             //cd.Complete.Execute(null);

@@ -13,7 +13,7 @@ using ControlGastos.Views;
 
 namespace ControlGastos.ViewModels
 {
-    public class EditViewModel
+    public class EditarGastosViewModel
     {
         #region Services
         NavigationService navigationService;
@@ -21,7 +21,7 @@ namespace ControlGastos.ViewModels
         #endregion
 
         #region Propiedades y atributos
-        private Balance balance;
+        private Gastos gastos;
         public string Fecha { get; set; }
         public string Dia { get; set; }
         public string Mes { get; set; }
@@ -30,7 +30,6 @@ namespace ControlGastos.ViewModels
         public string Origen { get; set; }
         public string Cantidad { get; set; }
         public string ImagenOrigen { get; set; }
-
         #endregion
 
         #region Command
@@ -46,45 +45,42 @@ namespace ControlGastos.ViewModels
         {
             try
             {
-
                 if (Cantidad == "0" || string.IsNullOrEmpty(Cantidad) || string.IsNullOrWhiteSpace(Cantidad))
                 {
                     await dialogService.ShowMessage("Error", "Debe asignar un valor mayor que cero");
                     return;
                 }
 
-            IFormatProvider culture = new CultureInfo("es-ES");
+                IFormatProvider culture = new CultureInfo("es-ES");
 
-            Fecha = string.Format("{0}/{1}/{2}", Dia, Mes, Anio);
-           
-
-
-           
-           
+            Fecha = string.Format("{0}/{1}/{2}", Dia, Mes, Anio);       
                 Fecha = DateTime.Parse(Fecha, culture).ToString("dd/MMM/yyyy", culture);
                 Dia = DateTime.Parse(Fecha, culture).ToString("dd", culture);
                 Mes = DateTime.Parse(Fecha, culture).ToString("MMM", culture);
                 Anio = DateTime.Parse(Fecha, culture).ToString("yyyy", culture);
+            
 
-
-            balance.Dia = Dia;
-            balance.Mes = Mes;
-            balance.Anio = Anio;
-            balance.Origen = Origen;
+            gastos.Dia = Dia;
+            gastos.Mes = Mes;
+            gastos.Anio = Anio;
+            gastos.GastoNombre = Origen;
 
             if (Cantidad.Contains("-"))
             {
-                balance.Cantidad = Cantidad.Replace("-","");
+                gastos.GastosCantidad = Cantidad.Replace("-", "");
             }
-            else { 
-            balance.Cantidad = Cantidad;
+            else
+            {
+                gastos.GastosCantidad = Cantidad;
             }
-            var balanceViewModel = BalanceViewModel.GetInstance();
-            balanceViewModel.Editar(balance);
-            var editView = EditView.GetInstance();
-           await editView.Navigation.PopAsync();
-                //await navigationService.Back();
-            }
+            // Instanciar la GastosViewModel para usar el método Editar
+            var gastosViewModel = GastosViewModel.GetInstance();
+            gastosViewModel.Editar(gastos);
+            // Instanciar la pagina de editar gastos para usar la propiedad de navegación
+            var editarGastos = EditarGastos.GetInstance();
+            await editarGastos.Navigation.PopAsync();
+            //await navigationService.Back();
+        }
             catch
             {
                 await dialogService.ShowMessage("Error", "El formato elegido es incorrecto");
@@ -94,59 +90,57 @@ namespace ControlGastos.ViewModels
         #endregion
 
         #region Constructor
-        public EditViewModel(Balance balance)
+        public EditarGastosViewModel(Gastos gastos)
         {
-           
+
             navigationService = new NavigationService();
             dialogService = new DialogService();
 
-            this.balance = balance;
-  
-            Dia = balance.Dia;
-            Mes = balance.Mes;
-            Anio = balance.Anio;
-            if (string.IsNullOrEmpty(balance.Origen))
+            this.gastos = gastos;
+
+            Dia = gastos.Dia;
+            Mes = gastos.Mes;
+            Anio = gastos.Anio;
+            if (string.IsNullOrEmpty(gastos.GastoNombre))
             {
                 Origen = "Sin origen";
             }
             else
             {
-                Origen = balance.Origen;
+                Origen = gastos.GastoNombre;
             }
 
-            if (balance.Cantidad.Contains("-")) { 
-            Cantidad = balance.Cantidad.Replace("-","");
+            if (gastos.GastosCantidad.Contains("-"))
+            {
+                Cantidad = gastos.GastosCantidad.Replace("-", "");
             }
             else
             {
-                Cantidad = balance.Cantidad;
+                Cantidad = gastos.GastosCantidad;
             }
-            if (balance.GastoIngreso.Contains("Ingreso"))
-            {
-                ImagenOrigen = "income";
-            }
-            else { 
-            switch (balance.GastoIngreso)
-            {
-                case "Servicios":
-                    ImagenOrigen = "servicios";
-                    break;
-                case "Ocio":
-                    ImagenOrigen = "ocio";
-                    break;
-                case "Provisiones":
-                    ImagenOrigen = "provisiones";
-                    break;
-                    case "Impuestos":
-                        ImagenOrigen = "Batman";
+
+                switch (gastos.Categoria)
+                {
+                    case "Servicios":
+                        ImagenOrigen = "servicios";
                         break;
-                    default:
-                    ImagenOrigen = "Sin Imagen Disponible";
+                    case "Ocio":
+                        ImagenOrigen = "ocio";
+                        break;
+                    case "Provisiones":
+                        ImagenOrigen = "provisiones";
+                        break;
+                case "Impuestos":
+                    ImagenOrigen = "Batman";
                     break;
-            }
-           }
+                default:
+                        ImagenOrigen = "Sin Imagen Disponible";
+                        break;
+                }
+            
         }
         #endregion
 
     }
 }
+

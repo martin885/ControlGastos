@@ -18,6 +18,10 @@ namespace ControlGastos.ViewModels
         public BalanceViewModel Balance { get; set; }
         public EditViewModel Edit { get; set; }
         public DeleteViewModel Delete { get; set; }
+        public EditarGastosViewModel EditarGastos { get; set; }
+        public BorrarGastosViewModel BorrarGastos { get; set; }
+        public EditarIngresosViewModel EditarIngresos { get; set; }
+        public BorrarIngresosViewModel BorrarIngresos { get; set; }
         #endregion
 
 
@@ -26,9 +30,6 @@ namespace ControlGastos.ViewModels
         {
             instance = this;
             //PaginaInicio = new PaginaInicioViewModel();
-            Balance = new BalanceViewModel();
-            Gastos = new GastosViewModel();
-            Ingresos = new IngresosViewModel();
         }
         #endregion
 

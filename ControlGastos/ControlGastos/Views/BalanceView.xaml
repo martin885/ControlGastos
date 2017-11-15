@@ -14,11 +14,12 @@
                 </Grid.ColumnDefinitions>
                 
                 <Picker Title="Mes" 
-                    ItemsSource="{Binding Meses}"
-                    HorizontalOptions="FillAndExpand"
+                        ItemsSource="{Binding Meses}"
+                        HorizontalOptions="FillAndExpand"
                         SelectedItem="{Binding SelectedItemMes,Mode=TwoWay}"
                         BackgroundColor="Transparent"
-                        Grid.Column="0">
+                        Grid.Column="0"
+                         SelectedIndex="{Binding DefaultMes}">
                     <Picker.Behaviors>
                         <local:SelectedItemPicker  Command="{Binding SelectedItemMesesCommand}"/>
                     </Picker.Behaviors>
@@ -27,13 +28,14 @@
                        Scale="0.75"
                        VerticalOptions="Center"
                        HorizontalOptions="End"
-                       Grid.Column="0"/> 
-                <Picker Title="  Año"
+                       Grid.Column="0"/>
+                <Picker Title="Año"
                         ItemsSource="{Binding Años}"
                         HorizontalOptions="FillAndExpand"
                         SelectedItem="{Binding SelectedItemAño,Mode=TwoWay}"
                         BackgroundColor="Transparent"
-                        Grid.Column="1">
+                        Grid.Column="1"
+                        SelectedIndex="{Binding DefaultAño}">
                     <Picker.Behaviors>
                         <local:SelectedItemPicker Command="{Binding SelectedItemAñosCommand}"/>
                     </Picker.Behaviors>
@@ -64,28 +66,32 @@
                                     <Image Source="{Binding ImagenOrigen}"
                                            VerticalOptions="Center"/>
                                     <Label Text="{Binding Origen}"
-                                           VerticalOptions="Center"/>
+                                           VerticalOptions="Center"
+                                           FontSize="Large"/>
                                 </StackLayout>
                                 <StackLayout Orientation="Horizontal">
                                     <Image Source="{Binding ImagenFecha}"
                                            VerticalOptions="Center"/>
                                     <Label Text="{Binding Dia}"
-                                           VerticalOptions="Center"/>
+                                           VerticalOptions="Center"
+                                           FontSize="Large"/>
                                     <Label Text="/"
                                            VerticalOptions="Center"/>
                                     <Label Text="{Binding Mes}"
-                                           VerticalOptions="Center"/>
+                                           VerticalOptions="Center"
+                                           FontSize="Large"/>
                                     <Label Text="/"
                                            VerticalOptions="Center"/>
                                     <Label Text="{Binding Anio}"
-                                           VerticalOptions="Center"/>
+                                           VerticalOptions="Center"
+                                           FontSize="Large"/>
                                 </StackLayout>
                                 <StackLayout Orientation="Horizontal">
                                     <Image Source="{Binding ImagenMonto}"
                                            VerticalOptions="Center"/>
                                     <Label Text="{Binding Cantidad}" 
                                        TextColor="{Binding ColorGastoIngreso}"
-                                       FontSize="Medium"
+                                       FontSize="Large"
                                        FontAttributes="Bold"
                                        VerticalOptions="Center"/>
                                 </StackLayout>
@@ -95,18 +101,51 @@
                     </DataTemplate>
                     </ListView.ItemTemplate>
             </ListView>
-            <StackLayout Orientation="Horizontal"
-                         Margin="20"
-                         HorizontalOptions="StartAndExpand">
+            <Grid Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
                 <Label Text="Balance: "
-                       VerticalOptions="Center"/>
+                       VerticalOptions="Center"
+                       HorizontalOptions="CenterAndExpand"
+                       FontSize="Large"
+                       Grid.Row="0"
+                       Grid.Column="0"/>
             <Label Text="{Binding BalanceTotal}"
                    FontSize="Large"
                    FontAttributes="Bold"
                    TextColor="{Binding ColorBalance}"
-                   VerticalOptions="Center"/>
-               
-            </StackLayout>
+                   VerticalOptions="Center"
+                   HorizontalOptions="CenterAndExpand"
+                   Grid.Row="1"
+                   Grid.Column="0"/>
+                <Image Source="Batman"
+                       HorizontalOptions="End"
+                       VerticalOptions="Center"
+                       Grid.Row="0"
+                       Grid.RowSpan="2"
+                       Grid.Column="1">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding EmailCommand}"/>
+                    </Image.GestureRecognizers>
+                </Image>
+                <Image Source="Batman"
+                       HorizontalOptions="End"
+                       VerticalOptions="Center"
+                       Grid.Row="0"
+                       Grid.RowSpan="2"
+                       Grid.Column="2">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ExcelCommand}"/>
+                    </Image.GestureRecognizers>
+                </Image>
+            </Grid>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

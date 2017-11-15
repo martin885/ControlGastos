@@ -1,19 +1,18 @@
-﻿using System;
+﻿using ControlGastos.Models;
+using ControlGastos.Services;
+using ControlGastos.Views;
+using GalaSoft.MvvmLight.Command;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ControlGastos.Models;
-using Xamarin.Forms;
 using System.Windows.Input;
-using GalaSoft.MvvmLight.Command;
-using ControlGastos.Services;
-using System.Globalization;
-using ControlGastos.Views;
 
 namespace ControlGastos.ViewModels
 {
-    public class EditViewModel
+   public class EditarIngresosViewModel
     {
         #region Services
         NavigationService navigationService;
@@ -21,7 +20,7 @@ namespace ControlGastos.ViewModels
         #endregion
 
         #region Propiedades y atributos
-        private Balance balance;
+        private Ingresos ingresos;
         public string Fecha { get; set; }
         public string Dia { get; set; }
         public string Mes { get; set; }
@@ -30,7 +29,6 @@ namespace ControlGastos.ViewModels
         public string Origen { get; set; }
         public string Cantidad { get; set; }
         public string ImagenOrigen { get; set; }
-
         #endregion
 
         #region Command
@@ -56,34 +54,33 @@ namespace ControlGastos.ViewModels
             IFormatProvider culture = new CultureInfo("es-ES");
 
             Fecha = string.Format("{0}/{1}/{2}", Dia, Mes, Anio);
-           
 
 
-           
-           
+
+          
+            
                 Fecha = DateTime.Parse(Fecha, culture).ToString("dd/MMM/yyyy", culture);
                 Dia = DateTime.Parse(Fecha, culture).ToString("dd", culture);
                 Mes = DateTime.Parse(Fecha, culture).ToString("MMM", culture);
                 Anio = DateTime.Parse(Fecha, culture).ToString("yyyy", culture);
 
-
-            balance.Dia = Dia;
-            balance.Mes = Mes;
-            balance.Anio = Anio;
-            balance.Origen = Origen;
+            ingresos.Dia = Dia;
+            ingresos.Mes = Mes;
+            ingresos.Anio = Anio;
+            ingresos.IngresoNombre = Origen;
 
             if (Cantidad.Contains("-"))
             {
-                balance.Cantidad = Cantidad.Replace("-","");
+                ingresos.IngresoCantidad = Cantidad.Replace("-", "");
             }
-            else { 
-            balance.Cantidad = Cantidad;
+            else
+            {
+                ingresos.IngresoCantidad = Cantidad;
             }
-            var balanceViewModel = BalanceViewModel.GetInstance();
-            balanceViewModel.Editar(balance);
-            var editView = EditView.GetInstance();
-           await editView.Navigation.PopAsync();
-                //await navigationService.Back();
+            var ingresosViewModel = IngresosViewModel.GetInstance();
+            ingresosViewModel.Editar(ingresos);
+            var editarIngresosView = EditarIngresosView.GetInstance();
+            await editarIngresosView.Navigation.PopAsync();
             }
             catch
             {
@@ -94,59 +91,30 @@ namespace ControlGastos.ViewModels
         #endregion
 
         #region Constructor
-        public EditViewModel(Balance balance)
+        public EditarIngresosViewModel(Ingresos ingresos)
         {
-           
+
             navigationService = new NavigationService();
             dialogService = new DialogService();
 
-            this.balance = balance;
-  
-            Dia = balance.Dia;
-            Mes = balance.Mes;
-            Anio = balance.Anio;
-            if (string.IsNullOrEmpty(balance.Origen))
+            this.ingresos = ingresos;
+            //Carga los valores en la página de edición
+            Dia = ingresos.Dia;
+            Mes = ingresos.Mes;
+            Anio = ingresos.Anio;
+            if (string.IsNullOrEmpty(ingresos.IngresoNombre))
             {
                 Origen = "Sin origen";
             }
             else
             {
-                Origen = balance.Origen;
+                Origen = ingresos.IngresoNombre;
             }
 
-            if (balance.Cantidad.Contains("-")) { 
-            Cantidad = balance.Cantidad.Replace("-","");
-            }
-            else
-            {
-                Cantidad = balance.Cantidad;
-            }
-            if (balance.GastoIngreso.Contains("Ingreso"))
-            {
-                ImagenOrigen = "income";
-            }
-            else { 
-            switch (balance.GastoIngreso)
-            {
-                case "Servicios":
-                    ImagenOrigen = "servicios";
-                    break;
-                case "Ocio":
-                    ImagenOrigen = "ocio";
-                    break;
-                case "Provisiones":
-                    ImagenOrigen = "provisiones";
-                    break;
-                    case "Impuestos":
-                        ImagenOrigen = "Batman";
-                        break;
-                    default:
-                    ImagenOrigen = "Sin Imagen Disponible";
-                    break;
-            }
-           }
+            Cantidad = ingresos.IngresoCantidad;
+            ImagenOrigen = "income";
+
+            #endregion
         }
-        #endregion
-
     }
 }

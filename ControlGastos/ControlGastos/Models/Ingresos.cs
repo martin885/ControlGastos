@@ -1,10 +1,14 @@
-﻿using SQLite.Net.Attributes;
+﻿using ControlGastos.ViewModels;
+using ControlGastos.Views;
+using GalaSoft.MvvmLight.Command;
+using SQLite.Net.Attributes;
 using SQLiteNetExtensions.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace ControlGastos.Models
 {
@@ -36,6 +40,41 @@ namespace ControlGastos.Models
         {
             return IngresoId;
         }
+
+        #region Commands
+        public ICommand EditCommand
+        {
+            get
+            {
+                return new RelayCommand(Edit);
+            }
+        }
+        private void Edit()
+        {
+            //Instanciar ViewModel
+            var mainViewModel = MainViewModel.GetInstance();
+            mainViewModel.EditarIngresos = new EditarIngresosViewModel(this);
+
+            //Ir a la página de edición
+            var ingresosView = IngresosView.GetInstance();
+            ingresosView.Navigation.PushAsync(new EditarIngresosView());
+        }
+
+        public ICommand DeleteCommand
+        {
+            get
+            {
+                return new RelayCommand(Delete);
+            }
+        }
+
+
+        private void Delete()
+        {
+            var mainViewModel = MainViewModel.GetInstance();
+            mainViewModel.BorrarIngresos = new BorrarIngresosViewModel(this);
+        }
+        #endregion
 
     }
 }

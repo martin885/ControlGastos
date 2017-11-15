@@ -15,12 +15,30 @@ namespace ControlGastos.Views
     {
         public IngresosView()
         {
+         
             InitializeComponent();
+            instance = this;
         }
         protected override void OnAppearing()
         {
             var mainViewModel = MainViewModel.GetInstance();
             mainViewModel.Ingresos = new IngresosViewModel();
+            InitializeComponent();
         }
+
+        #region Singleton
+
+        static IngresosView instance;
+
+        public static IngresosView GetInstance()
+        {
+            if (instance == null)
+            {
+                return new IngresosView();
+            }
+            return instance;
+        }
+        #endregion
+
     }
 }
