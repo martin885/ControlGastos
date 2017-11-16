@@ -63,7 +63,7 @@ namespace ControlGastos.ViewModels
             gastos.Dia = Dia;
             gastos.Mes = Mes;
             gastos.Anio = Anio;
-            gastos.GastoNombre = Origen;
+            gastos.GastoNombre = string.Format("{0}{1}", Origen.Substring(0, 1).ToUpper(), Origen.Substring(1));
 
             if (Cantidad.Contains("-"))
             {
@@ -131,7 +131,7 @@ namespace ControlGastos.ViewModels
                         ImagenOrigen = "provisiones";
                         break;
                 case "Impuestos":
-                    ImagenOrigen = "Batman";
+                    ImagenOrigen = "impuestos";
                     break;
                 default:
                         ImagenOrigen = "Sin Imagen Disponible";

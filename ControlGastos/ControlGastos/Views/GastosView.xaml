@@ -22,7 +22,9 @@
                     </Picker.Behaviors>
                 </Picker>
                 <Entry Placeholder="Origen del Gasto" 
+                       Keyboard="Text"
                        Text="{Binding OrigenGasto,Mode=TwoWay}"/>
+             
             </StackLayout>
             <StackLayout Orientation="Horizontal"
                          Margin="10">

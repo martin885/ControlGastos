@@ -67,7 +67,7 @@ namespace ControlGastos.ViewModels
             ingresos.Dia = Dia;
             ingresos.Mes = Mes;
             ingresos.Anio = Anio;
-            ingresos.IngresoNombre = Origen;
+            ingresos.IngresoNombre = string.Format("{0}{1}", Origen.Substring(0, 1).ToUpper(), Origen.Substring(1));
 
             if (Cantidad.Contains("-"))
             {

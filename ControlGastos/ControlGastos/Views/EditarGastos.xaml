@@ -39,6 +39,7 @@
                    VerticalOptions="Center"/>
                 <Entry Text="{Binding Origen,Mode=TwoWay}"
                        VerticalOptions="Center"
+                       Keyboard="Text"
                        HorizontalOptions="FillAndExpand"/>
             </StackLayout>
             <StackLayout Orientation="Horizontal">

@@ -146,7 +146,7 @@ namespace ControlGastos.ViewModels
                 {
                     OrigenIngreso = "Sin Origen";
                 }
-                Ingresos.IngresoNombre = OrigenIngreso;
+                Ingresos.IngresoNombre = string.Format("{0}{1}", OrigenIngreso.Substring(0, 1).ToUpper(), OrigenIngreso.Substring(1));
                 Ingresos.ImagenOrigen = "income";
                 if (MontoIngreso == null)
                 {

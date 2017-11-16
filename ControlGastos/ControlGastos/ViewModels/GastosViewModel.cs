@@ -184,7 +184,7 @@ namespace ControlGastos.ViewModels
             }
 
             Gastos.Categoria = SelectedItem;
-            Gastos.GastoNombre = OrigenGasto;
+            Gastos.GastoNombre = string.Format("{0}{1}", OrigenGasto.Substring(0, 1).ToUpper(), OrigenGasto.Substring(1));
             switch (Gastos.Categoria)
             {
                 case "Servicios":
@@ -197,7 +197,7 @@ namespace ControlGastos.ViewModels
                     Gastos.ImagenOrigen = "provisiones";
                     break;
                 case "Impuestos":
-                    Gastos.ImagenOrigen = "Batman";
+                    Gastos.ImagenOrigen = "impuestos";
                     break;
                 default:
                     Gastos.ImagenOrigen = "Sin Imagen Disponible";

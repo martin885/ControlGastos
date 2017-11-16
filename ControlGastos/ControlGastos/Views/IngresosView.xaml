@@ -15,6 +15,7 @@
                     </DatePicker.Behaviors>
                 </DatePicker>
                 <Entry Placeholder="Origen del Ingreso" 
+                       Keyboard="Text"
                        Text="{Binding OrigenIngreso,Mode=TwoWay}"/>
             </StackLayout>
             <StackLayout Orientation="Horizontal"

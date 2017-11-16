@@ -12,10 +12,13 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
                 <Picker Title="Mes" 
                         ItemsSource="{Binding Meses}"
                         HorizontalOptions="FillAndExpand"
+                        VerticalOptions="CenterAndExpand"
                         SelectedItem="{Binding SelectedItemMes,Mode=TwoWay}"
                         BackgroundColor="Transparent"
                         Grid.Column="0"
@@ -32,6 +35,7 @@
                 <Picker Title="Año"
                         ItemsSource="{Binding Años}"
                         HorizontalOptions="FillAndExpand"
+                        VerticalOptions="CenterAndExpand"
                         SelectedItem="{Binding SelectedItemAño,Mode=TwoWay}"
                         BackgroundColor="Transparent"
                         Grid.Column="1"
@@ -108,8 +112,8 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Label Text="Balance: "
                        VerticalOptions="Center"
@@ -125,7 +129,7 @@
                    HorizontalOptions="CenterAndExpand"
                    Grid.Row="1"
                    Grid.Column="0"/>
-                <Image Source="Batman"
+                <Image Source="correo"
                        HorizontalOptions="End"
                        VerticalOptions="Center"
                        Grid.Row="0"
@@ -135,7 +139,7 @@
                         <TapGestureRecognizer Command="{Binding EmailCommand}"/>
                     </Image.GestureRecognizers>
                 </Image>
-                <Image Source="Batman"
+                <Image Source="excel"
                        HorizontalOptions="End"
                        VerticalOptions="Center"
                        Grid.Row="0"

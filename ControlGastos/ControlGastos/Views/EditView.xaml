@@ -39,7 +39,8 @@
                    VerticalOptions="Center"/>
                 <Entry Text="{Binding Origen,Mode=TwoWay}"
                        VerticalOptions="Center"
-                       HorizontalOptions="FillAndExpand"/>
+                       HorizontalOptions="FillAndExpand"
+                       Keyboard="Text"/>
             </StackLayout>
             <StackLayout Orientation="Horizontal">
                 <Image Source="money"
