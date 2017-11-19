@@ -27,7 +27,7 @@ namespace ControlGastos.Views
         }
         #region Singleton
 
-        static GastosView instance;   
+        static GastosView instance;
 
         public static GastosView GetInstance()
         {
@@ -37,6 +37,9 @@ namespace ControlGastos.Views
             }
             return instance;
         }
+
         #endregion
+
+
     }
 }

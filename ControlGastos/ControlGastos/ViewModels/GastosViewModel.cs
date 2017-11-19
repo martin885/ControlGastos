@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Xamarin.Forms;
 
 namespace ControlGastos.ViewModels
 {
@@ -278,7 +279,6 @@ namespace ControlGastos.ViewModels
             dataService = new DataService();
             dialogService = new DialogService();
             instance = this;
-
             Cargas();
 
         }

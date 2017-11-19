@@ -57,7 +57,8 @@
                 Text="Guardar Cambio" 
                   Command="{Binding GuardarCambioCommand}"
                     VerticalOptions="EndAndExpand"
-                    HorizontalOptions="Center"/>
+                    HorizontalOptions="Center"
+                    BackgroundColor="#F7A008"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

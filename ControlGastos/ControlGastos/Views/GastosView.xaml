@@ -43,7 +43,9 @@
             </StackLayout>
             <ListView ItemsSource="{Binding CollectionGastos}"
                       HasUnevenRows="True"
-                      SeparatorColor="#f18624">
+                      SeparatorColor="#f18624" 
+                      BackgroundColor="{Binding BackgroundColor}"
+                      Margin="10,0,10,0">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
@@ -54,8 +56,7 @@
                                           Command="{Binding DeleteCommand}" 
                                           IsDestructive="True"/>
                             </ViewCell.ContextActions>
-                        <StackLayout Margin="10,0,10,0"
-                                     Spacing="-10">
+                        <StackLayout  Spacing="-10">
                             
                                 <StackLayout Orientation="Horizontal">
                                     <Image Source="{Binding ImagenOrigen}"
