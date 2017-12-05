@@ -100,9 +100,9 @@
                          HorizontalOptions="CenterAndExpand">
                 <StackLayout Orientation="Horizontal">
                     <Label Text="Gastos de"
-                       VerticalOptions="Center"/>
+                       VerticalOptions="CenterAndExpand"/>
                     <Label Text="{Binding Categoria}"
-                       VerticalOptions="Center"/>
+                       VerticalOptions="CenterAndExpand"/>
                     <Label Text="{Binding SumaGastoCategoria}" 
                        FontSize="Large" 
                        FontAttributes="Bold"
@@ -111,13 +111,13 @@
                 </StackLayout>
                 <StackLayout Orientation="Horizontal">
                     <Label Text="Gastos de"
-                       VerticalOptions="Center"/>
+                       VerticalOptions="CenterAndExpand"/>
                     <Label Text="{Binding Mes}"
-                       VerticalOptions="Center"/>
+                       VerticalOptions="CenterAndExpand"/>
                     <Label Text="{Binding SumaGasto}" 
                        FontSize="Large" 
                        FontAttributes="Bold"
-                       VerticalOptions="Center"
+                       VerticalOptions="CenterAndExpand"
                        TextColor="Red"/>
                 </StackLayout>
 

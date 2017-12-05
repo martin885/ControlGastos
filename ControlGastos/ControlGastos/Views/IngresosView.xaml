@@ -92,13 +92,13 @@
                          HorizontalOptions="CenterAndExpand">
                 <StackLayout Orientation="Horizontal">
                 <Label Text="Ingresos Brutos de"
-                       VerticalOptions="Center"/>
+                       VerticalOptions="CenterAndExpand"/>
                 <Label Text="{Binding Mes}"
-                       VerticalOptions="Center"/>
+                       VerticalOptions="CenterAndExpand"/>
                 <Label Text="{Binding SumaIngreso}" 
                        FontSize="Large" 
                        FontAttributes="Bold"
-                       VerticalOptions="Center"
+                       VerticalOptions="CenterAndExpand"
                        TextColor="Green"/>
                 </StackLayout>
                
