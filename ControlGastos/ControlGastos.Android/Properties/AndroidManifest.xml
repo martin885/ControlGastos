@@ -1,17 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.gestorgastos.onesignal" android:installLocation="auto">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.gestorgastos.onesignal" android:installLocation="auto" android:versionCode="3" android:versionName="3.0">
 	<uses-sdk android:minSdkVersion="15" />
-    <permission android:name="com.gestorgastos.onesignal.permission.C2D_MESSAGE"
-              android:protectionLevel="signature" />
-  <uses-permission android:name="com.gestorgastos.onesignal.permission.C2D_MESSAGE" />
+	<permission android:name="com.gestorgastos.onesignal.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+	<uses-permission android:name="com.gestorgastos.onesignal.permission.C2D_MESSAGE" />
 	<uses-permission android:name="android.permission.INTERNET" />
-	<application android:label="Gestor de Gastos">
-    <receiver android:name="com.onesignal.GcmBroadcastReceiver"
-      android:permission="com.google.android.c2dm.permission.SEND" >
-      <intent-filter>
-        <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-        <category android:name="com.gestorgastos.onesignal" />
-      </intent-filter>
-    </receiver>
-  </application>
+	<application android:label="Gestor de Gastos" android:icon="@drawable/logotipoGG">
+		<receiver android:name="com.onesignal.GcmBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
+			<intent-filter>
+				<action android:name="com.google.android.c2dm.intent.RECEIVE" />
+				<category android:name="com.gestorgastos.onesignal" />
+			</intent-filter>
+		</receiver>
+	</application>
 </manifest>

@@ -39,6 +39,10 @@
       <item name="android:colorActivatedHighlight">@color/ListViewSelected</item>
       <item name="android:activatedBackgroundIndicator">@color/ListViewSelected</item>
 
+    
+           <!--cambio de colores para el picker-->
+    <item name="android:alertDialogTheme">@style/AppCompatDialogStyle</item>
+    
   </style>
 
   <style name="AppCompatDialogStyle" parent="Theme.AppCompat.Light.Dialog">
@@ -55,6 +59,4 @@
 <!--<style name="DatePickerStyle" parent="android:Widget.Material.DatePicker">
     <item name="android:datePickerMode">calendar</item>
 </style>-->
-
-
 </resources>
