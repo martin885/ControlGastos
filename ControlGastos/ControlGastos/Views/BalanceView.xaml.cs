@@ -28,8 +28,7 @@ namespace ControlGastos.Views
             
             var mainViewModel = MainViewModel.GetInstance();
             mainViewModel.Balance = new BalanceViewModel();
-            InitializeComponent();
-
+            InitializeComponent();     
         }
 
         #region Singleton

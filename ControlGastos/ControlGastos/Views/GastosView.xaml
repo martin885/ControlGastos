@@ -7,33 +7,52 @@
              NavigationPage.HasNavigationBar="False">
     <ContentPage.Content>
         <StackLayout BindingContext="{Binding Gastos}">
-            <StackLayout Margin="10" >
+            <StackLayout Margin="10,10,10,0" >
                 <DatePicker Format="D"
                             Date="{Binding Date}">
                     <DatePicker.Behaviors>
                         <local:DateSelected Command="{Binding DateSelectedCommand}"/>
                     </DatePicker.Behaviors>
                 </DatePicker>
-                <Picker SelectedItem="{Binding SelectedItem,Mode=TwoWay}"
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Picker SelectedItem="{Binding SelectedItem,Mode=TwoWay}"
+                        HorizontalOptions="FillAndExpand"
+                        VerticalOptions="CenterAndExpand"
                         ItemsSource="{Binding PickerCategorias}"
-                        Title="Seleccionar Categoría">
-                    <Picker.Behaviors>
-                        <local:SelectedItemPicker Command="{Binding SelectedItemChangedCommand}"/>
-                    </Picker.Behaviors>
-                </Picker>
-                <Entry Placeholder="Origen del Gasto" 
+                        Title="Seleccionar Categoría..."
+                        BackgroundColor="Transparent"
+                        Grid.Column="0">
+                        <Picker.Behaviors>
+                            <local:SelectedItemPicker Command="{Binding SelectedItemChangedCommand}"/>
+                        </Picker.Behaviors>
+                    </Picker>
+                    <Image Source="arrow" 
+                       Scale="0.75"
+                       VerticalOptions="Center"
+                       Grid.Column="0" 
+                       HorizontalOptions="End"/>
+                </Grid>
+                <Entry Placeholder="Origen del Gasto..." 
+                       PlaceholderColor="Gray"
                        Keyboard="Text"
                        Text="{Binding OrigenGasto,Mode=TwoWay}"/>
-             
             </StackLayout>
             <StackLayout Orientation="Horizontal"
-                         Margin="10">
-                <Entry Placeholder="Monto en pesos"
+                         Margin="10,0,10,0">
+                <Entry Placeholder="Monto en pesos..."
+                       PlaceholderColor="Gray"
                        HorizontalOptions="FillAndExpand"
                        VerticalOptions="Center"
                        Keyboard="Numeric"
                        Text="{Binding MontoGasto,Mode=TwoWay}"/>
                 <Image Source="plus"
+                       Scale="0.75"
                        HorizontalOptions="End"
                        VerticalOptions="Center">
                     <Image.GestureRecognizers>
@@ -44,10 +63,9 @@
             <ListView ItemsSource="{Binding CollectionGastos}"
                       HasUnevenRows="True"
                       SeparatorColor="#f18624" 
-                      BackgroundColor="{Binding BackgroundColor}"
-                      Margin="10,0,10,0">
+                      BackgroundColor="{Binding BackgroundColor}">
                 <ListView.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate >
                         <ViewCell>
                             <ViewCell.ContextActions>
                                 <MenuItem Text="Editar" 
@@ -56,12 +74,13 @@
                                           Command="{Binding DeleteCommand}" 
                                           IsDestructive="True"/>
                             </ViewCell.ContextActions>
-                        <StackLayout  Spacing="-10">
+                            <StackLayout  Margin="10,0,10,0"
+                                          Spacing="-25">
                             
                                 <StackLayout Orientation="Horizontal">
                                     <Image Source="{Binding ImagenOrigen}"
                                            VerticalOptions="Center"
-                                           Scale="0.75"/>
+                                           Scale="0.50"/>
                                     <Label Text="{Binding GastoNombre}"
                                            VerticalOptions="Center"/>
                                 </StackLayout>
@@ -69,7 +88,7 @@
                                 <StackLayout Orientation="Horizontal">
                                     <Image Source="{Binding ImagenFecha}"
                                            VerticalOptions="Center"
-                                           Scale="0.75"/>
+                                           Scale="0.50"/>
                                     <Label Text="{Binding Dia}"
                                            VerticalOptions="Center"/>
                                     <Label Text="/"
@@ -85,7 +104,7 @@
                                 <StackLayout Orientation="Horizontal">
                                     <Image Source="{Binding ImagenMonto}"
                                            VerticalOptions="Center"
-                                           Scale="0.75"/>
+                                           Scale="0.50"/>
                                     <Label Text="{Binding GastosCantidad}"
                                            VerticalOptions="Center"/>
                                 </StackLayout>
@@ -95,9 +114,10 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <StackLayout Margin="10" 
+            <StackLayout Margin="10,0,10,10" 
                          VerticalOptions="CenterAndExpand"
-                         HorizontalOptions="CenterAndExpand">
+                         HorizontalOptions="CenterAndExpand"
+                         Spacing="-5">
                 <StackLayout Orientation="Horizontal">
                     <Label Text="Gastos de"
                        VerticalOptions="CenterAndExpand"/>

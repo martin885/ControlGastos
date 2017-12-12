@@ -22,6 +22,7 @@ namespace ControlGastos.ViewModels
         public BorrarGastosViewModel BorrarGastos { get; set; }
         public EditarIngresosViewModel EditarIngresos { get; set; }
         public BorrarIngresosViewModel BorrarIngresos { get; set; }
+        public InfoViewModel Info { get; set; }
         #endregion
 
 

@@ -1,6 +1,7 @@
 ﻿using ControlGastos.Interfaces;
 using ControlGastos.Models;
 using ControlGastos.Services;
+using ControlGastos.Views;
 using GalaSoft.MvvmLight.Command;
 using Plugin.Messaging;
 using Syncfusion.XlsIO;
@@ -167,6 +168,23 @@ namespace ControlGastos.ViewModels
             }
         }
 
+        public ICommand InfoCommand
+        {
+            get
+            {
+                return new RelayCommand(Info);
+            }
+        }
+
+        private async void Info()
+        {
+            //Instanciar ViewModel
+            var mainViewModel = MainViewModel.GetInstance();
+            mainViewModel.Info = new InfoViewModel();
+            //Ir a la página de información
+            var balanceView = BalanceView.GetInstance();
+            await balanceView.Navigation.PushAsync(new InfoView());
+        }
 
         private async void Excel()
         {

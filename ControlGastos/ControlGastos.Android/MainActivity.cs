@@ -6,6 +6,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using Com.OneSignal;
 
 namespace ControlGastos.Droid
 {
@@ -18,6 +19,8 @@ namespace ControlGastos.Droid
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(bundle);
+
+            OneSignal.Current.StartInit("d18e950f-8242-437d-beb8-28fc657cf0a4").EndInit();
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
             LoadApplication(new App());

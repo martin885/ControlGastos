@@ -1,5 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.gestorgastos.onesignal" android:installLocation="auto">
 	<uses-sdk android:minSdkVersion="15" />
-	<application android:label="Gestor de Gastos"></application>
+    <permission android:name="com.gestorgastos.onesignal.permission.C2D_MESSAGE"
+              android:protectionLevel="signature" />
+  <uses-permission android:name="com.gestorgastos.onesignal.permission.C2D_MESSAGE" />
+	<uses-permission android:name="android.permission.INTERNET" />
+	<application android:label="Gestor de Gastos">
+    <receiver android:name="com.onesignal.GcmBroadcastReceiver"
+      android:permission="com.google.android.c2dm.permission.SEND" >
+      <intent-filter>
+        <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+        <category android:name="com.gestorgastos.onesignal" />
+      </intent-filter>
+    </receiver>
+  </application>
 </manifest>

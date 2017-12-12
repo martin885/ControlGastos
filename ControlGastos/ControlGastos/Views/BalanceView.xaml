@@ -64,38 +64,42 @@
                                           IsDestructive="True"/>
                             </ViewCell.ContextActions>
 
-                            <StackLayout Margin="10">
+                            <StackLayout Margin="10,1,10,1"
+                                         Spacing="-10">
                                 
                                 <StackLayout Orientation="Horizontal">
                                     <Image Source="{Binding ImagenOrigen}"
-                                           VerticalOptions="Center"/>
+                                           VerticalOptions="Center"
+                                           Scale="0.75"/>
                                     <Label Text="{Binding Origen}"
                                            VerticalOptions="Center"
-                                           FontSize="Large"/>
+                                           FontSize="Medium"/>
                                 </StackLayout>
                                 <StackLayout Orientation="Horizontal">
                                     <Image Source="{Binding ImagenFecha}"
-                                           VerticalOptions="Center"/>
+                                           VerticalOptions="Center"
+                                           Scale="0.75"/>
                                     <Label Text="{Binding Dia}"
                                            VerticalOptions="Center"
-                                           FontSize="Large"/>
+                                           FontSize="Medium"/>
                                     <Label Text="/"
                                            VerticalOptions="Center"/>
                                     <Label Text="{Binding Mes}"
                                            VerticalOptions="Center"
-                                           FontSize="Large"/>
+                                           FontSize="Medium"/>
                                     <Label Text="/"
                                            VerticalOptions="Center"/>
                                     <Label Text="{Binding Anio}"
                                            VerticalOptions="Center"
-                                           FontSize="Large"/>
+                                           FontSize="Medium"/>
                                 </StackLayout>
                                 <StackLayout Orientation="Horizontal">
                                     <Image Source="{Binding ImagenMonto}"
+                                           Scale="0.75"
                                            VerticalOptions="Center"/>
                                     <Label Text="{Binding Cantidad}" 
                                        TextColor="{Binding ColorGastoIngreso}"
-                                       FontSize="Large"
+                                       FontSize="Medium"
                                        FontAttributes="Bold"
                                        VerticalOptions="Center"/>
                                 </StackLayout>
@@ -107,6 +111,7 @@
             </ListView>
             <Grid Margin="10">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
@@ -115,12 +120,23 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
+                <Image Source="info"
+                       HorizontalOptions="Start"
+                       VerticalOptions="Center"
+                       Grid.Row="0"
+                       Grid.RowSpan="2"
+                       Grid.Column="0"
+                       Scale="0.75">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding InfoCommand}"/>
+                    </Image.GestureRecognizers>
+                </Image>
                 <Label Text="Balance: "
                        VerticalOptions="Center"
                        HorizontalOptions="CenterAndExpand"
                        FontSize="Large"
                        Grid.Row="0"
-                       Grid.Column="0"/>
+                       Grid.Column="1"/>
             <Label Text="{Binding BalanceTotal}"
                    FontSize="Large"
                    FontAttributes="Bold"
@@ -128,13 +144,14 @@
                    VerticalOptions="Center"
                    HorizontalOptions="CenterAndExpand"
                    Grid.Row="1"
-                   Grid.Column="0"/>
+                   Grid.Column="1"/>
                 <Image Source="correo"
                        HorizontalOptions="End"
                        VerticalOptions="Center"
                        Grid.Row="0"
                        Grid.RowSpan="2"
-                       Grid.Column="1">
+                       Grid.Column="2"
+                       Scale="0.75">
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding EmailCommand}"/>
                     </Image.GestureRecognizers>
@@ -144,7 +161,8 @@
                        VerticalOptions="Center"
                        Grid.Row="0"
                        Grid.RowSpan="2"
-                       Grid.Column="2">
+                       Grid.Column="3"
+                       Scale="0.75">
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding ExcelCommand}"/>
                     </Image.GestureRecognizers>

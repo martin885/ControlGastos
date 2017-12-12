@@ -7,27 +7,30 @@
              NavigationPage.HasNavigationBar="False">
     <ContentPage.Content>
         <StackLayout BindingContext="{Binding Ingresos}">
-            <StackLayout Margin="10" >
+            <StackLayout Margin="10,10,10,0" >
                 <DatePicker Format="D"
                     Date="{Binding Date}">
                     <DatePicker.Behaviors>
                         <local:DateSelected Command="{Binding DateSelectedCommand}"/>
                     </DatePicker.Behaviors>
                 </DatePicker>
-                <Entry Placeholder="Origen del Ingreso" 
+                <Entry Placeholder="Origen del Ingreso..."
+                       PlaceholderColor="Gray"
                        Keyboard="Text"
                        Text="{Binding OrigenIngreso,Mode=TwoWay}"/>
             </StackLayout>
             <StackLayout Orientation="Horizontal"
-                         Margin="10">
-                <Entry Placeholder="Monto en pesos"
+                         Margin="10,0,10,0">
+                <Entry Placeholder="Monto en pesos..."
+                       PlaceholderColor="Gray"
                        HorizontalOptions="FillAndExpand"
                        VerticalOptions="Center"
                        Keyboard="Numeric"
                        Text="{Binding MontoIngreso,Mode=TwoWay}"/>
                 <Image Source="plus"
                        HorizontalOptions="End"
-                       VerticalOptions="Center">
+                       VerticalOptions="Center"
+                       Scale="0.75">
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding AgregarIngresoCommand}"/>
                     </Image.GestureRecognizers>
@@ -48,12 +51,12 @@
                             </ViewCell.ContextActions>
                             
                             <StackLayout Margin="10,0,10,0"
-                                         Spacing="-10">
+                                         Spacing="-25">
 
                                 <StackLayout Orientation="Horizontal">
                                     <Image Source="{Binding ImagenOrigen}"
                                            VerticalOptions="Center"
-                                           Scale="0.75"/>
+                                           Scale="0.5"/>
                                     <Label Text="{Binding IngresoNombre}"
                                            VerticalOptions="Center"/>
                                 </StackLayout>
@@ -61,7 +64,7 @@
                                 <StackLayout Orientation="Horizontal">
                                     <Image Source="{Binding ImagenFecha}"
                                            VerticalOptions="Center"
-                                           Scale="0.75"/>
+                                           Scale="0.5"/>
                                     <Label Text="{Binding Dia}"
                                            VerticalOptions="Center"/>
                                     <Label Text="/"
@@ -77,7 +80,7 @@
                                 <StackLayout Orientation="Horizontal">
                                     <Image Source="{Binding ImagenMonto}"
                                            VerticalOptions="Center"
-                                           Scale="0.75"/>
+                                           Scale="0.5"/>
                                     <Label Text="{Binding IngresoCantidad}"
                                            VerticalOptions="Center"/>
                                 </StackLayout>
