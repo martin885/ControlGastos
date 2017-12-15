@@ -49,10 +49,10 @@
                        VerticalOptions="Center"
                        Grid.Column="1" 
                        HorizontalOptions="End"/>
-            </Grid>
+            </Grid >
             <ListView ItemsSource="{Binding CollectionBalance}"
                       HasUnevenRows="True"
-                      SeparatorColor="#f18624">
+                      SeparatorColor="#f18121">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
@@ -66,7 +66,7 @@
 
                             <StackLayout Margin="10,1,10,1"
                                          Spacing="-10">
-                                
+
                                 <StackLayout Orientation="Horizontal">
                                     <Image Source="{Binding ImagenOrigen}"
                                            VerticalOptions="Center"
@@ -103,53 +103,54 @@
                                        FontAttributes="Bold"
                                        VerticalOptions="Center"/>
                                 </StackLayout>
-                                
+
                             </StackLayout>
                         </ViewCell>
                     </DataTemplate>
-                    </ListView.ItemTemplate>
+                </ListView.ItemTemplate>
             </ListView>
-            <Grid Margin="10">
+            <StackLayout Orientation="Horizontal"
+                         HorizontalOptions="CenterAndExpand">
+                <Label Text="Balance: "
+                       VerticalOptions="Center"
+                       HorizontalOptions="CenterAndExpand"
+                       FontSize="Large"/>
+                <Label Text="{Binding BalanceTotal}"
+                   FontSize="Large"
+                   FontAttributes="Bold"
+                   TextColor="{Binding ColorBalance}"
+                   VerticalOptions="Center"
+                   HorizontalOptions="CenterAndExpand"/>
+            </StackLayout>
+            <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
+                <BoxView BackgroundColor="#f18121"
+                         Grid.Row="0"
+                         Grid.Column="0"
+                         Grid.ColumnSpan="4"/>
                 <Image Source="info"
-                       HorizontalOptions="Start"
+                       HorizontalOptions="Center"
                        VerticalOptions="Center"
                        Grid.Row="0"
-                       Grid.RowSpan="2"
                        Grid.Column="0"
                        Scale="0.75">
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding InfoCommand}"/>
                     </Image.GestureRecognizers>
                 </Image>
-                <Label Text="Balance: "
-                       VerticalOptions="Center"
-                       HorizontalOptions="CenterAndExpand"
-                       FontSize="Large"
-                       Grid.Row="0"
-                       Grid.Column="1"/>
-            <Label Text="{Binding BalanceTotal}"
-                   FontSize="Large"
-                   FontAttributes="Bold"
-                   TextColor="{Binding ColorBalance}"
-                   VerticalOptions="Center"
-                   HorizontalOptions="CenterAndExpand"
-                   Grid.Row="1"
-                   Grid.Column="1"/>
+
                 <Image Source="correo"
-                       HorizontalOptions="End"
+                       HorizontalOptions="Center"
                        VerticalOptions="Center"
                        Grid.Row="0"
-                       Grid.RowSpan="2"
                        Grid.Column="2"
                        Scale="0.75">
                     <Image.GestureRecognizers>
@@ -157,14 +158,23 @@
                     </Image.GestureRecognizers>
                 </Image>
                 <Image Source="excel"
-                       HorizontalOptions="End"
+                       HorizontalOptions="Center"
                        VerticalOptions="Center"
                        Grid.Row="0"
-                       Grid.RowSpan="2"
                        Grid.Column="3"
                        Scale="0.75">
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding ExcelCommand}"/>
+                    </Image.GestureRecognizers>
+                </Image>
+                <Image Source="notificacion"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       Grid.Row="0"
+                       Grid.Column="1"
+                       Scale="0.75">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NotificationCommand}"/>
                     </Image.GestureRecognizers>
                 </Image>
             </Grid>

@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ControlGastos.Views.NotificationView"
+             BindingContext="{Binding Main,Source={StaticResource Key=Locator}}"
+             NavigationPage.HasNavigationBar="False">
+    <ContentPage.Content>
+        <StackLayout BindingContext="{Binding Notification}">
+            <StackLayout Margin="10,10,10,0" >
+                <DatePicker Format="D"
+                    Date="{Binding Date}"
+                            MinimumDate="{Binding MinimuDate}"/>
+                <TimePicker Time="{Binding Time,Mode=TwoWay}" />
+                <Entry Placeholder="Título del mensaje..."
+                       PlaceholderColor="Gray"
+                       Keyboard="Text"
+                       Text="{Binding TituloNotification,Mode=TwoWay}"/>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal"
+                         Margin="10,0,10,0">
+                <Entry Placeholder="Mensaje..."
+                       PlaceholderColor="Gray"
+                       HorizontalOptions="FillAndExpand"
+                       VerticalOptions="Center"
+                       Text="{Binding MensajeNotification,Mode=TwoWay}"/>
+                <Image Source="plus"
+                       HorizontalOptions="End"
+                       VerticalOptions="Center"
+                       Scale="0.75">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NotificationCommand}"/>
+                    </Image.GestureRecognizers>
+                </Image>
+            </StackLayout>
+            <ListView ItemsSource="{Binding CollectionNotification}"
+                      HasUnevenRows="True"
+                      SeparatorColor="#f18121"
+                      Margin="10,10,10,10">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <ViewCell.ContextActions>
+                                <MenuItem Text="Editar" 
+                                          Command="{Binding EditCommand}"/>
+                                <MenuItem Text="Borrar" 
+                                          Command="{Binding DeleteCommand}" 
+                                          IsDestructive="True"/>
+                            </ViewCell.ContextActions>
+
+                            <Grid Margin="10" RowSpacing="-5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Image Source="notificacion"
+                                       Scale="1.5"
+                                       HorizontalOptions="EndAndExpand"
+                                           Grid.Row="0"
+                                           Grid.Column="0"
+                                           Grid.RowSpan="4"
+                                       Margin="10,0,30,0"/>
+                                <Label Text="{Binding Title}"
+                                           VerticalOptions="Center"
+                                       Grid.Row="0"
+                                       Grid.Column="1"/>
+                                <StackLayout Orientation="Horizontal"
+                                             Grid.Row="1"
+                                             Grid.Column="1">
+                                    <Label Text="{Binding Dia}"
+                                           VerticalOptions="Center"/>
+                                    <Label Text="/"
+                                           VerticalOptions="Center"/>
+                                    <Label Text="{Binding Mes}"
+                                           VerticalOptions="Center"/>
+                                    <Label Text="/"
+                                           VerticalOptions="Center"/>
+                                    <Label Text="{Binding Anio}"
+                                           VerticalOptions="Center"/>
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal"
+                                             Grid.Row="2"
+                                             Grid.Column="1">
+                                    <Label Text="{Binding Hora}"
+                                           VerticalOptions="Center"/>
+                                    <Label Text=":"
+                                           VerticalOptions="Center"/>
+                                    <Label Text="{Binding Minutos}"
+                                           VerticalOptions="Center"/>
+                                </StackLayout>
+                                <Label Text="{Binding Message}"
+                                       VerticalOptions="Center"
+                                       Grid.Row="3"
+                                       Grid.Column="1"/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Button Text="Volver" Command="{Binding VolverCommand}"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

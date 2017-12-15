@@ -8,55 +8,58 @@
   </style>
 
   <style name="MainTheme" parent="MainTheme.Base">
-    
+
   </style>
   <!-- Base theme applied no matter what API -->
   <style name="MainTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
-    
+
     <!--If you are using revision 22.1 please use just windowNoTitle. Without android:-->
     <item name="windowNoTitle">true</item>
     <!--We will be using the toolbar so no need to show ActionBar-->
     <item name="windowActionBar">false</item>
     <!-- Set theme colors from http://www.google.com/design/spec/style/color.html#color-color-palette -->
     <!-- colorPrimary is used for the default action bar background -->
-    <item name="colorPrimary">#F7A008</item>
+    <item name="colorPrimary">#f18121</item>
     <!-- colorPrimaryDark is used for the status bar -->
-    <item name="colorPrimaryDark">#F7A008</item>
+    <item name="colorPrimaryDark">#f18121</item>
     <!-- colorAccent is used as the default value for colorControlActivated
          which is used to tint widgets -->
-    <item name="colorAccent">#F7A008</item>
+    <item name="colorAccent">#f18121</item>
     <!-- You can also set colorControlNormal, colorControlActivated
          colorControlHighlight and colorSwitchThumbNormal. -->
     <item name="windowActionModeOverlay">true</item>
 
     <!--cambio de color del estilo del dialog del datepicker-->
     <item name="android:datePickerDialogTheme">@style/AppCompatDialogStyle</item>
-    
-    <!--cambio de colores para la listview-->
-      <item name="android:colorPressedHighlight">@color/ListViewSelected</item>
-      <item name="android:colorLongPressedHighlight">@color/ListViewHighlighted</item>
-      <item name="android:colorFocusedHighlight">@color/ListViewSelected</item>
-      <item name="android:colorActivatedHighlight">@color/ListViewSelected</item>
-      <item name="android:activatedBackgroundIndicator">@color/ListViewSelected</item>
 
-    
-           <!--cambio de colores para el picker-->
+    <!--cambio de color del estilo del dialog del timepicker-->
+    <item name="android:timePickerDialogTheme">@style/AppCompatDialogStyle</item>
+ 
+    <!--cambio de colores para la listview-->
+    <item name="android:colorPressedHighlight">@color/ListViewSelected</item>
+    <item name="android:colorLongPressedHighlight">@color/ListViewHighlighted</item>
+    <item name="android:colorFocusedHighlight">@color/ListViewSelected</item>
+    <item name="android:colorActivatedHighlight">@color/ListViewSelected</item>
+    <item name="android:activatedBackgroundIndicator">@color/ListViewSelected</item>
+
+
+    <!--cambio de colores para el picker-->
     <item name="android:alertDialogTheme">@style/AppCompatDialogStyle</item>
-    
+
   </style>
 
   <style name="AppCompatDialogStyle" parent="Theme.AppCompat.Light.Dialog">
-    <item name="colorAccent">#F7A008</item>
-     <!--cambio de spinner a calendar datepicker-->
-   <!--<item name="android:datePickerStyle">@style/DatePickerStyle</item>-->
+    <item name="colorAccent">#f18121</item>
+    <!--cambio de spinner a calendar datepicker-->
+    <!--<item name="android:datePickerStyle">@style/DatePickerStyle</item>-->
   </style>
-  
+
   <!--selección de colores para la listview-->
   <color name="ListViewSelected">#CCC</color>
   <color name="ListViewHighlighted">#CCC</color>
-  
+
   <!--cambio de spinner a calendar datepicker-->
-<!--<style name="DatePickerStyle" parent="android:Widget.Material.DatePicker">
+  <!--<style name="DatePickerStyle" parent="android:Widget.Material.DatePicker">
     <item name="android:datePickerMode">calendar</item>
 </style>-->
 </resources>

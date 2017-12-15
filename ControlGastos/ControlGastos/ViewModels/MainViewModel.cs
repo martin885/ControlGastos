@@ -23,6 +23,7 @@ namespace ControlGastos.ViewModels
         public EditarIngresosViewModel EditarIngresos { get; set; }
         public BorrarIngresosViewModel BorrarIngresos { get; set; }
         public InfoViewModel Info { get; set; }
+        public NotificationViewModel Notification { get; set; }
         #endregion
 
 
@@ -36,13 +37,13 @@ namespace ControlGastos.ViewModels
 
         #region Singleton
 
-       static MainViewModel instance;
+        static MainViewModel instance;
 
-      public static MainViewModel GetInstance()
+        public static MainViewModel GetInstance()
         {
             if (instance == null)
             {
-               return new MainViewModel();
+                return new MainViewModel();
             }
             return instance;
         }
