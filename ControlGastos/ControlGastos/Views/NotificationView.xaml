@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ControlGastos.Views.NotificationView"
              BindingContext="{Binding Main,Source={StaticResource Key=Locator}}"
-             NavigationPage.HasNavigationBar="False">
+             NavigationPage.HasNavigationBar="True">
     <ContentPage.Content>
         <StackLayout BindingContext="{Binding Notification}">
             <StackLayout Margin="10,10,10,0" >
@@ -102,7 +102,6 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <Button Text="Volver" Command="{Binding VolverCommand}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

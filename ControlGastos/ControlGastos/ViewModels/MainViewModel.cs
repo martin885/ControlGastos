@@ -24,6 +24,8 @@ namespace ControlGastos.ViewModels
         public BorrarIngresosViewModel BorrarIngresos { get; set; }
         public InfoViewModel Info { get; set; }
         public NotificationViewModel Notification { get; set; }
+        public EditarNotificationViewModel EditarNotification { get; set; }
+        public BorrarNotificationViewModel BorrarNotification { get; set; }
         #endregion
 
 

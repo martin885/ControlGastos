@@ -29,11 +29,9 @@ namespace ControlGastos.ViewModels
         #region Propiedades y Atributos
         IFormatProvider culture;
 
-        public DateTime Date { get; set; }
         public DateTime MinimuDate { get; set; }
-        public TimeSpan Time { get; set; }
+
         Notification Notificacion;
-        public List<Notification> ListaNotifications { get; set; }
 
         string _mensajeNotification;
         public string MensajeNotification
@@ -81,6 +79,57 @@ namespace ControlGastos.ViewModels
                 {
                     _tituloNotification = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TituloNotification)));
+                }
+            }
+        }
+
+        public TimeSpan _time;
+        public TimeSpan Time
+        {
+            get
+            {
+                return _time;
+            }
+            set
+            {
+                if (_time != value)
+                {
+                    _time = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Time)));
+                }
+            }
+        }
+
+        public DateTime _date;
+        public DateTime Date
+        {
+            get
+            {
+                return _date;
+            }
+            set
+            {
+                if (_date != value)
+                {
+                    _date = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Date)));
+                }
+            }
+        }
+
+        List<Notification> _listaNotifications;
+        public List<Notification> ListaNotifications
+    {
+            get
+            {
+                return _listaNotifications;
+            }
+            set
+            {
+                if (_listaNotifications != value)
+                {
+                    _listaNotifications = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ListaNotifications)));
                 }
             }
         }
@@ -136,9 +185,13 @@ namespace ControlGastos.ViewModels
 
             var FechayTiempo = Date.Date + Time;
 
+            Notificacion.Fecha = Date.Date;
+
+            Notificacion.Horario = Time;
+
             Notificacion.TiempoRestanteEnvio = FechayTiempo - DateTime.Now  ;
 
-            var tiempoSchedule = (int)Notificacion.TiempoRestanteEnvio.TotalMinutes;
+            var tiempoSchedule = Notificacion.TiempoRestanteEnvio.TotalMinutes;
 
             if (string.IsNullOrEmpty(TituloNotification) || string.IsNullOrWhiteSpace(TituloNotification))
             {
@@ -152,9 +205,10 @@ namespace ControlGastos.ViewModels
             }
             Notificacion.Message = MensajeNotification;
             ListaNotifications.Add(Notificacion);
-            //Realizar la sumatoria con los ingresos pertenecientes al mes y año elegido
             TituloNotification = null;
             MensajeNotification = null;
+            Date = DateTime.Now;
+            Time = DateTime.Now.TimeOfDay;
             dataService.Save(ListaNotifications, true);
             CollectionNotification = new ObservableCollection<Notification>(
                 ListaNotifications.OrderByDescending(
@@ -212,42 +266,71 @@ namespace ControlGastos.ViewModels
             if (dataService.CheckTableIsEmpty<Notification>())
             {
                 ListaNotifications = dataService.Get<Notification>(true);
-               
+               foreach(var notification in ListaNotifications)
+                {
+                    var fechaTiempo = notification.Fecha.Date + notification.Horario;
+
+                    if (fechaTiempo <= DateTime.Now)
+                    {
+                        dataService.Delete(notification);
+                        
+                    }
+                }
+                ListaNotifications = dataService.Get<Notification>(true);
                 CollectionNotification = new ObservableCollection<Notification>(ListaNotifications.OrderByDescending(x=>x.TiempoRestanteEnvio.TotalMinutes));
             }
 
         }
 
-        //public void Editar(Ingresos ingresos)
-        //{
-        //    var ingresoAntiguo = ListaIngresos.Find(x => x.IngresoId == ingresos.IngresoId);
-        //    ingresoAntiguo = ingresos;
-        //    dataService.Update(ingresoAntiguo, true);
-        //    SumaIngreso = ListaIngresos.Where(x => x.Mes == Date.ToString("MMM", culture) &&
-        //        x.Anio == Date.ToString("yyyy", culture)).ToList().Sum(x => double.Parse(x.IngresoCantidad)).ToString();
-        //    CollectionIngresos = new ObservableCollection<Ingresos>(ListaIngresos.OrderByDescending(x => double.Parse(x.Dia)).ToList());
-        //}
+        public async Task Editar(Notification notification)
+        {
+            var notificacionAntigua = ListaNotifications.Find(x => x.NotificationId == notification.NotificationId);
+            notificacionAntigua = notification;
+            dataService.Update(notificacionAntigua, true);
 
-        //public async void Delete(Ingresos ingresos)
-        //{
-        //    var confirmacion = await dialogService.ShowMessageConfirmacion("Mensaje", "Desea borrar este elemento?");
+            var FechayTiempo = Date.Date + Time;
 
-        //    if (confirmacion)
-        //    {
+            notification.TiempoRestanteEnvio = FechayTiempo - DateTime.Now;
 
-        //        var ingresoAntiguo = ListaIngresos.Find(x => x.IngresoId == ingresos.IngresoId);
-        //        dataService.Delete(ingresoAntiguo);
-        //        ListaIngresos.Remove(ingresoAntiguo);
-        //        SumaIngreso = ListaIngresos.Where(x => x.Mes == Date.ToString("MMM", culture) &&
-        //        x.Anio == Date.ToString("yyyy", culture)).ToList().Sum(x => double.Parse(x.IngresoCantidad)).ToString();
+            var tiempoSchedule = notification.TiempoRestanteEnvio.TotalMinutes;
 
-        //        CollectionIngresos = new ObservableCollection<Ingresos>(ListaIngresos.OrderByDescending(x => double.Parse(x.Dia)).ToList());
-        //    }
-        //    else
-        //    {
-        //        return;
-        //    }
-        //}
+            try
+            {
+                CrossLocalNotifications.Current.Cancel(notification.NotificationId);
+                CrossLocalNotifications.Current.Show(
+                     Notificacion.Title,
+                     Notificacion.Message,
+                     Notificacion.NotificationId,
+                     DateTime.Now.AddMinutes(tiempoSchedule));
+
+            }
+            catch (Exception e)
+            {
+                await dialogService.ShowMessage("Error", e.Message);
+            }
+
+            CollectionNotification = new ObservableCollection<Notification>(ListaNotifications.OrderByDescending(x => x.TiempoRestanteEnvio.TotalMinutes));
+        }
+
+        public async Task Delete(Notification notification)
+        {
+            var confirmacion = await dialogService.ShowMessageConfirmacion("Mensaje", "Desea borrar este elemento?");
+
+            if (confirmacion)
+            {
+
+                var notificacionAntigua = ListaNotifications.Find(x => x.NotificationId == notification.NotificationId);
+                CrossLocalNotifications.Current.Cancel(notification.NotificationId);
+                dataService.Delete(notificacionAntigua);
+                ListaNotifications.Remove(notification);
+
+                CollectionNotification = new ObservableCollection<Notification>(ListaNotifications.OrderByDescending(x => x.TiempoRestanteEnvio.TotalMinutes));
+            }
+            else
+            {
+                return;
+            }
+        }
         #endregion
 
     }

@@ -60,12 +60,12 @@ namespace ControlGastos.Models
                 return new RelayCommand(Edit);
             }
         }
-        private  void Edit()
+        private async  void Edit()
         {
             var mainViewModel = MainViewModel.GetInstance();
             mainViewModel.Edit = new EditViewModel(this);
             var balanceView = BalanceView.GetInstance();
-            balanceView.Navigation.PushAsync(new EditView());
+           await balanceView.Navigation.PushAsync(new EditView());
         }
         public ICommand DeleteCommand
         {
@@ -76,10 +76,10 @@ namespace ControlGastos.Models
         }
 
 
-        private void Delete()
+        private  void Delete()
         {
             var mainViewModel = MainViewModel.GetInstance();
-            mainViewModel.Delete = new DeleteViewModel(this);
+             mainViewModel.Delete = new DeleteViewModel(this);
         }
         #endregion
 

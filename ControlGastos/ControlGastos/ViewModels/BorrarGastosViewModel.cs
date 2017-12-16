@@ -13,7 +13,7 @@ namespace ControlGastos.ViewModels
            
         private Gastos gastos;
 
-        public BorrarGastosViewModel(Gastos gastos)
+        public  BorrarGastosViewModel(Gastos gastos)
         {
             this.gastos = gastos;
             var gastosViewModel = GastosViewModel.GetInstance();

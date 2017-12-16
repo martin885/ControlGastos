@@ -61,9 +61,11 @@
     <Compile Include="ViewModels\BalanceViewModel.cs" />
     <Compile Include="ViewModels\BorrarGastosViewModel.cs" />
     <Compile Include="ViewModels\BorrarIngresosViewModel.cs" />
+    <Compile Include="ViewModels\BorrarNotificationViewModel.cs" />
     <Compile Include="ViewModels\DeleteViewModel.cs" />
     <Compile Include="ViewModels\EditarGastosViewModel.cs" />
     <Compile Include="ViewModels\EditarIngresosViewModel.cs" />
+    <Compile Include="ViewModels\EditarNotificationViewModel.cs" />
     <Compile Include="ViewModels\EditViewModel.cs" />
     <Compile Include="ViewModels\GastosViewModel.cs" />
     <Compile Include="ViewModels\InfoViewModel.cs" />
@@ -79,6 +81,9 @@
     </Compile>
     <Compile Include="Views\EditarIngresosView.xaml.cs">
       <DependentUpon>EditarIngresosView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EditarNotificationView.xaml.cs">
+      <DependentUpon>EditarNotificationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EditView.xaml.cs">
       <DependentUpon>EditView.xaml</DependentUpon>
@@ -220,6 +225,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\NotificationView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\EditarNotificationView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

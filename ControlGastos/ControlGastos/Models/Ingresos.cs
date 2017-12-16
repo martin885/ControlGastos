@@ -49,7 +49,7 @@ namespace ControlGastos.Models
                 return new RelayCommand(Edit);
             }
         }
-        private void Edit()
+        private async void Edit()
         {
             //Instanciar ViewModel
             var mainViewModel = MainViewModel.GetInstance();
@@ -57,7 +57,7 @@ namespace ControlGastos.Models
 
             //Ir a la página de edición
             var ingresosView = IngresosView.GetInstance();
-            ingresosView.Navigation.PushAsync(new EditarIngresosView());
+          await  ingresosView.Navigation.PushAsync(new EditarIngresosView());
         }
 
         public ICommand DeleteCommand
