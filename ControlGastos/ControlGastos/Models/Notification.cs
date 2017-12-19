@@ -2,6 +2,7 @@
 using ControlGastos.ViewModels;
 using ControlGastos.Views;
 using GalaSoft.MvvmLight.Command;
+using Plugin.LocalNotifications;
 using SQLite.Net.Attributes;
 using SQLiteNetExtensions.Attributes;
 using System;
@@ -72,11 +73,12 @@ namespace ControlGastos.Models
 
         private async void Edit()
         {
-            if (this.Horario <= DateTime.Now.TimeOfDay.Add(TimeSpan.FromMinutes(5)))
-            {
-                await dialogService.ShowMessage("Error", "La fecha del mensaje está próxima a su envío, no puede ser editado");
-                return;
-            }
+
+                if (this.Horario <= DateTime.Now.TimeOfDay.Add(TimeSpan.FromMinutes(5)))
+                {
+                    await dialogService.ShowMessage("Error", "La fecha del mensaje está próxima a su envío, no puede ser editado");
+                    return;
+                }
 
             //Instanciar ViewModel
             var mainViewModel = MainViewModel.GetInstance();
@@ -84,7 +86,7 @@ namespace ControlGastos.Models
 
             //Ir a la página de edición
             var notificationView = NotificationView.GetInstance();
-           await notificationView.Navigation.PushAsync(new EditarNotificationView());
+            await notificationView.Navigation.PushAsync(new EditarNotificationView());
         }
 
         public ICommand DeleteCommand
@@ -106,6 +108,53 @@ namespace ControlGastos.Models
             var mainViewModel = MainViewModel.GetInstance();
             mainViewModel.BorrarNotification = new BorrarNotificationViewModel(this);
         }
+
+        public ICommand ToggledCommand
+        {
+            get
+            {
+                return new RelayCommand(ToggledActive);
+            }
+        }
+
+        private async void ToggledActive()
+        {
+            if (!Toggled)
+            {
+                await dialogService.ShowMessage("Mensaje", "Los mensajes diarios están desactivados");
+
+
+                foreach (var notificacionDiaria in ListaNotificacionDiaria)
+                {
+                    CrossLocalNotifications.Current.Cancel(notificacionDiaria.NotificacionDiariaId);
+                }
+               
+            }
+          else
+            {
+
+
+                var FechayTiempo = Fecha.Date + Horario;
+
+                TiempoRestanteEnvio = FechayTiempo - DateTime.Now;
+
+                var tiempoSchedule = TiempoRestanteEnvio.TotalMinutes;
+
+                foreach (var notificacionDiaria in ListaNotificacionDiaria)
+                {
+                    var contador = 1;
+
+                    CrossLocalNotifications.Current.Show(
+                         notificacionDiaria.Title,
+                         notificacionDiaria.Message,
+                         notificacionDiaria.NotificacionDiariaId,
+                         DateTime.Now.AddMinutes(tiempoSchedule).AddDays(contador));
+
+                    contador++;
+                }
+            }
+            }
+        }
         #endregion
     }
-}
+

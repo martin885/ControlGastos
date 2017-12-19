@@ -411,11 +411,14 @@ namespace ControlGastos.ViewModels
                 {
                     var fechaTiempo = notification.Fecha.Date + notification.Horario;
 
-                    if (fechaTiempo <= DateTime.Now)
+                    if (fechaTiempo <= DateTime.Now && notification.TodosLosDias.Equals(false))
                     {
                         dataService.Delete(notification);
-
                     }
+                    if (notification.ListaNotificacionDiaria.Count.Equals(0))
+                    {
+                        dataService.Delete(notification);
+                    }  
                 }
                 ListaNotifications = dataService.Get<Notification>(true);
                 try
@@ -501,8 +504,16 @@ namespace ControlGastos.ViewModels
 
         public async Task Delete(Notification notification)
         {
-            var confirmacion = await dialogService.ShowMessageConfirmacion("Mensaje", "Desea borrar este elemento?");
+            var confirmacion = false;
 
+            if (Toggled.Equals(false))
+            { 
+             confirmacion = await dialogService.ShowMessageConfirmacion("Mensaje", "Desea borrar este elemento?");
+            }
+            else
+            {
+                confirmacion = true;
+            }
             if (confirmacion)
             {
 
