@@ -3,13 +3,37 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ControlGastos.Views.NotificationView"
              BindingContext="{Binding Main,Source={StaticResource Key=Locator}}"
-             NavigationPage.HasNavigationBar="True">
+             xmlns:local="clr-namespace:ControlGastos.Behaviors"
+             NavigationPage.HasNavigationBar="True"
+             Title="Notificaciones">
     <ContentPage.Content>
         <StackLayout BindingContext="{Binding Notification}">
             <StackLayout Margin="10,10,10,0" >
+                <StackLayout Orientation="Horizontal"
+                             HorizontalOptions="Center">
+                    <Label  Text="Mensaje una sola vez"
+                        FontSize="Micro"
+                           VerticalOptions="Center"/>
+                    <Switch IsToggled="{Binding Toggled,Mode=TwoWay}" 
+                        VerticalOptions="Center">
+                    <Switch.Behaviors>
+                    <local:ToggleBehavior Command="{Binding ToggledCommand}"/>
+                    </Switch.Behaviors>
+                </Switch>
+                    <Label  Text="Mensaje durante varios días"
+                        FontSize="Micro"
+                           VerticalOptions="Center"/>
+
+                </StackLayout>
                 <DatePicker Format="D"
                     Date="{Binding Date}"
-                            MinimumDate="{Binding MinimuDate}"/>
+                            MinimumDate="{Binding MinimuDate}"
+                            IsVisible="{Binding IsVisible}"/>
+                <Entry Text="{Binding Text,Mode=TwoWay}" 
+                       IsVisible="{Binding IsVisibleEntry}"
+                       Placeholder="Ingresar cantidad de días..."
+                       TextColor="Gray"
+                       Keyboard="Numeric"/>
                 <TimePicker Time="{Binding Time,Mode=TwoWay}" />
                 <Entry Placeholder="Título del mensaje..."
                        PlaceholderColor="Gray"
@@ -51,6 +75,9 @@
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
@@ -69,34 +96,46 @@
                                            VerticalOptions="Center"
                                        Grid.Row="0"
                                        Grid.Column="1"/>
-                                <StackLayout Orientation="Horizontal"
-                                             Grid.Row="1"
-                                             Grid.Column="1">
-                                    <Label Text="{Binding Dia}"
-                                           VerticalOptions="Center"/>
-                                    <Label Text="/"
-                                           VerticalOptions="Center"/>
-                                    <Label Text="{Binding Mes}"
-                                           VerticalOptions="Center"/>
-                                    <Label Text="/"
-                                           VerticalOptions="Center"/>
-                                    <Label Text="{Binding Anio}"
-                                           VerticalOptions="Center"/>
-                                </StackLayout>
-                                <StackLayout Orientation="Horizontal"
-                                             Grid.Row="2"
-                                             Grid.Column="1">
-                                    <Label Text="{Binding Hora}"
-                                           VerticalOptions="Center"/>
-                                    <Label Text=":"
-                                           VerticalOptions="Center"/>
-                                    <Label Text="{Binding Minutos}"
-                                           VerticalOptions="Center"/>
-                                </StackLayout>
+                                <Label Text="{Binding FechaString}"
+                                           VerticalOptions="Center"
+                                           Grid.Row="1"
+                                             Grid.Column="1"/>
+                                <Label Text="{Binding HorarioString}"
+                                           VerticalOptions="Center"
+                                           Grid.Row="2"
+                                           Grid.Column="1"/>
                                 <Label Text="{Binding Message}"
-                                       VerticalOptions="Center"
+                                       VerticalOptions="CenterAndExpand"
                                        Grid.Row="3"
                                        Grid.Column="1"/>
+                                <Label Text="Inactivo"
+                                       FontSize="Micro"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="End"
+                                       Grid.Row="0"
+                                       Grid.RowSpan="4"
+                                       Grid.Column="2"
+                                       IsVisible="{Binding IsVisible}"/>
+                                <Switch IsToggled="{Binding Toggled,Mode=TwoWay}" 
+                                        VerticalOptions="Center"
+                                        HorizontalOptions="End"
+                                        Scale="0.75"
+                                        Grid.Row="0"
+                                        Grid.RowSpan="4"
+                                        Grid.Column="3"
+                                        IsVisible="{Binding IsVisible}">
+                                    <Switch.Behaviors>
+                                        <local:ToggleBehavior Command="{Binding ToggledCommand}"/>
+                                    </Switch.Behaviors>
+                                </Switch>
+                                    <Label Text="Activo"
+                                       FontSize="Micro"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="End"
+                                       Grid.Row="0"
+                                       Grid.RowSpan="4"
+                                       Grid.Column="4"
+                                       IsVisible="{Binding IsVisible}"/>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>

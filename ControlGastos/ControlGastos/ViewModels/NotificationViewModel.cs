@@ -15,12 +15,12 @@ using System.Windows.Input;
 
 namespace ControlGastos.ViewModels
 {
-   public class NotificationViewModel:INotifyPropertyChanged
+    public class NotificationViewModel : INotifyPropertyChanged
     {
         #region Eventos
         public event PropertyChangedEventHandler PropertyChanged;
         #endregion
-        
+
         #region Services
         DataService dataService;
         DialogService dialogService;
@@ -30,9 +30,10 @@ namespace ControlGastos.ViewModels
         IFormatProvider culture;
 
         public DateTime MinimuDate { get; set; }
-
+        public List<Notification> ListaNotifications { get; set; }
+        public List<NotificacionDiaria> ListaNotificacionDiaria { get; set; }
         Notification Notificacion;
-
+        NotificacionDiaria notificacionDiaria;
         string _mensajeNotification;
         public string MensajeNotification
         {
@@ -117,19 +118,69 @@ namespace ControlGastos.ViewModels
             }
         }
 
-        List<Notification> _listaNotifications;
-        public List<Notification> ListaNotifications
-    {
+        bool _toggled;
+        public bool Toggled
+        {
             get
             {
-                return _listaNotifications;
+                return _toggled;
             }
             set
             {
-                if (_listaNotifications != value)
+                if (_toggled != value)
                 {
-                    _listaNotifications = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ListaNotifications)));
+                    _toggled = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Toggled)));
+                }
+            }
+        }
+        bool _isVisible;
+        public bool IsVisible
+        {
+            get
+            {
+                return _isVisible;
+            }
+            set
+            {
+                if (_isVisible != value)
+                {
+                    _isVisible = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsVisible)));
+                }
+            }
+        }
+
+        bool _isVisibleEntry;
+        public bool IsVisibleEntry
+        {
+            get
+            {
+                return _isVisibleEntry;
+            }
+            set
+            {
+                if (_isVisibleEntry != value)
+                {
+                    _isVisibleEntry = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsVisibleEntry)));
+                }
+            }
+        }
+
+        string _text;
+        public string Text
+        {
+            get
+            {
+                return _text;
+            }
+            set
+            {
+                if (_text != value)
+                {
+                    _text = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Text)));
                 }
             }
         }
@@ -147,85 +198,173 @@ namespace ControlGastos.ViewModels
 
         private async void Notification()
         {
-
-            //Crea el objeto Ingreso, lo agrego a la lista del mes, y después se hace la sumatoria de la lista
-
-            if (string.IsNullOrEmpty(MensajeNotification) || string.IsNullOrWhiteSpace(MensajeNotification))
-            {           
-                await dialogService.ShowMessage("Error", "Debe contener un mensaje para enviar");
-                return;
-            }
-            if (Date < DateTime.Now && Time<DateTime.Now.TimeOfDay.Subtract(TimeSpan.FromMinutes(1)))
-            {
-                await dialogService.ShowMessage("Error", "El horario de entrega seleccionado no puede ser anterior al horario actual");
-
-                return;
-            }
-
-            Notificacion = new Notification();
-            Notificacion.Anio = Date.ToString("yyyy", culture);
-            Notificacion.Mes = Date.ToString("MMM", culture);
-            Notificacion.Dia = Date.ToString("dd", culture);
-            if (int.Parse(Time.Hours.ToString(culture)) < 10)
-            {
-                Notificacion.Hora =string.Format("0{0}", Time.Hours.ToString(culture));
-            }
-            else
-            {
-                Notificacion.Hora = Time.Hours.ToString(culture);
-            }
-            if(int.Parse(Time.Minutes.ToString(culture)) < 10)
-            {
-                Notificacion.Minutos = string.Format("0{0}", Time.Minutes.ToString(culture));
-            }
-            else
-            {
-                Notificacion.Minutos = Time.Minutes.ToString(culture);
-            }
-
-            var FechayTiempo = Date.Date + Time;
-
-            Notificacion.Fecha = Date.Date;
-
-            Notificacion.Horario = Time;
-
-            Notificacion.TiempoRestanteEnvio = FechayTiempo - DateTime.Now  ;
-
-            var tiempoSchedule = Notificacion.TiempoRestanteEnvio.TotalMinutes;
-
-            if (string.IsNullOrEmpty(TituloNotification) || string.IsNullOrWhiteSpace(TituloNotification))
-            {
-
-                Notificacion.Title = "Aviso";
-            }
-            else 
-            {
-
-                Notificacion.Title = string.Format("{0}{1}", TituloNotification.Substring(0, 1).ToUpper(), TituloNotification.Substring(1)); ;
-            }
-            Notificacion.Message = MensajeNotification;
-            ListaNotifications.Add(Notificacion);
-            TituloNotification = null;
-            MensajeNotification = null;
-            Date = DateTime.Now;
-            Time = DateTime.Now.TimeOfDay;
-            dataService.Save(ListaNotifications, true);
-            CollectionNotification = new ObservableCollection<Notification>(
-                ListaNotifications.OrderByDescending(
-                    x=>x.TiempoRestanteEnvio.TotalMinutes));
             try
             {
-               CrossLocalNotifications.Current.Show(
+                //Crea el objeto Ingreso, lo agrego a la lista del mes, y después se hace la sumatoria de la lista
+                if (IsVisibleEntry.Equals(false))
+                {
+                    Text = "1";
+                }
+                if (Text.Contains("-") || Text.Contains("."))
+                {
+                    await dialogService.ShowMessage("Error", "La cantidad de días debe contener un número entero y positivo");
+                    return;
+                }
+                else if (string.IsNullOrEmpty(Text) && IsVisibleEntry.Equals(true))
+                {
+                    await dialogService.ShowMessage("Error", "La cantidad de días debe contener un número entero y positivo");
+                    return;
+                }
+                if (int.Parse(Text) > 31)
+                {
+                    var confirmar = await dialogService.ShowMessageConfirmacion("Error", "La cantidad de días debe ser como máximo de 31, ¿desea que 31 sea el nuevo valor?");
+                    if (confirmar)
+                    {
+                        Text = "31";
+                    }
+                    else
+                    {
+                        return;
+                    }
+
+                }
+
+                if (string.IsNullOrEmpty(MensajeNotification) || string.IsNullOrWhiteSpace(MensajeNotification))
+                {
+                    await dialogService.ShowMessage("Error", "Debe contener un mensaje para enviar");
+                    return;
+                }
+                if (Date < DateTime.Now && Time < DateTime.Now.TimeOfDay.Subtract(TimeSpan.FromMinutes(1)))
+                {
+                    await dialogService.ShowMessage("Error", "El horario de entrega seleccionado no puede ser anterior al horario actual");
+
+                    return;
+                }
+
+                    Notificacion = new Notification();
+
+                    var Hora = "Hora";
+
+                    if (int.Parse(Time.Hours.ToString(culture)) < 10)
+                    {
+                        Hora = string.Format("0{0}", Time.Hours.ToString(culture));
+                    }
+                    else
+                    {
+                        Hora = Time.Hours.ToString(culture);
+                    }
+
+                    var Minutos = "Minutos";
+
+                    if (int.Parse(Time.Minutes.ToString(culture)) < 10)
+                    {
+                        Minutos = string.Format("0{0}", Time.Minutes.ToString(culture));
+                    }
+                    else
+                    {
+                        Minutos = Time.Minutes.ToString(culture);
+                    }
+
+                    Notificacion.HorarioString = string.Format("{0}:{1} hs", Hora, Minutos);
+
+                    var FechayTiempo = Date.Date + Time;
+
+                    Notificacion.Fecha = Date.Date;
+
+                    Notificacion.Horario = Time;
+
+                    Notificacion.TiempoRestanteEnvio = FechayTiempo - DateTime.Now;
+
+                    var tiempoSchedule = Notificacion.TiempoRestanteEnvio.TotalMinutes;
+
+                    if (string.IsNullOrEmpty(TituloNotification) || string.IsNullOrWhiteSpace(TituloNotification))
+                    {
+                    Notificacion.Title = "Aviso";
+                    }
+                    else
+                    {
+                    Notificacion.Title = string.Format("{0}{1}", TituloNotification.Substring(0, 1).ToUpper(), TituloNotification.Substring(1)); ;
+                    }
+
+                    Notificacion.Message = MensajeNotification;
+
+                    Notificacion.TodosLosDiasActivado = true;
+
+                    Notificacion.TodosLosDias = Toggled;
+
+                    ListaNotifications.Add(Notificacion);
+
+
+                    if (Toggled.Equals(true))
+                    {
+
+                    Notificacion.FechaString = "Mensaje diario";
+
+                    Notificacion.IsVisible = true;
+
+                    Notificacion.Toggled = true;
+
+                    for (int i = 1; i <= int.Parse(Text); i++)
+                    {
+                        notificacionDiaria = new NotificacionDiaria();
+
+                        notificacionDiaria.Title = Notificacion.Title;
+                        notificacionDiaria.Message = Notificacion.Message;
+
+                        ListaNotificacionDiaria.Add(notificacionDiaria);
+
+
+
+                        CrossLocalNotifications.Current.Show(
+                        notificacionDiaria.Title,
+                        notificacionDiaria.Message,
+                        notificacionDiaria.NotificacionDiariaId,
+                        DateTime.Now.AddMinutes(tiempoSchedule).AddDays(i));
+                    }
+                    Notificacion.ListaNotificacionDiaria = ListaNotificacionDiaria;
+                }
+                    else
+                    {
+                        Notificacion.FechaString = string.Format("{0}/{1}/{2}", Date.ToString("dd", culture), Date.ToString("MMM", culture), Date.ToString("yyyy", culture));
+
+                        Notificacion.IsVisible = false;
+
+                        CrossLocalNotifications.Current.Show(
                     Notificacion.Title,
                     Notificacion.Message,
                     Notificacion.NotificationId,
                     DateTime.Now.AddMinutes(tiempoSchedule));
+                    }
+          
+                dataService.Save(ListaNotifications, true);
+                dataService.Save(ListaNotificacionDiaria,false);
+                Toggled = false;
+                TituloNotification = null;
+                MensajeNotification = null;
+                Date = DateTime.Now;
+                Time = DateTime.Now.TimeOfDay;
+                CollectionNotification = new ObservableCollection<Notification>(
+    ListaNotifications.OrderByDescending(
+        x => x.TiempoRestanteEnvio.TotalMinutes));
 
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                await dialogService.ShowMessage("Error", e.Message);            
+                await dialogService.ShowMessage("Error", e.Message);
             }
+        }
+        public ICommand ToggledCommand
+        {
+            get
+            {
+                return new RelayCommand(ToggledAction);
+            }
+        }
+
+        private void ToggledAction()
+        {
+            IsVisible = !IsVisible;
+            IsVisibleEntry = !IsVisibleEntry;
         }
         #endregion
 
@@ -259,50 +398,98 @@ namespace ControlGastos.ViewModels
         #region Métodos
         private void Cargas()
         {
+            IsVisible = true;
             Date = DateTime.Now;
             MinimuDate = DateTime.Now;
             Time = DateTime.Now.TimeOfDay;
             ListaNotifications = new List<Notification>();
+            ListaNotificacionDiaria = new List<NotificacionDiaria>();
             if (dataService.CheckTableIsEmpty<Notification>())
             {
                 ListaNotifications = dataService.Get<Notification>(true);
-               foreach(var notification in ListaNotifications)
+                foreach (var notification in ListaNotifications)
                 {
                     var fechaTiempo = notification.Fecha.Date + notification.Horario;
 
                     if (fechaTiempo <= DateTime.Now)
                     {
                         dataService.Delete(notification);
-                        
+
                     }
                 }
                 ListaNotifications = dataService.Get<Notification>(true);
-                CollectionNotification = new ObservableCollection<Notification>(ListaNotifications.OrderByDescending(x=>x.TiempoRestanteEnvio.TotalMinutes));
+                try
+                {
+                    CollectionNotification = new ObservableCollection<Notification>(
+        ListaNotifications.OrderByDescending(
+            x => x.TiempoRestanteEnvio.TotalMinutes));
+                }
+                catch
+                {
+
+                }
             }
 
         }
 
         public async Task Editar(Notification notification)
         {
-            var notificacionAntigua = ListaNotifications.Find(x => x.NotificationId == notification.NotificationId);
-            notificacionAntigua = notification;
-            dataService.Update(notificacionAntigua, true);
-
-            var FechayTiempo = Date.Date + Time;
-
-            notification.TiempoRestanteEnvio = FechayTiempo - DateTime.Now;
-
-            var tiempoSchedule = notification.TiempoRestanteEnvio.TotalMinutes;
-
             try
             {
-                CrossLocalNotifications.Current.Cancel(notification.NotificationId);
-                CrossLocalNotifications.Current.Show(
-                     Notificacion.Title,
-                     Notificacion.Message,
-                     Notificacion.NotificationId,
-                     DateTime.Now.AddMinutes(tiempoSchedule));
+                if (notification.TodosLosDias.Equals(true))
+                {
+                    var listaAntigua = notification.ListaNotificacionDiaria.Where(x=>x.notification.NotificationId.Equals(notification.NotificationId)).ToList();
 
+                    var FechayTiempo = Date.Date + Time;
+
+                    notification.TiempoRestanteEnvio = FechayTiempo - DateTime.Now;
+
+                    var tiempoSchedule = notification.TiempoRestanteEnvio.TotalMinutes;
+
+                    foreach (var notif in listaAntigua)
+                    {
+                        var contador = 1;
+
+                        notif.Title = notification.Title;
+                        notif.Message = notification.Message;
+     
+
+
+                        CrossLocalNotifications.Current.Cancel(notif.NotificacionDiariaId);
+                        CrossLocalNotifications.Current.Show(
+                             notif.Title,
+                             notif.Message,
+                             notif.NotificacionDiariaId,
+                             DateTime.Now.AddMinutes(tiempoSchedule).AddDays(contador));
+                        contador++;
+                    }
+
+                    dataService.Delete(notification);
+                    dataService.Insert(notification, true);
+                    dataService.Save(notification.ListaNotificacionDiaria,true);
+                }
+                else
+                {
+                    var notificacionAntigua = ListaNotifications.Find(x => x.NotificationId.Equals(notification.NotificationId));
+
+                    notificacionAntigua = notification;
+
+                    dataService.Update(notificacionAntigua, true);
+
+                    var FechayTiempo = Date.Date + Time;
+
+                    notification.TiempoRestanteEnvio = FechayTiempo - DateTime.Now;
+
+                    var tiempoSchedule = notification.TiempoRestanteEnvio.TotalMinutes;
+
+
+                    CrossLocalNotifications.Current.Cancel(notification.NotificationId);
+                    CrossLocalNotifications.Current.Show(
+                         Notificacion.Title,
+                         Notificacion.Message,
+                         Notificacion.NotificationId,
+                         DateTime.Now.AddMinutes(tiempoSchedule));
+                }
             }
             catch (Exception e)
             {
@@ -319,10 +506,35 @@ namespace ControlGastos.ViewModels
             if (confirmacion)
             {
 
-                var notificacionAntigua = ListaNotifications.Find(x => x.NotificationId == notification.NotificationId);
-                CrossLocalNotifications.Current.Cancel(notification.NotificationId);
-                dataService.Delete(notificacionAntigua);
-                ListaNotifications.Remove(notification);
+                if (notification.TodosLosDias.Equals(true))
+                {
+                    var listaAntigua = notification.ListaNotificacionDiaria.Where(x => x.notification.NotificationId.Equals(notification.NotificationId)).ToList();
+
+                    foreach (var notif in listaAntigua)
+                    {
+                        CrossLocalNotifications.Current.Cancel(notif.NotificacionDiariaId);
+
+                        dataService.Delete(notification);
+
+                        ListaNotifications.Remove(notification);
+                    }
+                }
+                else
+                {
+                    var notificacionAntigua = ListaNotifications.Find(x => x.NotificationId.Equals(notification.NotificationId));
+
+                    notificacionAntigua = notification;
+
+                    CrossLocalNotifications.Current.Cancel(notification.NotificationId);
+
+                    dataService.Delete(notificacionAntigua);
+
+                    ListaNotifications.Remove(notification);
+                }
+
+
+
+
 
                 CollectionNotification = new ObservableCollection<Notification>(ListaNotifications.OrderByDescending(x => x.TiempoRestanteEnvio.TotalMinutes));
             }

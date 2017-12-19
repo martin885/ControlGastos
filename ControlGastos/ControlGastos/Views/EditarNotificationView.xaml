@@ -25,7 +25,7 @@
                     Command="{Binding GuardarCambioCommand}"
                     VerticalOptions="EndAndExpand"
                     HorizontalOptions="CenterAndExpand"
-                     BackgroundColor="#F7A008"/>
+                     BackgroundColor="#f18121"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

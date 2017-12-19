@@ -25,7 +25,6 @@ namespace ControlGastos.Views
 
         protected override void OnAppearing()
         {
-            
             var mainViewModel = MainViewModel.GetInstance();
             mainViewModel.Balance = new BalanceViewModel();
             InitializeComponent();     

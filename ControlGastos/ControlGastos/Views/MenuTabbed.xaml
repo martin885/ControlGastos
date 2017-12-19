@@ -3,13 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:ControlGastos.Views"
              x:Class="ControlGastos.Views.MenuTabbed"
-            NavigationPage.HasNavigationBar="False"
-            BarBackgroundColor="#f18624">
+            NavigationPage.HasNavigationBar="False">
 
     <NavigationPage Title="Balance" 
-                    Icon="balance2" >
+                 Icon="balance2">
         <x:Arguments>
-            <local:BalanceView />
+            <local:BalanceView   x:Name="nombre"/>
         </x:Arguments>
     </NavigationPage>
     

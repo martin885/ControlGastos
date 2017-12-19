@@ -17,8 +17,5 @@ namespace ControlGastos.Views
         {
             InitializeComponent();
         }
-
-
-        
     }
 }

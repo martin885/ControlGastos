@@ -23,14 +23,11 @@ namespace ControlGastos.ViewModels
         private Notification notification;
         public int NotificationId { get; set; }
         public string Title { get; set; }
-        public string Hora { get; set; }
-        public string Minutos { get; set; }
+        public string HorarioString { get; set; }
         public TimeSpan TiempoRestanteEnvio { get; set; }
         public DateTime Date { get; set; }
         public TimeSpan Time { get; set; }
-        public string Anio { get; set; }
-        public string Mes { get; set; }
-        public string Dia { get; set; }
+        public string FechaString { get; set; }
         public string Message { get; set; }
         #endregion
 
@@ -64,26 +61,28 @@ namespace ControlGastos.ViewModels
                     return;
                 }
                 notification.Fecha = Date;
-                notification.Anio = Date.ToString("yyyy", culture);
-                notification.Mes = Date.ToString("MMM", culture);
-                notification.Dia = Date.ToString("dd", culture);
-                notification.Horario = Time;
+                notification.FechaString = string.Format("{0}/{1}/{2}", Date.ToString("dd", culture), Date.ToString("MMM", culture), Date.ToString("yyyy", culture));
+
+                var Hora = "Hora";
                 if (int.Parse(Time.Hours.ToString(culture)) < 10)
                 {
-                    notification.Hora = string.Format("0{0}", Time.Hours.ToString(culture));
+                    Hora = string.Format("0{0}", Time.Hours.ToString(culture));
                 }
                 else
                 {
-                    notification.Hora = Time.Hours.ToString(culture);
+                    Hora = Time.Hours.ToString(culture);
                 }
+                var Minutos = "Minutos";
                 if (int.Parse(Time.Minutes.ToString(culture)) < 10)
                 {
-                    notification.Minutos = string.Format("0{0}", Time.Minutes.ToString(culture));
+                    Minutos = string.Format("0{0}", Time.Minutes.ToString(culture));
                 }
                 else
                 {
-                    notification.Minutos = Time.Minutes.ToString(culture);
+                    Minutos = Time.Minutes.ToString(culture);
                 }
+
+                notification.HorarioString = string.Format("{0}:{1} hs", Hora, Minutos);
 
                 notification.Fecha = Date.Date;
 
@@ -125,9 +124,8 @@ namespace ControlGastos.ViewModels
 
             this.notification = notification;
             //Carga los valores en la página de edición
-            Dia = notification.Dia;
-            Mes = notification.Mes;
-            Anio = notification.Anio;
+            FechaString = notification.FechaString;
+            HorarioString = notification.HorarioString;
             if (string.IsNullOrEmpty(notification.Title))
             {
                 Title = "Aviso";

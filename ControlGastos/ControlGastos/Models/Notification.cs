@@ -3,6 +3,7 @@ using ControlGastos.ViewModels;
 using ControlGastos.Views;
 using GalaSoft.MvvmLight.Command;
 using SQLite.Net.Attributes;
+using SQLiteNetExtensions.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,9 +25,7 @@ namespace ControlGastos.Models
 
         public string Title { get; set; }
 
-        public string Hora { get; set; }
-
-        public string Minutos { get; set; }
+        public string HorarioString { get; set; }
 
         public TimeSpan TiempoRestanteEnvio { get; set; }
 
@@ -34,13 +33,20 @@ namespace ControlGastos.Models
 
         public TimeSpan Horario { get; set; }
 
-        public string Anio { get; set; }
-
-        public string Mes { get; set; }
-
-        public string Dia { get; set; }
+        public string FechaString { get; set; }
 
         public string Message { get; set; }
+
+        public bool TodosLosDias { get; set; }
+
+        public bool TodosLosDiasActivado { get; set; }
+
+        public bool IsVisible { get; set; }
+
+        public bool Toggled { get; set; }
+
+        [OneToMany(CascadeOperations = CascadeOperation.All)]
+        public List<NotificacionDiaria> ListaNotificacionDiaria { get; set; }
 
         public override int GetHashCode()
         {

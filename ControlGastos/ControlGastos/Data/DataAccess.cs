@@ -28,7 +28,8 @@ namespace ControlGastos.Data
             connection.CreateTable<Ingresos>();
             connection.CreateTable<Gastos>();
             connection.CreateTable<Notification>();
-            //connection.DropTable<SemanasA>();
+            connection.CreateTable<NotificacionDiaria>();
+            //connection.DropTable<Notification>();
             //connection.CreateTable<SemanasA>();
 
         }

@@ -23,7 +23,7 @@
     <!-- colorPrimaryDark is used for the status bar -->
     <item name="colorPrimaryDark">#f18121</item>
     <!-- colorAccent is used as the default value for colorControlActivated
-         which is used to tint widgets -->
+         which is used to tint widgets -->    
     <item name="colorAccent">#f18121</item>
     <!-- You can also set colorControlNormal, colorControlActivated
          colorControlHighlight and colorSwitchThumbNormal. -->
@@ -42,12 +42,10 @@
     <item name="android:colorActivatedHighlight">@color/ListViewSelected</item>
     <item name="android:activatedBackgroundIndicator">@color/ListViewSelected</item>
 
-
     <!--cambio de colores para el picker-->
     <item name="android:alertDialogTheme">@style/AppCompatDialogStyle</item>
 
   <item name="android:actionBarTabStyle">@style/AppCompatDialogStyle</item>
-  
   </style>
 
   <style name="AppCompatDialogStyle" parent="Theme.AppCompat.Light.Dialog">
@@ -59,6 +57,7 @@
   <!--selección de colores para la listview-->
   <color name="ListViewSelected">#CCC</color>
   <color name="ListViewHighlighted">#CCC</color>
+
 
   <!--cambio de spinner a calendar datepicker-->
   <!--<style name="DatePickerStyle" parent="android:Widget.Material.DatePicker">

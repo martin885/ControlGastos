@@ -51,6 +51,7 @@
     <Compile Include="Models\Ingresos.cs" />
     <Compile Include="Models\Balance.cs" />
     <Compile Include="Models\IngresosMes.cs" />
+    <Compile Include="Models\NotificacionDiaria.cs" />
     <Compile Include="Models\Notification.cs" />
     <Compile Include="Services\DataService.cs" />
     <Compile Include="Services\DialogService.cs" />
