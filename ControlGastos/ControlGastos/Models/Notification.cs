@@ -38,6 +38,8 @@ namespace ControlGastos.Models
 
         public string Message { get; set; }
 
+        public string CantidadDeDias { get; set; }
+
         public bool TodosLosDias { get; set; }
 
         public bool TodosLosDiasActivado { get; set; }
@@ -73,12 +75,27 @@ namespace ControlGastos.Models
 
         private async void Edit()
         {
+            if (TodosLosDias.Equals(true))
+            {
+                foreach(var notifDiaria in ListaNotificacionDiaria)
+                {
+                    if (notifDiaria.Horario <= DateTime.Now.TimeOfDay.Add(TimeSpan.FromMinutes(5)) && notifDiaria.Equals(DateTime.Now))
+                    {
+                        await dialogService.ShowMessage("Error", "La fecha del mensaje está próxima a su envío, no puede ser editado. Intentarlo de nuevo dentro de unos minutos.");
+                        return;
+                    }
+                }
 
-                if (this.Horario <= DateTime.Now.TimeOfDay.Add(TimeSpan.FromMinutes(5)))
+            }
+            else
+            {
+                if (this.Horario <= DateTime.Now.TimeOfDay.Add(TimeSpan.FromMinutes(5)) && Fecha.Equals(DateTime.Now))
                 {
                     await dialogService.ShowMessage("Error", "La fecha del mensaje está próxima a su envío, no puede ser editado");
                     return;
                 }
+            }
+
 
             //Instanciar ViewModel
             var mainViewModel = MainViewModel.GetInstance();

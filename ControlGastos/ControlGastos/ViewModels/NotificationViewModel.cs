@@ -30,6 +30,7 @@ namespace ControlGastos.ViewModels
         IFormatProvider culture;
 
         public DateTime MinimuDate { get; set; }
+        public double tiempoSchedule { get; set; }
         public List<Notification> ListaNotifications { get; set; }
         public List<NotificacionDiaria> ListaNotificacionDiaria { get; set; }
         Notification Notificacion;
@@ -205,7 +206,7 @@ namespace ControlGastos.ViewModels
                 {
                     Text = "1";
                 }
-                if (Text.Contains("-") || Text.Contains("."))
+                if (Text.Contains("-") || Text.Contains(".") || Text.Equals("0"))
                 {
                     await dialogService.ShowMessage("Error", "La cantidad de días debe contener un número entero y positivo");
                     return;
@@ -267,6 +268,7 @@ namespace ControlGastos.ViewModels
 
                     Notificacion.HorarioString = string.Format("{0}:{1} hs", Hora, Minutos);
 
+                if (Toggled.Equals(false)) { 
                     var FechayTiempo = Date.Date + Time;
 
                     Notificacion.Fecha = Date.Date;
@@ -275,9 +277,22 @@ namespace ControlGastos.ViewModels
 
                     Notificacion.TiempoRestanteEnvio = FechayTiempo - DateTime.Now;
 
-                    var tiempoSchedule = Notificacion.TiempoRestanteEnvio.TotalMinutes;
+                     tiempoSchedule = Notificacion.TiempoRestanteEnvio.TotalMinutes;
+                }
+                else
+                {
+                    var FechayTiempo = Date.Date.AddDays(1) + Time;
 
-                    if (string.IsNullOrEmpty(TituloNotification) || string.IsNullOrWhiteSpace(TituloNotification))
+                    Notificacion.Fecha = Date.Date.AddDays(1);
+
+                    Notificacion.Horario = Time;
+
+                    Notificacion.TiempoRestanteEnvio = FechayTiempo - DateTime.Now;
+
+                     tiempoSchedule = Notificacion.TiempoRestanteEnvio.TotalMinutes;
+                }
+
+                if (string.IsNullOrEmpty(TituloNotification) || string.IsNullOrWhiteSpace(TituloNotification))
                     {
                     Notificacion.Title = "Aviso";
                     }
@@ -304,13 +319,14 @@ namespace ControlGastos.ViewModels
 
                     Notificacion.Toggled = true;
 
-                    for (int i = 1; i <= int.Parse(Text); i++)
+                    for (int i = 0; i < int.Parse(Text); i++)
                     {
                         notificacionDiaria = new NotificacionDiaria();
 
                         notificacionDiaria.Title = Notificacion.Title;
                         notificacionDiaria.Message = Notificacion.Message;
-
+                        notificacionDiaria.Fecha = Notificacion.Fecha.AddDays(i);
+                        notificacionDiaria.Horario = Notificacion.Horario;
                         ListaNotificacionDiaria.Add(notificacionDiaria);
 
 
@@ -410,11 +426,24 @@ namespace ControlGastos.ViewModels
                 foreach (var notification in ListaNotifications)
                 {
                     var fechaTiempo = notification.Fecha.Date + notification.Horario;
+                    
 
                     if (fechaTiempo <= DateTime.Now && notification.TodosLosDias.Equals(false))
                     {
                         dataService.Delete(notification);
                     }
+
+                    foreach(var notifDiaria in notification.ListaNotificacionDiaria)
+                    {
+                        var fechaTiempoNotificacionDiaria = notifDiaria.Fecha.Date + notifDiaria.Horario;
+
+                        if (fechaTiempoNotificacionDiaria <= DateTime.Now)
+                        {
+                            dataService.Delete(notificacionDiaria);
+                        }
+
+                    }
+
                     if (notification.ListaNotificacionDiaria.Count.Equals(0))
                     {
                         dataService.Delete(notification);
@@ -443,30 +472,27 @@ namespace ControlGastos.ViewModels
                 {
                     var listaAntigua = notification.ListaNotificacionDiaria.Where(x=>x.notification.NotificationId.Equals(notification.NotificationId)).ToList();
 
-                    var FechayTiempo = Date.Date + Time;
+                    var FechayTiempo = Date.Date.AddDays(1) + Time;
 
                     notification.TiempoRestanteEnvio = FechayTiempo - DateTime.Now;
 
-                    var tiempoSchedule = notification.TiempoRestanteEnvio.TotalMinutes;
+                     tiempoSchedule = notification.TiempoRestanteEnvio.TotalMinutes;
 
-                    foreach (var notif in listaAntigua)
-                    {
-                        var contador = 1;
-
-                        notif.Title = notification.Title;
-                        notif.Message = notification.Message;
-     
-
-
-                        CrossLocalNotifications.Current.Cancel(notif.NotificacionDiariaId);
+                        foreach (var notif in listaAntigua)
+                        {
+                            notif.Title = notification.Title;
+                            notif.Message = notification.Message;
+                            var contador = 0;
+                            CrossLocalNotifications.Current.Cancel(notif.NotificacionDiariaId);
+                        
                         CrossLocalNotifications.Current.Show(
-                             notif.Title,
-                             notif.Message,
-                             notif.NotificacionDiariaId,
-                             DateTime.Now.AddMinutes(tiempoSchedule).AddDays(contador));
-                        contador++;
-                    }
-
+                                                notif.Title,
+                                                 notif.Message,
+                                                 notif.NotificacionDiariaId,
+                                                DateTime.Now.AddMinutes(tiempoSchedule).AddDays(contador));
+                            contador++;
+                        }
+          
                     dataService.Delete(notification);
                     dataService.Insert(notification, true);
                     dataService.Save(notification.ListaNotificacionDiaria,true);

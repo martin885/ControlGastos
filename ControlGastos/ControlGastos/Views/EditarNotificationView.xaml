@@ -3,22 +3,30 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ControlGastos.Views.EditarNotificationView"
              BindingContext="{Binding Main,Source={StaticResource Key=Locator}}"
-             NavigationPage.HasNavigationBar="False">
+             NavigationPage.HasNavigationBar="False"
+             Title="Editar Notificaciones">
     <ContentPage.Content>
         <StackLayout  BindingContext="{Binding EditarNotification}">
-            <DatePicker Date="{Binding Date}"/>
+            <DatePicker Date="{Binding Date}"
+                        IsVisible="{Binding IsVisibleDatePicker}"/>
+            <Entry Text="{Binding Text,Mode=TwoWay}" 
+                       IsVisible="{Binding IsVisibleEntry}"
+                       Placeholder="Ingresar cantidad de días..."
+                       TextColor="Gray"
+                       Keyboard="Numeric"/>
             <TimePicker Time="{Binding Time}"/>
 
                 <Entry Text="{Binding Title,Mode=TwoWay}"
                        VerticalOptions="Center"
                        Keyboard="Text"
+                       TextColor="Gray"
                        HorizontalOptions="FillAndExpand"/>
 
-                <Entry Text="{Binding Message,Mode=TwoWay}" 
+                <Entry Text="{Binding Message,Mode=TwoWay}"
+                       TextColor="Gray"
                        FontSize="Medium"
                        FontAttributes="Bold"
                        VerticalOptions="Center"
-                       Keyboard="Numeric"
                        HorizontalOptions="FillAndExpand"/>
 
             <Button  Text="Guardar Cambio" 

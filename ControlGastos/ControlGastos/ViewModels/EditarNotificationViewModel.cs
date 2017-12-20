@@ -29,6 +29,10 @@ namespace ControlGastos.ViewModels
         public TimeSpan Time { get; set; }
         public string FechaString { get; set; }
         public string Message { get; set; }
+        public string Text { get; set; }
+        public bool IsVisibleDatePicker { get; set; }
+        public bool IsVisibleEntry { get; set; }
+
         #endregion
 
         #region Command
@@ -51,6 +55,32 @@ namespace ControlGastos.ViewModels
 
                     return;
                 }
+
+                //else if (string.IsNullOrEmpty(Text) && IsVisibleEntry.Equals(true))
+                //{
+                //    await dialogService.ShowMessage("Error", "La cantidad de días debe contener un número entero y positivo");
+                //    return;
+                //}
+
+                //if (Text.Contains("-") || Text.Contains(".") || Text.Equals("0"))
+                //{
+                //    await dialogService.ShowMessage("Error", "La cantidad de días debe contener un número entero y positivo");
+                //    return;
+                //}
+
+                //if (int.Parse(Text) > 31)
+                //{
+                //    var confirmar = await dialogService.ShowMessageConfirmacion("Error", "La cantidad de días debe ser como máximo de 31, ¿desea que 31 sea el nuevo valor?");
+                //    if (confirmar)
+                //    {
+                //        Text = "31";
+                //    }
+                //    else
+                //    {
+                //        return;
+                //    }
+
+                //}
 
                 IFormatProvider culture = new CultureInfo("es-ES");
 
@@ -83,10 +113,15 @@ namespace ControlGastos.ViewModels
                 }
 
                 notification.HorarioString = string.Format("{0}:{1} hs", Hora, Minutos);
-
+                if (notification.TodosLosDias)
+                {
+                    notification.Horario = Time;
+                }
+                else { 
                 notification.Fecha = Date.Date;
 
                 notification.Horario = Time;
+                }
 
                 if (string.IsNullOrEmpty(Title) || string.IsNullOrWhiteSpace(Title))
                 {
@@ -101,6 +136,8 @@ namespace ControlGastos.ViewModels
 
                 notification.Title = Title;
                 notification.Message = Message;
+
+                notification.CantidadDeDias = Text;
 
                 var notificationViewModel = NotificationViewModel.GetInstance();
                 await notificationViewModel.Editar(notification);
@@ -123,6 +160,16 @@ namespace ControlGastos.ViewModels
             dialogService = new DialogService();
 
             this.notification = notification;
+            if (notification.TodosLosDias.Equals(true))
+            {
+                IsVisibleDatePicker = false;
+                IsVisibleEntry = false;
+            }
+            else
+            {
+                IsVisibleEntry = false;
+                IsVisibleDatePicker = true;
+            }
             //Carga los valores en la página de edición
             FechaString = notification.FechaString;
             HorarioString = notification.HorarioString;

@@ -25,6 +25,10 @@ namespace ControlGastos.Models
 
         public string Message { get; set; }
 
+        public DateTime Fecha { get; set; }
+
+        public TimeSpan Horario { get; set; }
+
         public bool TodosLosDiasActivado { get; set; }
 
         public override int GetHashCode()
