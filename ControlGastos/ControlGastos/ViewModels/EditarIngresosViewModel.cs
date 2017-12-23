@@ -14,6 +14,7 @@ namespace ControlGastos.ViewModels
 {
    public class EditarIngresosViewModel
     {
+      
         #region Services
         NavigationService navigationService;
         DialogService dialogService;
@@ -115,6 +116,7 @@ namespace ControlGastos.ViewModels
             ImagenOrigen = "income";
 
             #endregion
+
         }
     }
 }

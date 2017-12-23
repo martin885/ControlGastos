@@ -4,7 +4,7 @@
              xmlns:local="clr-namespace:ControlGastos.Views"
              x:Class="ControlGastos.Views.MenuTabbed"
             NavigationPage.HasNavigationBar="False"
-            BarBackgroundColor="#f18624">
+            BarBackgroundColor="#f18121">
 
     <NavigationPage Title="Balance" 
                     Icon="balance2" >

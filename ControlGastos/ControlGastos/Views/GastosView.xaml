@@ -62,8 +62,9 @@
             </StackLayout>
             <ListView ItemsSource="{Binding CollectionGastos}"
                       HasUnevenRows="True"
-                      SeparatorColor="#f18624" 
-                      BackgroundColor="{Binding BackgroundColor}">
+                      SeparatorColor="#f18121" 
+                      BackgroundColor="{Binding BackgroundColor}"
+                      IsRefreshing="{Binding IsRefreshing,Mode=TwoWay}">
                 <ListView.ItemTemplate>
                     <DataTemplate >
                         <ViewCell>

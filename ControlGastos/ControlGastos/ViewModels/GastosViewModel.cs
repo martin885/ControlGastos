@@ -146,6 +146,23 @@ namespace ControlGastos.ViewModels
                 }
             }
         }
+
+        bool _isRefreshing;
+        public bool IsRefreshing
+        {
+            get
+            {
+                return _isRefreshing;
+            }
+            set
+            {
+                if (_isRefreshing != value)
+                {
+                    _isRefreshing = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsRefreshing)));
+                }
+            }
+        }
         #endregion
 
         #region Commands
@@ -311,7 +328,7 @@ namespace ControlGastos.ViewModels
             Mes = DateTime.Now.ToString("MMMM",culture);
             Date = DateTime.Now;
             ListaGastos = new List<Gastos>();
-            
+            IsRefreshing = true;
             if (dataService.CheckTableIsEmpty<Gastos>())
             {
                 //Busco en la base de datos los gastos guardados 
@@ -324,6 +341,7 @@ namespace ControlGastos.ViewModels
                 x.Anio == Date.ToString("yyyy",culture)).ToList().Sum(x => double.Parse(x.GastosCantidad)).ToString();
                 CollectionGastos = new ObservableCollection<Gastos>(ListaGastos.Where(x => x.Mes == Date.ToString("MMM", culture) &&
                 x.Anio == Date.ToString("yyyy", culture)));
+
                 }
                 catch
                 {
@@ -336,6 +354,7 @@ namespace ControlGastos.ViewModels
                  SumaGasto = "0";
                
             }
+            IsRefreshing = false;
         }
 
         public void Editar(Gastos gastos)

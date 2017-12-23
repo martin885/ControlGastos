@@ -114,6 +114,23 @@ namespace ControlGastos.ViewModels
                 }
             }
         }
+
+        bool _isRefreshing;
+        public bool IsRefreshing
+        {
+            get
+            {
+                return _isRefreshing;
+            }
+            set
+            {
+                if (_isRefreshing != value)
+                {
+                    _isRefreshing = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsRefreshing)));
+                }
+            }
+        }
         #endregion
 
         #region Commands
@@ -226,6 +243,7 @@ namespace ControlGastos.ViewModels
             Mes = DateTime.Now.ToString("MMMM", culture);
             Date = DateTime.Now;
             ListaIngresos = new List<Ingresos>();
+            IsRefreshing = true;
             if (dataService.CheckTableIsEmpty<Ingresos>())
             {
                ListaIngresos= dataService.Get<Ingresos>(true);
@@ -238,6 +256,7 @@ namespace ControlGastos.ViewModels
             {
                 SumaIngreso = "0";
             }
+            IsRefreshing = false;
         }
 
         public void Editar(Ingresos ingresos)

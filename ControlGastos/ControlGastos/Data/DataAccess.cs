@@ -27,6 +27,7 @@ namespace ControlGastos.Data
             //connection.DropTable<Ingresos>();
             connection.CreateTable<Ingresos>();
             connection.CreateTable<Gastos>();
+            connection.CreateTable<Notification>();
             //connection.DropTable<SemanasA>();
             //connection.CreateTable<SemanasA>();
 

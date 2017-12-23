@@ -15,7 +15,7 @@ namespace ControlGastos.ViewModels
         {
             this.ingresos = ingresos;
             var ingresosViewModel = IngresosViewModel.GetInstance();
-            ingresosViewModel.Delete(this.ingresos);
+             ingresosViewModel.Delete(this.ingresos);
         }
     }
 }

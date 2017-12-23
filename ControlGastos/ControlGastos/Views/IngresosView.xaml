@@ -38,7 +38,8 @@
             </StackLayout>
             <ListView ItemsSource="{Binding CollectionIngresos}"
                       HasUnevenRows="True"
-                      SeparatorColor="#f18624">
+                      SeparatorColor="#f18121"
+                      IsRefreshing="{Binding IsRefreshing,Mode=TwoWay}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>

@@ -19,7 +19,7 @@ using Xamarin.Forms;
 
 namespace ControlGastos.ViewModels
 {
-    public class BalanceViewModel:INotifyPropertyChanged
+    public class BalanceViewModel : INotifyPropertyChanged
     {
         #region Eventos
         public event PropertyChangedEventHandler PropertyChanged;
@@ -110,6 +110,23 @@ namespace ControlGastos.ViewModels
                 }
             }
         }
+
+        bool _isRefreshing;
+        public bool IsRefreshing
+        {
+            get
+            {
+                return _isRefreshing;
+            }
+            set
+            {
+                if (_isRefreshing != value)
+                {
+                    _isRefreshing = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsRefreshing)));
+                }
+            }
+        }
         #endregion
 
         #region Commands
@@ -125,7 +142,7 @@ namespace ControlGastos.ViewModels
 
         private void SelectedItemMeses()
         {
-            CargarLaObservableCollection(SelectedItemMes,SelectedItemAño);
+            CargarLaObservableCollection(SelectedItemMes, SelectedItemAño);
         }
 
         public ICommand SelectedItemAñosCommand
@@ -138,7 +155,7 @@ namespace ControlGastos.ViewModels
 
         private void SelectedItemAños()
         {
-            CargarLaObservableCollection(SelectedItemMes,SelectedItemAño);
+            CargarLaObservableCollection(SelectedItemMes, SelectedItemAño);
         }
 
         public ICommand EmailCommand
@@ -166,24 +183,6 @@ namespace ControlGastos.ViewModels
             {
                 return new RelayCommand(Excel);
             }
-        }
-
-        public ICommand InfoCommand
-        {
-            get
-            {
-                return new RelayCommand(Info);
-            }
-        }
-
-        private async void Info()
-        {
-            //Instanciar ViewModel
-            var mainViewModel = MainViewModel.GetInstance();
-            mainViewModel.Info = new InfoViewModel();
-            //Ir a la página de información
-            var balanceView = BalanceView.GetInstance();
-            await balanceView.Navigation.PushAsync(new InfoView());
         }
 
         private async void Excel()
@@ -232,8 +231,8 @@ namespace ControlGastos.ViewModels
                     //Nueva celda
                     migrantRange.ResetRowColumn(cont + 2, 1);
                     migrantRange.Text = string.Format("{0}/{1}/{2}", elemento.Dia, elemento.Mes, elemento.Anio);
-                   
-                  
+
+
                     //migrantRange.CellStyle.Borders.LineStyle = ExcelLineStyle.Medium;
 
                     //Nueva celda
@@ -244,7 +243,7 @@ namespace ControlGastos.ViewModels
                     migrantRange.Text = elemento.GastoIngreso;
                     //Nueva celda
                     migrantRange.ResetRowColumn(cont + 2, 4);
-                   
+
                     migrantRange.Number = double.Parse(elemento.Cantidad);
                     if (double.Parse(elemento.Cantidad) > 0)
                     {
@@ -265,7 +264,7 @@ namespace ControlGastos.ViewModels
                 range.Text = string.Format("Balance: ");
                 range.CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
                 range.CellStyle.Font.Bold = true;
-                worksheet[string.Format("D{0}", cont + 2)].Number =double.Parse( BalanceTotal);
+                worksheet[string.Format("D{0}", cont + 2)].Number = double.Parse(BalanceTotal);
                 worksheet[string.Format("D{0}", cont + 2)].CellStyle.Font.Bold = true;
                 if (double.Parse(BalanceTotal) > 0)
                 {
@@ -278,7 +277,7 @@ namespace ControlGastos.ViewModels
                 worksheet.Range[string.Format("A1:D{0}", cont + 2)].BorderInside();
                 worksheet.Range[string.Format("A1:D{0}", cont + 2)].BorderAround();
                 worksheet.UsedRange.AutofitColumns();
-               
+
                 //Save the workbook to stream in xlsx format. 
                 MemoryStream stream = new MemoryStream();
                 workbook.SaveAs(stream);
@@ -286,12 +285,47 @@ namespace ControlGastos.ViewModels
                 workbook.Close();
 
                 //Save the stream as a file in the device and invoke it for viewing
-                await DependencyService.Get<ISave>().SaveAndView(string.Format("{0}-{1}",SelectedItemMes,SelectedItemAño) + ".xlsx", "application/msexcel", stream);
+                await DependencyService.Get<ISave>().SaveAndView(string.Format("{0}-{1}", SelectedItemMes, SelectedItemAño) + ".xlsx", "application/msexcel", stream);
 
                 await dialogService.ShowMessage("Mensaje", "El balance se guardó como hoja de Excel en la carpeta Balances");
             }
         }
 
+        public ICommand InfoCommand
+        {
+            get
+            {
+                return new RelayCommand(Info);
+            }
+        }
+
+        private async void Info()
+        {
+            //Instanciar ViewModel
+            var mainViewModel = MainViewModel.GetInstance();
+            mainViewModel.Info = new InfoViewModel();
+            //Ir a la página de información
+            var balanceView = BalanceView.GetInstance();
+            await balanceView.Navigation.PushAsync(new InfoView());
+        }
+
+        public ICommand NotificationCommand
+        {
+            get
+            {
+                return new RelayCommand(Notification);
+            }
+        }
+
+        private async void Notification()
+        {
+            //Instanciar ViewModel
+            var mainViewModel = MainViewModel.GetInstance();
+            mainViewModel.Notification = new NotificationViewModel();
+            //Ir a la página de notificación
+            var balanceView = BalanceView.GetInstance();
+            await balanceView.Navigation.PushAsync(new NotificationView());
+        }
         #endregion
 
         #region Constructor
@@ -325,60 +359,60 @@ namespace ControlGastos.ViewModels
         private void Cargas()
         {
             ListaBalance = new List<Balance>();
-           
+            IsRefreshing = true;
             //Item Source del Picker de Meses
             Meses = new ObservableCollection<string>();
             //Item Source del Picker de Años
             Años = new ObservableCollection<string>();
-           
+
             //Agregado de meses al picker dependiendo si existen o no datos guardados en esos meses
-          
-                foreach (var MesesIngresos in dataService.Get<Ingresos>(true))
+
+            foreach (var MesesIngresos in dataService.Get<Ingresos>(true))
+            {
+                if (!string.IsNullOrEmpty(MesesIngresos.Mes))
                 {
-                    if (!string.IsNullOrEmpty(MesesIngresos.Mes))
+                    if (Meses.Contains(MesesIngresos.Mes) == false)
                     {
-                        if (Meses.Contains(MesesIngresos.Mes) == false)
-                        {
-                            Meses.Add(MesesIngresos.Mes);
-                        }
+                        Meses.Add(MesesIngresos.Mes);
                     }
                 }
-                foreach (var MesesGastos in dataService.Get<Gastos>(true))
+            }
+            foreach (var MesesGastos in dataService.Get<Gastos>(true))
+            {
+                if (!string.IsNullOrEmpty(MesesGastos.Mes))
                 {
-                    if (!string.IsNullOrEmpty(MesesGastos.Mes))
+                    if (Meses.Contains(MesesGastos.Mes) == false)
                     {
-                        if (Meses.Contains(MesesGastos.Mes) == false)
-                        {
-                            Meses.Add(MesesGastos.Mes);
-                        }
+                        Meses.Add(MesesGastos.Mes);
                     }
                 }
-              
-          
+            }
+
+
             //Agregado de años al picker dependiendo si existen o no datos guardados en esos años
 
 
-         
-                foreach (var AñosIngresos in dataService.Get<Ingresos>(true))
+
+            foreach (var AñosIngresos in dataService.Get<Ingresos>(true))
+            {
+                if (!string.IsNullOrEmpty(AñosIngresos.Mes))
                 {
-                    if (!string.IsNullOrEmpty(AñosIngresos.Mes))
+                    if (Años.Contains(AñosIngresos.Anio) == false)
                     {
-                        if (Años.Contains(AñosIngresos.Anio) == false)
-                        {
-                            Años.Add(AñosIngresos.Anio);
-                        }
+                        Años.Add(AñosIngresos.Anio);
                     }
                 }
-                foreach (var AñosGastos in dataService.Get<Gastos>(true))
+            }
+            foreach (var AñosGastos in dataService.Get<Gastos>(true))
+            {
+                if (!string.IsNullOrEmpty(AñosGastos.Anio))
                 {
-                    if (!string.IsNullOrEmpty(AñosGastos.Anio))
+                    if (Años.Contains(AñosGastos.Anio) == false)
                     {
-                        if (Años.Contains(AñosGastos.Anio) == false)
-                        {
-                            Años.Add(AñosGastos.Anio);
-                        }
+                        Años.Add(AñosGastos.Anio);
                     }
                 }
+            }
 
 
             foreach (var meses in Meses)
@@ -394,70 +428,71 @@ namespace ControlGastos.ViewModels
                     }
                 }
             }
-            DefaultMes = Meses.IndexOf(DateTime.Now.ToString("MMM",culture)).ToString();
-            DefaultAño = Años.IndexOf(DateTime.Now.ToString("yyyy",culture)).ToString();
+            DefaultMes = Meses.IndexOf(DateTime.Now.ToString("MMM", culture)).ToString();
+            DefaultAño = Años.IndexOf(DateTime.Now.ToString("yyyy", culture)).ToString();
+            IsRefreshing = false;
         }
 
         private void CargarLaObservableCollection(string selectedItemMes, string selectedItemAño)
         {
             ListaBalance.Clear();
-        
-                //Agregado de objetos balance a las observable collection en caso de que se encuentren el mes y el año pertenecientes a la fecha del día. En función de los ingresos 
-                if (dataService.Get<Ingresos>(true).Exists(x => x.Mes == selectedItemMes && x.Anio == selectedItemAño))
-                {
-                    foreach (var ListadeBalanceIngreso in dataService.Get<Ingresos>(true).Where(x => x.Mes == selectedItemMes && x.Anio == selectedItemAño).ToList())
-                    {
-                        Balance = new Balance
-                        {
-                            BalanceId=ListadeBalanceIngreso.IngresoId.ToString(),
-                            Dia = ListadeBalanceIngreso.Dia,
-                            Mes = ListadeBalanceIngreso.Mes,
-                            Anio = ListadeBalanceIngreso.Anio,
-                            Fecha = string.Format("{0}/{1}/{2}", ListadeBalanceIngreso.Dia, ListadeBalanceIngreso.Mes, ListadeBalanceIngreso.Anio),
-                            ImagenFecha = "date",
-                            GastoIngreso ="Ingreso",
-                            Cantidad = ListadeBalanceIngreso.IngresoCantidad,
-                            ImagenMonto="money",
-                            ColorGastoIngreso=Color.Green,
-                            Origen = ListadeBalanceIngreso.IngresoNombre,
-                            ImagenOrigen="income"
-                        };
-                        if (!double.TryParse(Balance.Cantidad, out double result))
-                        {
-                            Balance.Cantidad = 0.ToString();
-                        }
-                        ListaBalance.Add(Balance);
 
-                    }
-                }
-                //Agregado de objetos balance a las observable collection en caso de que se encuentren el mes y el año pertenecientes a la fecha del día. En función de los gastos 
-                if (dataService.Get<Gastos>(true).Exists(x => x.Mes == selectedItemMes && x.Anio == selectedItemAño))
+            //Agregado de objetos balance a las observable collection en caso de que se encuentren el mes y el año pertenecientes a la fecha del día. En función de los ingresos 
+            if (dataService.Get<Ingresos>(true).Exists(x => x.Mes == selectedItemMes && x.Anio == selectedItemAño))
+            {
+                foreach (var ListadeBalanceIngreso in dataService.Get<Ingresos>(true).Where(x => x.Mes == selectedItemMes && x.Anio == selectedItemAño).ToList())
                 {
-                    foreach (var ListadeBalanceGastos in dataService.Get<Gastos>(true).Where(x => x.Mes == selectedItemMes && x.Anio == selectedItemAño).ToList())
+                    Balance = new Balance
                     {
-                        Balance = new Balance
-                        {
-                            BalanceId = ListadeBalanceGastos.GastosId.ToString(),
-                            Dia= ListadeBalanceGastos.Dia,
-                            Mes= ListadeBalanceGastos.Mes,
-                            Anio= ListadeBalanceGastos.Anio,
-                            Fecha = string.Format("{0}/{1}/{2}",ListadeBalanceGastos.Dia, ListadeBalanceGastos.Mes, ListadeBalanceGastos.Anio),
-                            ImagenFecha="date",
-                            GastoIngreso=ListadeBalanceGastos.Categoria,
-                            Cantidad = string.Format("-{0}",ListadeBalanceGastos.GastosCantidad),
-                            ImagenMonto = "money",
-                            ColorGastoIngreso =Color.Red,
-                            Origen = ListadeBalanceGastos.GastoNombre
-                        };
-                        if (Balance.Cantidad.Contains("--"))
-                        {
-                            Balance.Cantidad = Balance.Cantidad.Replace("--", "-");
-                        }
-                        if (!double.TryParse(Balance.Cantidad, out double result))
-                        {
-                            Balance.Cantidad = 0.ToString();     
-                        }
-                        switch (Balance.GastoIngreso)
+                        BalanceId = ListadeBalanceIngreso.IngresoId.ToString(),
+                        Dia = ListadeBalanceIngreso.Dia,
+                        Mes = ListadeBalanceIngreso.Mes,
+                        Anio = ListadeBalanceIngreso.Anio,
+                        Fecha = string.Format("{0}/{1}/{2}", ListadeBalanceIngreso.Dia, ListadeBalanceIngreso.Mes, ListadeBalanceIngreso.Anio),
+                        ImagenFecha = "date",
+                        GastoIngreso = "Ingreso",
+                        Cantidad = ListadeBalanceIngreso.IngresoCantidad,
+                        ImagenMonto = "money",
+                        ColorGastoIngreso = Color.Green,
+                        Origen = ListadeBalanceIngreso.IngresoNombre,
+                        ImagenOrigen = "income"
+                    };
+                    if (!double.TryParse(Balance.Cantidad, out double result))
+                    {
+                        Balance.Cantidad = 0.ToString();
+                    }
+                    ListaBalance.Add(Balance);
+
+                }
+            }
+            //Agregado de objetos balance a las observable collection en caso de que se encuentren el mes y el año pertenecientes a la fecha del día. En función de los gastos 
+            if (dataService.Get<Gastos>(true).Exists(x => x.Mes == selectedItemMes && x.Anio == selectedItemAño))
+            {
+                foreach (var ListadeBalanceGastos in dataService.Get<Gastos>(true).Where(x => x.Mes == selectedItemMes && x.Anio == selectedItemAño).ToList())
+                {
+                    Balance = new Balance
+                    {
+                        BalanceId = ListadeBalanceGastos.GastosId.ToString(),
+                        Dia = ListadeBalanceGastos.Dia,
+                        Mes = ListadeBalanceGastos.Mes,
+                        Anio = ListadeBalanceGastos.Anio,
+                        Fecha = string.Format("{0}/{1}/{2}", ListadeBalanceGastos.Dia, ListadeBalanceGastos.Mes, ListadeBalanceGastos.Anio),
+                        ImagenFecha = "date",
+                        GastoIngreso = ListadeBalanceGastos.Categoria,
+                        Cantidad = string.Format("-{0}", ListadeBalanceGastos.GastosCantidad),
+                        ImagenMonto = "money",
+                        ColorGastoIngreso = Color.Red,
+                        Origen = ListadeBalanceGastos.GastoNombre
+                    };
+                    if (Balance.Cantidad.Contains("--"))
+                    {
+                        Balance.Cantidad = Balance.Cantidad.Replace("--", "-");
+                    }
+                    if (!double.TryParse(Balance.Cantidad, out double result))
+                    {
+                        Balance.Cantidad = 0.ToString();
+                    }
+                    switch (Balance.GastoIngreso)
                     {
                         case "Servicios":
                             Balance.ImagenOrigen = "servicios";
@@ -475,25 +510,23 @@ namespace ControlGastos.ViewModels
                             Balance.ImagenOrigen = "Sin Imagen Disponible";
                             break;
                     }
-                        ListaBalance.Add(Balance);
-                    
-                    }
-                }
-          
-                CollectionBalance = new ObservableCollection<Balance>(ListaBalance.OrderByDescending(x => double.Parse(x.Dia)).ToList());
+                    ListaBalance.Add(Balance);
 
-            
+                }
+            }
 
-                BalanceTotal = ListaBalance.Sum(x => double.Parse(x.Cantidad)).ToString();
-                if (double.Parse(BalanceTotal) < 0)
-                {
-                    ColorBalance = Color.Red;
-                }
-                else if(double.Parse(BalanceTotal) > 0)
-                {
-                    ColorBalance = Color.Green;
-                }
-            
+            CollectionBalance = new ObservableCollection<Balance>(ListaBalance.OrderByDescending(x => double.Parse(x.Dia)).ToList());
+
+            BalanceTotal = ListaBalance.Sum(x => double.Parse(x.Cantidad)).ToString();
+            if (double.Parse(BalanceTotal) < 0)
+            {
+                ColorBalance = Color.Red;
+            }
+            else if (double.Parse(BalanceTotal) > 0)
+            {
+                ColorBalance = Color.Green;
+            }
+
 
         }
 
@@ -504,7 +537,7 @@ namespace ControlGastos.ViewModels
             //Encuentro el gasto o ingreso  a actualizar en la base de datos y cambio uno a uno los valores
             if (balance.GastoIngreso == "Ingreso")
             {
-               var IngresoAntiguo= dataService.Get<Ingresos>(true).Find(x => x.IngresoId.ToString() == balance.BalanceId);
+                var IngresoAntiguo = dataService.Get<Ingresos>(true).Find(x => x.IngresoId.ToString() == balance.BalanceId);
                 IngresoAntiguo.Dia = balance.Dia;
                 IngresoAntiguo.Mes = balance.Mes;
                 IngresoAntiguo.Anio = balance.Anio;
@@ -537,12 +570,12 @@ namespace ControlGastos.ViewModels
                     var IngresoAntiguo = dataService.Get<Ingresos>(true).Find(x => x.IngresoId.ToString() == balance.BalanceId);
                     dataService.Delete(IngresoAntiguo);
                 }
-               else 
+                else
                 {
                     var GastoAntiguo = dataService.Get<Gastos>(true).Find(x => x.GastosId.ToString() == balance.BalanceId);
                     dataService.Delete(GastoAntiguo);
                 }
-              
+
 
                 CargarLaObservableCollection(SelectedItemMes, SelectedItemAño);
             }
@@ -553,8 +586,6 @@ namespace ControlGastos.ViewModels
 
 
         }
-            #endregion
-
-
-        }
+        #endregion
+    }
 }
