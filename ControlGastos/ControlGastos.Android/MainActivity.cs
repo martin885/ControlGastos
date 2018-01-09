@@ -8,6 +8,7 @@ using Android.Widget;
 using Android.OS;
 using Com.OneSignal;
 using Plugin.LocalNotifications;
+using Android.Gms.Ads;
 
 namespace ControlGastos.Droid
 {
@@ -23,6 +24,7 @@ namespace ControlGastos.Droid
 
             OneSignal.Current.StartInit("d18e950f-8242-437d-beb8-28fc657cf0a4").EndInit();
             LocalNotificationsImplementation.NotificationIconId = Resource.Drawable.logotipoGGnotification;
+            MobileAds.Initialize(ApplicationContext, "ca-app-pub-4740837376040145~7975705945");
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
             LoadApplication(new App());

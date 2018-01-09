@@ -131,7 +131,6 @@ namespace ControlGastos.ViewModels
 
         #region Commands
 
-
         public ICommand SelectedItemMesesCommand
         {
             get
@@ -168,12 +167,12 @@ namespace ControlGastos.ViewModels
 
         private void Email()
         {
+
             var emailMessenger = CrossMessaging.Current.EmailMessenger;
             if (emailMessenger.CanSendEmail && emailMessenger.CanSendEmailAttachments)
             {
                 var filename = string.Format("{0}-{1}", SelectedItemMes, SelectedItemAño);
                 emailMessenger.SendEmail(DependencyService.Get<IEmail>().EmailMessage(filename));
-
             }
         }
 
@@ -187,6 +186,7 @@ namespace ControlGastos.ViewModels
 
         private async void Excel()
         {
+            Cargas();
             if (ListaBalance.Count == 0)
             {
                 await dialogService.ShowMessage("Error", "Se deben agregar elementos al balance");
@@ -206,9 +206,6 @@ namespace ControlGastos.ViewModels
                 IWorksheet worksheet = workbook.Worksheets[0];
 
                 IMigrantRange migrantRange = worksheet.MigrantRange;
-
-
-
 
                 foreach (var elemento in ListaBalance)
                 {
@@ -305,8 +302,9 @@ namespace ControlGastos.ViewModels
             var mainViewModel = MainViewModel.GetInstance();
             mainViewModel.Info = new InfoViewModel();
             //Ir a la página de información
-            var balanceView = BalanceView.GetInstance();
-            await balanceView.Navigation.PushAsync(new InfoView());
+            //var balanceView = BalanceView.GetInstance();
+            //await balanceView.Navigation.PushAsync(new InfoView());
+         await  Application.Current.MainPage.Navigation.PushAsync(new InfoView());
         }
 
         public ICommand NotificationCommand
@@ -323,15 +321,16 @@ namespace ControlGastos.ViewModels
             var mainViewModel = MainViewModel.GetInstance();
             mainViewModel.Notification = new NotificationViewModel();
             //Ir a la página de notificación
-            var balanceView = BalanceView.GetInstance();
-            await balanceView.Navigation.PushAsync(new NotificationView());
+            //var balanceView = BalanceView.GetInstance();
+            //await balanceView.Navigation.PushAsync(new NotificationView());
+           await Application.Current.MainPage.Navigation.PushAsync(new NotificationView());
         }
         #endregion
 
         #region Constructor
         public BalanceViewModel()
         {
-            culture = new CultureInfo("es-ES");
+
             instance = this;
             dataService = new DataService();
             dialogService = new DialogService();
@@ -358,6 +357,7 @@ namespace ControlGastos.ViewModels
         #region Métodos
         private void Cargas()
         {
+            culture = new CultureInfo("es-ES");
             ListaBalance = new List<Balance>();
             IsRefreshing = true;
             //Item Source del Picker de Meses

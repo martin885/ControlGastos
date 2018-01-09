@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ControlGastos.Views.EditarNotificationView"
              BindingContext="{Binding Main,Source={StaticResource Key=Locator}}"
-             NavigationPage.HasNavigationBar="False"
+             NavigationPage.HasNavigationBar="True"
              Title="Editar Notificaciones">
     <ContentPage.Content>
         <StackLayout  BindingContext="{Binding EditarNotification}">

@@ -30,6 +30,7 @@ namespace ControlGastos.ViewModels
         IFormatProvider culture;
         public DateTime Date { get; set; }
         public string SelectedItem { get; set; }
+        public BalanceViewModel Balance { get; set; }
         Gastos Gastos { get; set; }
         public List<Gastos> ListaGastos { get; set; }
         public ObservableCollection<string> PickerCategorias { get; set; }
@@ -295,6 +296,8 @@ namespace ControlGastos.ViewModels
             culture = new CultureInfo("es-ES");
             dataService = new DataService();
             dialogService = new DialogService();
+
+            Balance = MainViewModel.GetInstance().Balance;
             instance = this;
             Cargas();
 
@@ -378,7 +381,7 @@ namespace ControlGastos.ViewModels
             if (confirmacion)
             {
 
-                var GastoAntiguo = ListaGastos.Find(x => x.GastosId == gastos.GastosId);
+                var GastoAntiguo = ListaGastos.Find(x => x.GastosId.Equals( gastos.GastosId));
                     dataService.Delete(GastoAntiguo);
                 ListaGastos.Remove(GastoAntiguo);
                 SumaGastoCategoria = ListaGastos.Where(x => x.Mes == Date.ToString("MMM", culture) &&

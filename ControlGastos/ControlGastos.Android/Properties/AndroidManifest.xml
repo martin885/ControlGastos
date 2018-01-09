@@ -4,12 +4,17 @@
 	<permission android:name="com.gestorgastos.onesignal.permission.C2D_MESSAGE" android:protectionLevel="signature" />
 	<uses-permission android:name="com.gestorgastos.onesignal.permission.C2D_MESSAGE" />
 	<uses-permission android:name="android.permission.INTERNET" />
-	<application android:label="Gestor de Gastos" android:icon="@drawable/logotipoGG">
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+  <application android:label="Gestor de Gastos" android:icon="@drawable/logotipoGG">
 		<receiver android:name="com.onesignal.GcmBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
 			<intent-filter>
 				<action android:name="com.google.android.c2dm.intent.RECEIVE" />
 				<category android:name="com.gestorgastos.onesignal" />
 			</intent-filter>
 		</receiver>
+    <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version"/>
+    <activity android:name="com.google.android.gms.ads.AdActivity" 
+              android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" 
+              android:theme="@android:style/Theme.Translucent" />
 	</application>
 </manifest>

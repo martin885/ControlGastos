@@ -4,6 +4,7 @@
              x:Class="ControlGastos.Views.IngresosView"
              BindingContext="{Binding Main,Source={StaticResource Key=Locator}}"
              xmlns:local="clr-namespace:ControlGastos.Behaviors"
+             xmlns:controls="clr-namespace:ControlGastos.Views;assembly=ControlGastos"
              NavigationPage.HasNavigationBar="False">
     <ContentPage.Content>
         <StackLayout BindingContext="{Binding Ingresos}">
@@ -91,22 +92,81 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <StackLayout Margin="10" 
+            <StackLayout Margin="10,0,10,0" 
                          VerticalOptions="EndAndExpand"
                          HorizontalOptions="CenterAndExpand">
                 <StackLayout Orientation="Horizontal">
-                <Label Text="Ingresos Brutos de"
+                    <Label Text="Ingresos Brutos de"
                        VerticalOptions="CenterAndExpand"/>
-                <Label Text="{Binding Mes}"
+                    <Label Text="{Binding Mes}"
                        VerticalOptions="CenterAndExpand"/>
-                <Label Text="{Binding SumaIngreso}" 
+                    <Label Text="{Binding SumaIngreso}" 
                        FontSize="Large" 
                        FontAttributes="Bold"
                        VerticalOptions="CenterAndExpand"
                        TextColor="Green"/>
                 </StackLayout>
-               
             </StackLayout>
+            <Grid RowSpacing="0" BindingContext="{Binding Balance}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <BoxView BackgroundColor="#f18121"
+                         Grid.Row="0"
+                         Grid.Column="0"
+                         Grid.ColumnSpan="4"/>
+                <Image Source="info"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       Grid.Row="0"
+                       Grid.Column="0"
+                       Scale="0.75">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding InfoCommand}"/>
+                    </Image.GestureRecognizers>
+                </Image>
+
+                <Image Source="correo"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       Grid.Row="0"
+                       Grid.Column="2"
+                       Scale="0.75">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding EmailCommand}"/>
+                    </Image.GestureRecognizers>
+                </Image>
+                <Image Source="excel"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       Grid.Row="0"
+                       Grid.Column="3"
+                       Scale="0.75">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ExcelCommand}"/>
+                    </Image.GestureRecognizers>
+                </Image>
+                <Image Source="notificacion"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       Grid.Row="0"
+                       Grid.Column="1"
+                       Scale="0.75">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NotificationCommand}"/>
+                    </Image.GestureRecognizers>
+                </Image>
+                <controls:AdControlView Grid.Row="1" 
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="4"/>
+            </Grid>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

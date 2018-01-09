@@ -4,6 +4,7 @@
              x:Class="ControlGastos.Views.BalanceView"
              BindingContext="{Binding Main,Source={StaticResource Key=Locator}}"
              xmlns:local="clr-namespace:ControlGastos.Behaviors"
+             xmlns:controls="clr-namespace:ControlGastos.Views;assembly=ControlGastos"
              NavigationPage.HasNavigationBar="False">
     <ContentPage.Content>
         <StackLayout BindingContext="{Binding Balance}">
@@ -123,7 +124,7 @@
                    VerticalOptions="Center"
                    HorizontalOptions="CenterAndExpand"/>
             </StackLayout>
-            <Grid>
+            <Grid RowSpacing="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
@@ -131,6 +132,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <BoxView BackgroundColor="#f18121"
@@ -178,6 +180,9 @@
                         <TapGestureRecognizer Command="{Binding NotificationCommand}"/>
                     </Image.GestureRecognizers>
                 </Image>
+                <controls:AdControlView Grid.Row="1" 
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="4"/>
             </Grid>
         </StackLayout>
     </ContentPage.Content>

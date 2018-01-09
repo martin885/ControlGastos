@@ -3,31 +3,36 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ControlGastos.Views.InfoView"
              BindingContext="{Binding Main,Source={StaticResource Key=Locator}}"
-             NavigationPage.HasNavigationBar="True">
+             NavigationPage.HasNavigationBar="True"
+             Title="Información">
     <ContentPage.Content>
+        <ScrollView>
         <StackLayout BindingContext="{Binding Info}" 
                      Margin="10">
             <Label Text="Gestor de Gastos"
                    FontSize="Large"
                    HorizontalOptions="Center"
                    Margin="10,0,0,25"/>
+            <Image Source="logotipoGG"/>
             <StackLayout  Spacing="20"
                           HorizontalOptions="Center">
             <Label Text="Versión : 3.5"
                    HorizontalOptions="Center"/>
             <Label Text="Desarrolladores : Sumo Sistemas"
                    HorizontalOptions="Center"/>
-            <Label Text="Para cualquier consulta, contactate con:"
+                <Image Source="logotiposumo"/>
+                <Label Text="Para cualquier consulta, contactate con:"
                    HorizontalOptions="Center"/>
-            <Label Text="www.sumosistemas.com.ar"
-                   TextColor="Blue"
+                    <Label Text="www.sumosistemas.com.ar"
+                   TextColor="#f18121"
                    FontSize="Large"
                    HorizontalOptions="Center">
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding BrowseCommand}"/>
-                </Label.GestureRecognizers>
-            </Label>
-            </StackLayout>
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding BrowseCommand}"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+                </StackLayout>
         </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

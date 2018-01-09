@@ -31,6 +31,7 @@ namespace ControlGastos.ViewModels
        
         public DateTime Date { get; set; }
         Ingresos Ingresos { get; set; }
+        public BalanceViewModel Balance { get; set; }
        public List<Ingresos> ListaIngresos { get; set; }
         string _sumaIngreso;
         public string SumaIngreso
@@ -191,7 +192,6 @@ namespace ControlGastos.ViewModels
                 OrigenIngreso = null;
                 dataService.Save(ListaIngresos, true);
                 CollectionIngresos = new ObservableCollection<Ingresos>(ListaIngresos.Where(x => x.Mes == Ingresos.Mes && x.Anio == Ingresos.Anio).ToList());
-
         }
         public ICommand DateSelectedCommand
         {
@@ -215,6 +215,7 @@ namespace ControlGastos.ViewModels
         {
             dataService = new DataService();
             dialogService = new DialogService();
+            Balance = MainViewModel.GetInstance().Balance;
             culture = new CultureInfo("es-ES");
             instance = this;
 

@@ -22,14 +22,11 @@ namespace ControlGastos.Data
             var config = DependencyService.Get<IConfig>();
             connection = new SQLiteConnection(config.Platform,
             Path.Combine(config.DirectoryDB, "ControlGastos.db3"));
-            //connection.DropTable<IngresosMes>();
-            //connection.CreateTable<Gastos>();
+            //connection.DropTable<Gastos>();
             //connection.DropTable<Ingresos>();
             connection.CreateTable<Ingresos>();
             connection.CreateTable<Gastos>();
             connection.CreateTable<Notification>();
-            //connection.DropTable<SemanasA>();
-            //connection.CreateTable<SemanasA>();
 
         }
 

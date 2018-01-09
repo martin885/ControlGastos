@@ -72,6 +72,7 @@
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\NotificationViewModel.cs" />
     <Compile Include="ViewModels\PaginaInicioViewModel.cs" />
+    <Compile Include="Views\AdControlView.cs" />
     <Compile Include="Views\BalanceView.xaml.cs">
       <DependentUpon>BalanceView.xaml</DependentUpon>
     </Compile>
