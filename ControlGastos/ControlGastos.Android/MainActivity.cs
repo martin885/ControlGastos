@@ -22,7 +22,7 @@ namespace ControlGastos.Droid
 
             base.OnCreate(bundle);
 
-            OneSignal.Current.StartInit("d18e950f-8242-437d-beb8-28fc657cf0a4").EndInit();
+            OneSignal.Current.StartInit("").EndInit();
             LocalNotificationsImplementation.NotificationIconId = Resource.Drawable.logotipoGGnotification;
             MobileAds.Initialize(ApplicationContext, "ca-app-pub-4740837376040145~7975705945");
 
