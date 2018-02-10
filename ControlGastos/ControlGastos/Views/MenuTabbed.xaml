@@ -6,7 +6,16 @@
             NavigationPage.HasNavigationBar="False"
             BarBackgroundColor="#f18121">
 
-    <NavigationPage Title="Balance" 
+
+
+    <NavigationPage Title="BG" 
+                    Icon="balance2" >
+        <x:Arguments>
+            <local:BalanceGeneralView />
+        </x:Arguments>
+    </NavigationPage>
+
+    <NavigationPage Title="BM" 
                     Icon="balance2" >
         <x:Arguments>
             <local:BalanceView />

@@ -8,6 +8,11 @@
              NavigationPage.HasNavigationBar="False">
     <ContentPage.Content>
         <StackLayout BindingContext="{Binding Balance}">
+            <Label Text="Balance Mensual" 
+                   HorizontalOptions="Center"
+                   Margin="10"
+                   TextColor="#f18121"
+                   FontSize="Large"/>
             <Grid >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -113,7 +118,8 @@
             </ListView>
             <StackLayout Orientation="Horizontal"
                          HorizontalOptions="CenterAndExpand">
-                <Label Text="Balance: "
+                <Label Text="Balance Mensual: "
+                       TextColor="#f18121"
                        VerticalOptions="Center"
                        HorizontalOptions="CenterAndExpand"
                        FontSize="Large"/>

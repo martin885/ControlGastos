@@ -1,43 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="ControlGastos.Views.IngresosView"
+             x:Class="ControlGastos.Views.BalanceGeneralView"
              BindingContext="{Binding Main,Source={StaticResource Key=Locator}}"
              xmlns:local="clr-namespace:ControlGastos.Behaviors"
              xmlns:controls="clr-namespace:ControlGastos.Views;assembly=ControlGastos"
              NavigationPage.HasNavigationBar="False">
     <ContentPage.Content>
-        <StackLayout BindingContext="{Binding Ingresos}">
-            <StackLayout Margin="10,10,10,0" >
-                <DatePicker Format="D"
-                    Date="{Binding Date}">
-                    <DatePicker.Behaviors>
-                        <local:DateSelected Command="{Binding DateSelectedCommand}"/>
-                    </DatePicker.Behaviors>
-                </DatePicker>
-                <Entry Placeholder="Origen del Ingreso..."
-                       PlaceholderColor="Gray"
-                       Keyboard="Text"
-                       Text="{Binding OrigenIngreso,Mode=TwoWay}"/>
-            </StackLayout>
-            <StackLayout Orientation="Horizontal"
-                         Margin="10,0,10,0">
-                <Entry Placeholder="Monto en pesos..."
-                       PlaceholderColor="Gray"
-                       HorizontalOptions="FillAndExpand"
-                       VerticalOptions="Center"
-                       Keyboard="Numeric"
-                       Text="{Binding MontoIngreso,Mode=TwoWay}"/>
-                <Image Source="plus"
-                       HorizontalOptions="End"
-                       VerticalOptions="Center"
-                       Scale="0.75">
-                    <Image.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding AgregarIngresoCommand}"/>
-                    </Image.GestureRecognizers>
-                </Image>
-            </StackLayout>
-            <ListView ItemsSource="{Binding CollectionIngresos}"
+        <StackLayout BindingContext="{Binding BalanceGeneral}">
+            <Label Text="Balance General" 
+                   HorizontalOptions="Center"
+                   Margin="10"
+                   TextColor="#f18121"
+                   FontSize="Large"/>
+            <ListView ItemsSource="{Binding CollectionBalance}"
                       HasUnevenRows="True"
                       SeparatorColor="#f18121"
                       IsRefreshing="{Binding IsRefreshing,Mode=TwoWay}">
@@ -51,40 +27,31 @@
                                           Command="{Binding DeleteCommand}" 
                                           IsDestructive="True"/>
                             </ViewCell.ContextActions>
-                            
-                            <StackLayout Margin="10,0,10,0"
-                                         Spacing="-25">
 
-                                <StackLayout Orientation="Horizontal">
-                                    <Image Source="{Binding ImagenOrigen}"
-                                           VerticalOptions="Center"
-                                           Scale="0.5"/>
-                                    <Label Text="{Binding IngresoNombre}"
-                                           VerticalOptions="Center"/>
-                                </StackLayout>
-
+                            <StackLayout Margin="10,1,10,1"
+                                         Spacing="-10">
                                 <StackLayout Orientation="Horizontal">
                                     <Image Source="{Binding ImagenFecha}"
                                            VerticalOptions="Center"
-                                           Scale="0.5"/>
-                                    <Label Text="{Binding Dia}"
-                                           VerticalOptions="Center"/>
-                                    <Label Text="/"
-                                           VerticalOptions="Center"/>
+                                           Scale="0.75"/>
                                     <Label Text="{Binding Mes}"
-                                           VerticalOptions="Center"/>
+                                           VerticalOptions="Center"
+                                           FontSize="Medium"/>
                                     <Label Text="/"
                                            VerticalOptions="Center"/>
                                     <Label Text="{Binding Anio}"
-                                           VerticalOptions="Center"/>
+                                           VerticalOptions="Center"
+                                           FontSize="Medium"/>
                                 </StackLayout>
-
                                 <StackLayout Orientation="Horizontal">
                                     <Image Source="{Binding ImagenMonto}"
-                                           VerticalOptions="Center"
-                                           Scale="0.5"/>
-                                    <Label Text="{Binding IngresoCantidad}"
+                                           Scale="0.75"
                                            VerticalOptions="Center"/>
+                                    <Label Text="{Binding Cantidad}" 
+                                       TextColor="{Binding ColorGastoIngreso}"
+                                       FontSize="Medium"
+                                       FontAttributes="Bold"
+                                       VerticalOptions="Center"/>
                                 </StackLayout>
 
                             </StackLayout>
@@ -92,22 +59,19 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <StackLayout Margin="10,0,10,0" 
-                         VerticalOptions="EndAndExpand"
+            <StackLayout Orientation="Horizontal"
                          HorizontalOptions="CenterAndExpand">
-                <StackLayout Orientation="Horizontal">
-                    <Label Text="Ingresos de"
-                           TextColor="#f18121"
-                       VerticalOptions="CenterAndExpand"/>
-                    <Label Text="{Binding Mes}"
-                           TextColor="#f18121"
-                       VerticalOptions="CenterAndExpand"/>
-                    <Label Text="{Binding SumaIngreso}" 
-                       FontSize="Large" 
-                       FontAttributes="Bold"
-                       VerticalOptions="CenterAndExpand"
-                       TextColor="Green"/>
-                </StackLayout>
+                <Label Text="Balance General: "
+                       TextColor="#f18121"
+                       VerticalOptions="Center"
+                       HorizontalOptions="CenterAndExpand"
+                       FontSize="Large"/>
+                <Label Text="{Binding BalanceTotal}"
+                   FontSize="Large"
+                   FontAttributes="Bold"
+                   TextColor="{Binding ColorBalance}"
+                   VerticalOptions="Center"
+                   HorizontalOptions="CenterAndExpand"/>
             </StackLayout>
             <Grid RowSpacing="0">
                 <Grid.ColumnDefinitions>

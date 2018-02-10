@@ -8,22 +8,26 @@ using ControlGastos.ViewModels;
 using ControlGastos.Services;
 using Com.OneSignal;
 
+using ControlGastos.Config;
+
 namespace ControlGastos
 {
     public partial class App : Application
     {
- 
+        public configuracion config;
 
         public App()
         {
           
             InitializeComponent();
+
+            config = new configuracion();
             
             //MainPage = new NavigationPage(new PaginaInicio());
 
             MainPage =new NavigationPage( new MenuTabbed());
 
-            OneSignal.Current.StartInit("d18e950f-8242-437d-beb8-28fc657cf0a4").EndInit();
+            OneSignal.Current.StartInit(config.IdOneSignal).EndInit();
 
         }
 

@@ -26,6 +26,7 @@ namespace ControlGastos.ViewModels
         public NotificationViewModel Notification { get; set; }
         public EditarNotificationViewModel EditarNotification { get; set; }
         public BorrarNotificationViewModel BorrarNotification { get; set; }
+        public BalanceGeneralViewModel BalanceGeneral { get; set; }
         #endregion
 
 

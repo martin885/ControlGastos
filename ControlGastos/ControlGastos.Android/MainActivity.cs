@@ -9,12 +9,15 @@ using Android.OS;
 using Com.OneSignal;
 using Plugin.LocalNotifications;
 using Android.Gms.Ads;
+using ControlGastos.Config;
 
 namespace ControlGastos.Droid
 {
     [Activity(Label = "Gestor de Gastos", Icon = "@drawable/logotipoGG", Theme = "@style/MainTheme", MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, ScreenOrientation = ScreenOrientation.Portrait)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
+        configuracion config;
+
         protected override void OnCreate(Bundle bundle)
         {
             TabLayoutResource = Resource.Layout.Tabbar;
@@ -22,9 +25,9 @@ namespace ControlGastos.Droid
 
             base.OnCreate(bundle);
 
-            OneSignal.Current.StartInit("d18e950f-8242-437d-beb8-28fc657cf0a4").EndInit();
+            OneSignal.Current.StartInit(config.OneSignalAndroid).EndInit();
             LocalNotificationsImplementation.NotificationIconId = Resource.Drawable.logotipoGGnotification;
-            MobileAds.Initialize(ApplicationContext, "ca-app-pub-4740837376040145~7975705945");
+            MobileAds.Initialize(ApplicationContext, config.MobileAds);
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
             LoadApplication(new App());

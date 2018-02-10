@@ -122,8 +122,10 @@
                          Spacing="-5">
                 <StackLayout Orientation="Horizontal">
                     <Label Text="Gastos de"
+                           TextColor="#f18121"
                        VerticalOptions="CenterAndExpand"/>
                     <Label Text="{Binding Categoria}"
+                           TextColor="#f18121"
                        VerticalOptions="CenterAndExpand"/>
                     <Label Text="{Binding SumaGastoCategoria}" 
                        FontSize="Large" 
@@ -133,8 +135,10 @@
                 </StackLayout>
                 <StackLayout Orientation="Horizontal">
                     <Label Text="Gastos de"
+                           TextColor="#f18121"
                        VerticalOptions="CenterAndExpand"/>
                     <Label Text="{Binding Mes}"
+                           TextColor="#f18121"
                        VerticalOptions="CenterAndExpand"/>
                     <Label Text="{Binding SumaGasto}" 
                        FontSize="Large" 
@@ -143,7 +147,7 @@
                        TextColor="Red"/>
                 </StackLayout>
             </StackLayout>
-            <Grid RowSpacing="0" BindingContext="{Binding Balance}">
+            <Grid RowSpacing="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
