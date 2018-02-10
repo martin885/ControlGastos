@@ -38,6 +38,8 @@ bld/
 TestResult.xml
 
 # Build Results of an ATL Project
+
+config
 [Dd]ebugPS/
 [Rr]eleasePS/
 dlldata.c
