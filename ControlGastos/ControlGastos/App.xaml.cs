@@ -27,11 +27,9 @@ namespace ControlGastos
 
             MainPage =new NavigationPage( new MenuTabbed());
 
-<<<<<<< HEAD
+
             OneSignal.Current.StartInit(config.IdOneSignal).EndInit();
-=======
-            OneSignal.Current.StartInit("").EndInit();
->>>>>>> 44a7e649cc59644a9163cb22b3b130f6437c1021
+
 
         }
 

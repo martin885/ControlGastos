@@ -34,7 +34,7 @@ namespace ControlGastos.Droid.Implementations
             {
                 var emailConAdjunto = new EmailMessageBuilder()
                       .Subject(string.Format("{0}", filename))
-                      .Body(string.Format("Envío el archivo con la hoja de cálculos{0}. Saludos", filename))
+                      .Body(string.Format("Envío el archivo con la hoja de cálculos '{0}'. Saludos", filename))
                       .WithAttachment(file)
                       .Build();
 

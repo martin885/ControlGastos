@@ -22,13 +22,10 @@ namespace ControlGastos.Droid
                 return adView;
 
             // This is a string in the Resources/values/strings.xml that I added or you can modify it here. This comes from admob and contains a / in it
-<<<<<<< HEAD
             config = new configuracion();
 
             adUnitId = config.adUnitId;
-=======
-            adUnitId = "";
->>>>>>> 44a7e649cc59644a9163cb22b3b130f6437c1021
+
             adView = new AdView(Forms.Context);
             adView.AdSize = adSize;
             adView.AdUnitId = adUnitId;

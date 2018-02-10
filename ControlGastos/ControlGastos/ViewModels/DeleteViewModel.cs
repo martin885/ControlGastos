@@ -13,6 +13,9 @@ namespace ControlGastos.ViewModels
 
 
 
+
+
+
         public DeleteViewModel(Balance balance)
         {
             this.balance = balance;

@@ -301,9 +301,9 @@ namespace ControlGastos.ViewModels
                 workbook.Close();
 
                 //Save the stream as a file in the device and invoke it for viewing
-                await DependencyService.Get<ISave>().SaveAndView(string.Format("Balance Mensual de Gastos {0}-{1}", MesExcel, Anio) + ".xlsx", "application/msexcel", stream);
+                await DependencyService.Get<ISave>().SaveAndView(string.Format("Balance Mensual de Gastos {0}/{1}", MesExcel, Anio) + ".xlsx", "application/msexcel", stream);
 
-                await dialogService.ShowMessage("Mensaje", "El balance se guardó como hoja de Excel en la carpeta Balances");
+                await dialogService.ShowMessage("Mensaje", string.Format("El balance se guardó como archivo de nombre '{0}' en la carpeta Balances", string.Format("Balance Mensual de Gastos {0}-{1}", MesExcel, Anio) + ".xlsx"));
             }
         }
 

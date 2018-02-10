@@ -20,16 +20,15 @@ namespace ControlGastos.Droid
 
         protected override void OnCreate(Bundle bundle)
         {
+            config = new configuracion();
+
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(bundle);
 
-<<<<<<< HEAD
             OneSignal.Current.StartInit(config.OneSignalAndroid).EndInit();
-=======
-            OneSignal.Current.StartInit("").EndInit();
->>>>>>> 44a7e649cc59644a9163cb22b3b130f6437c1021
+
             LocalNotificationsImplementation.NotificationIconId = Resource.Drawable.logotipoGGnotification;
             MobileAds.Initialize(ApplicationContext, config.MobileAds);
 

@@ -53,34 +53,21 @@ namespace ControlGastos.Models
         #endregion
 
         #region Commands
-        //public ICommand EditCommand
-        //{
-        //    get
-        //    {
-        //        return new RelayCommand(Edit);
-        //    }
-        //}
-        //private async void Edit()
-        //{
-        //    var mainViewModel = MainViewModel.GetInstance();
-        //    mainViewModel.Edit = new EditViewModel(this);
-        //    var balanceView = BalanceView.GetInstance();
-        //    await balanceView.Navigation.PushAsync(new EditView());
-        //}
-        //public ICommand DeleteCommand
-        //{
-        //    get
-        //    {
-        //        return new RelayCommand(Delete);
-        //    }
-        //}
+
+        public ICommand DeleteCommand
+        {
+            get
+            {
+                return new RelayCommand(Delete);
+            }
+        }
 
 
-        //private void Delete()
-        //{
-        //    var mainViewModel = MainViewModel.GetInstance();
-        //    mainViewModel.Delete = new DeleteViewModel(this);
-        //}
+        private void Delete()
+        {
+            var mainViewModel = MainViewModel.GetInstance();
+            mainViewModel.BorrarBalanceGeneral = new BorrarBalanceGeneralViewModel(this);
+        }
         #endregion
     }
 }

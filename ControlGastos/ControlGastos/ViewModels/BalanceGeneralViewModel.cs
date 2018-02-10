@@ -285,7 +285,7 @@ namespace ControlGastos.ViewModels
                 //Save the stream as a file in the device and invoke it for viewing
                 await DependencyService.Get<ISave>().SaveAndView(string.Format("Balance General") + ".xlsx", "application/msexcel", stream);
 
-                await dialogService.ShowMessage("Mensaje", "El balance se guardó como hoja de Excel en la carpeta Balances");
+                await dialogService.ShowMessage("Mensaje", string.Format("El balance se guardó como archivo de nombre '{0}' en la carpeta Balances", string.Format("Balance General") + ".xlsx"));
             }
         }
 
@@ -361,80 +361,13 @@ namespace ControlGastos.ViewModels
             culture = new CultureInfo("es-ES");
             ListaBalanceGeneral = new List<BalanceGeneral>();
             IsRefreshing = true;
-            //Item Source del Picker de Meses
-            Meses = new ObservableCollection<string>();
-            //Item Source del Picker de Años
-            Años = new ObservableCollection<string>();
 
-            //Agregado de meses al picker dependiendo si existen o no datos guardados en esos meses
+            CargarLaObservableCollection();
 
-            foreach (var MesesIngresos in dataService.Get<Ingresos>(true))
-            {
-                if (!string.IsNullOrEmpty(MesesIngresos.Mes))
-                {
-                    if (Meses.Contains(MesesIngresos.Mes) == false)
-                    {
-                        Meses.Add(MesesIngresos.Mes);
-                    }
-                }
-            }
-            foreach (var MesesGastos in dataService.Get<Gastos>(true))
-            {
-                if (!string.IsNullOrEmpty(MesesGastos.Mes))
-                {
-                    if (Meses.Contains(MesesGastos.Mes) == false)
-                    {
-                        Meses.Add(MesesGastos.Mes);
-                    }
-                }
-            }
-
-
-            //Agregado de años al picker dependiendo si existen o no datos guardados en esos años
-
-
-
-            foreach (var AñosIngresos in dataService.Get<Ingresos>(true))
-            {
-                if (!string.IsNullOrEmpty(AñosIngresos.Mes))
-                {
-                    if (Años.Contains(AñosIngresos.Anio) == false)
-                    {
-                        Años.Add(AñosIngresos.Anio);
-                    }
-                }
-            }
-            foreach (var AñosGastos in dataService.Get<Gastos>(true))
-            {
-                if (!string.IsNullOrEmpty(AñosGastos.Anio))
-                {
-                    if (Años.Contains(AñosGastos.Anio) == false)
-                    {
-                        Años.Add(AñosGastos.Anio);
-                    }
-                }
-            }
-
-
-            foreach (var meses in Meses)
-            {
-                if (meses == DateTime.Now.ToString("MMM", culture))
-                {
-                    foreach (var años in Años)
-                    {
-                        if (años == DateTime.Now.ToString("yyyy", culture))
-                        {
-                            CargarLaObservableCollection(meses, años);
-                        }
-                    }
-                }
-            }
-            DefaultMes = Meses.IndexOf(DateTime.Now.ToString("MMM", culture)).ToString();
-            DefaultAño = Años.IndexOf(DateTime.Now.ToString("yyyy", culture)).ToString();
             IsRefreshing = false;
         }
 
-        private void CargarLaObservableCollection(string selectedItemMes, string selectedItemAño)
+        private void CargarLaObservableCollection()
         {
             ListaBalanceGeneral.Clear();
 
@@ -474,7 +407,7 @@ namespace ControlGastos.ViewModels
                             Fecha = string.Format("{0}/{1}", ListaIngresoPorMes.FirstOrDefault().Mes, ListaIngresoPorMes.FirstOrDefault().Anio),
                             ImagenFecha = "date",
                             CantidadIngreso = TotalDelMes,
-                            CantidadGasto="0",
+                            CantidadGasto = "0",
                             ImagenMonto = "money",
                             ColorGastoIngreso = Color.Green
                         };
@@ -525,7 +458,7 @@ namespace ControlGastos.ViewModels
                             Fecha = string.Format("{0}/{1}", ListaGastoPorMes.FirstOrDefault().Mes, ListaGastoPorMes.FirstOrDefault().Anio),
                             ImagenFecha = "date",
                             CantidadGasto = string.Format("-{0}", TotalDelMes),
-                            CantidadIngreso ="0",
+                            CantidadIngreso = "0",
                             ImagenMonto = "money",
                             ColorGastoIngreso = Color.Red
                         };
@@ -559,7 +492,7 @@ namespace ControlGastos.ViewModels
                 balanceGeneral.Cantidad = string.Format("{0}", (int.Parse(balanceGeneral.CantidadGasto) + int.Parse(balanceGeneral.CantidadIngreso)));
             }
 
-            CollectionBalance = new ObservableCollection<BalanceGeneral>(ListaBalanceGeneral);
+            CollectionBalance = new ObservableCollection<BalanceGeneral>(ListaBalanceGeneral.OrderByDescending(x => double.Parse(x.Anio)).ToList());
 
             BalanceTotal = ListaBalanceGeneral.Sum(x => double.Parse(x.Cantidad)).ToString();
             if (double.Parse(BalanceTotal) < 0)
@@ -574,62 +507,33 @@ namespace ControlGastos.ViewModels
 
         }
 
-        //public void Editar(BalanceGeneral balance)
-        //{
-        //    //Encuentro el balance a actualizar
-        //    var balanceAntiguo = ListaBalanceGeneral.Find(x => x.GastoIngreso == balance.GastoIngreso && x.BalanceId == balance.BalanceId);
-        //    //Encuentro el gasto o ingreso  a actualizar en la base de datos y cambio uno a uno los valores
-        //    if (balance.GastoIngreso == "Ingreso")
-        //    {
-        //        var IngresoAntiguo = dataService.Get<Ingresos>(true).Find(x => x.IngresoId.ToString() == balance.BalanceId);
-        //        IngresoAntiguo.Dia = balance.Dia;
-        //        IngresoAntiguo.Mes = balance.Mes;
-        //        IngresoAntiguo.Anio = balance.Anio;
-        //        IngresoAntiguo.IngresoNombre = balance.Origen;
-        //        IngresoAntiguo.IngresoCantidad = balance.Cantidad;
-        //        dataService.Update(IngresoAntiguo, true);
-        //    }
-        //    else
-        //    {
-        //        var GastoAntiguo = dataService.Get<Gastos>(true).Find(x => x.GastosId.ToString() == balance.BalanceId);
-        //        GastoAntiguo.Dia = balance.Dia;
-        //        GastoAntiguo.Mes = balance.Mes;
-        //        GastoAntiguo.Anio = balance.Anio;
-        //        GastoAntiguo.GastoNombre = balance.Origen;
-        //        GastoAntiguo.GastosCantidad = balance.Cantidad;
-        //        dataService.Update(GastoAntiguo, true);
-        //    }
-        //    balanceAntiguo = balance;
-        //    CollectionBalance = new ObservableCollection<BalanceGeneral>(ListaBalanceGeneral.OrderBy(x => double.Parse(x.Fecha.Substring(0, 2))).ToList());
-        //}
-        //public async void Delete(BalanceGeneral balance)
-        //{
-        //    var confirmacion = await dialogService.ShowMessageConfirmacion("Mensaje", "Desea borrar este elemento");
-        //    SelectedItemMes = balance.Mes;
-        //    SelectedItemAño = balance.Anio;
-        //    if (confirmacion)
-        //    {
-        //        if (balance.GastoIngreso == "Ingreso")
-        //        {
-        //            var IngresoAntiguo = dataService.Get<Ingresos>(true).Find(x => x.IngresoId.ToString() == balance.BalanceId);
-        //            dataService.Delete(IngresoAntiguo);
-        //        }
-        //        else
-        //        {
-        //            var GastoAntiguo = dataService.Get<Gastos>(true).Find(x => x.GastosId.ToString() == balance.BalanceId);
-        //            dataService.Delete(GastoAntiguo);
-        //        }
+        public async void Delete(BalanceGeneral balanceGeneral)
+        {
+            var confirmacion = await dialogService.ShowMessageConfirmacion("Mensaje", "Desea borrar este elemento");
+
+            if (confirmacion)
+            {
+                var balanceGeneralBorrar = ListaBalanceGeneral.Find(x => x.Mes.Equals(balanceGeneral.Mes) && x.Anio.Equals(balanceGeneral.Anio));
+
+                foreach (var IngresoParaBorrar in dataService.Get<Ingresos>(true).Where(x => x.Anio.Equals(balanceGeneral.Anio) && x.Mes.Equals(balanceGeneral.Mes)).ToList())
+                {
+                    dataService.Delete(IngresoParaBorrar);
+                }
+                foreach (var GastoParaBorrar in dataService.Get<Gastos>(true).Where(x => x.Anio.Equals(balanceGeneral.Anio) && x.Mes.Equals(balanceGeneral.Mes)).ToList())
+                {
+                    dataService.Delete(GastoParaBorrar);
+                }
+                ListaBalanceGeneral.Remove(balanceGeneralBorrar);
+
+                CargarLaObservableCollection();
+            }
+            else
+            {
+                return;
+            }
 
 
-        //        CargarLaObservableCollection(SelectedItemMes, SelectedItemAño);
-        //    }
-        //    else
-        //    {
-        //        return;
-        //    }
-
-
-        //}
+        }
         #endregion
     }
 }

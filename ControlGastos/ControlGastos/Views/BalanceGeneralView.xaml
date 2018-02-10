@@ -21,8 +21,6 @@
                     <DataTemplate>
                         <ViewCell>
                             <ViewCell.ContextActions>
-                                <MenuItem Text="Editar" 
-                                          Command="{Binding EditCommand}"/>
                                 <MenuItem Text="Borrar" 
                                           Command="{Binding DeleteCommand}" 
                                           IsDestructive="True"/>

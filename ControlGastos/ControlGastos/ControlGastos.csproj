@@ -61,6 +61,7 @@
     <Compile Include="Behaviors\ToggleBehavior.cs" />
     <Compile Include="ViewModels\BalanceGeneralViewModel.cs" />
     <Compile Include="ViewModels\BalanceViewModel.cs" />
+    <Compile Include="ViewModels\BorrarBalanceGeneralViewModel.cs" />
     <Compile Include="ViewModels\BorrarGastosViewModel.cs" />
     <Compile Include="ViewModels\BorrarIngresosViewModel.cs" />
     <Compile Include="ViewModels\BorrarNotificationViewModel.cs" />
