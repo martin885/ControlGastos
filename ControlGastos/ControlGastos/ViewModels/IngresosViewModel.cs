@@ -20,7 +20,7 @@ using Xamarin.Forms;
 
 namespace ControlGastos.ViewModels
 {
-    public class IngresosViewModel:INotifyPropertyChanged
+    public class IngresosViewModel : INotifyPropertyChanged
     {
 
         #region Eventos
@@ -34,14 +34,14 @@ namespace ControlGastos.ViewModels
 
         #region Propiedades y Atributos
         IFormatProvider culture;
-       
+
         public DateTime Date { get; set; }
         public string MesExcel { get; set; }
         public string Anio { get; set; }
         public int cont { get; set; }
         Ingresos Ingresos { get; set; }
         public BalanceViewModel Balance { get; set; }
-       public List<Ingresos> ListaIngresos { get; set; }
+        public List<Ingresos> ListaIngresos { get; set; }
         string _sumaIngreso;
         public string SumaIngreso
         {
@@ -61,7 +61,7 @@ namespace ControlGastos.ViewModels
 
         string _montoIngreso;
         public string MontoIngreso
-    {
+        {
             get
             {
                 return _montoIngreso;
@@ -174,100 +174,104 @@ namespace ControlGastos.ViewModels
 
         private async void Excel()
         {
-            Cargas();
-            if (ListaIngresos.Count == 0)
+            var confirmacion = await dialogService.ShowMessageConfirmacion("Mensaje", "Desea exportar los ingresos a una planilla de cálculo");
+            if (confirmacion)
             {
-                await dialogService.ShowMessage("Error", "Se deben agregar elementos al balance");
-                return;
-            }
-            using (ExcelEngine excelEngine = new ExcelEngine())
-            {
-
-                cont = 0;
-                //Seleccionar versión de Excel 2013
-                excelEngine.Excel.DefaultVersion = ExcelVersion.Excel2013;
-
-                //Crear workbook con una hoja de trabajo
-                IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
-
-                //Acceder a la primera hoja de trabajo desde la instancia de workbook
-                IWorksheet worksheet = workbook.Worksheets[0];
-
-                IMigrantRange migrantRange = worksheet.MigrantRange;
-
-                foreach (var elemento in ListaIngresos.Where(x=>x.Mes.Equals(MesExcel) && x.Anio.Equals(Anio)).ToList())
+                DateSelected();
+                if (ListaIngresos.Count == 0)
                 {
-
-                    // Writing Data.
-                    //cont aumenta en 7 la posición de las filas en cada producto, las columnas dependen de los días elegidos
-
-                    migrantRange["A1"].Text = "Fecha";
-                    migrantRange["A1"].CellStyle.Font.Bold = true;
-
-                    migrantRange["B1"].Text = "Ingreso";
-                    migrantRange["B1"].CellStyle.Font.Bold = true;
-
-                    migrantRange["C1"].Text = "Monto";
-                    migrantRange["C1"].CellStyle.Font.Bold = true;
-
-
-                    //Nueva celda
-                    migrantRange.ResetRowColumn(cont + 2, 1);
-                    migrantRange.Text = string.Format("{0}/{1}/{2}", elemento.Dia, elemento.Mes, elemento.Anio);
-
-
-                    //migrantRange.CellStyle.Borders.LineStyle = ExcelLineStyle.Medium;
-
-                    //Nueva celda
-                    migrantRange.ResetRowColumn(cont + 2, 2);
-                    migrantRange.Text = elemento.IngresoNombre;
-                    //Nueva celda
-                    migrantRange.ResetRowColumn(cont + 2, 3);
-
-                    migrantRange.Number = double.Parse(elemento.IngresoCantidad);
-                    if (double.Parse(elemento.IngresoCantidad) > 0)
-                    {
-                        worksheet[string.Format("C{0}", cont + 2)].CellStyle.Font.Color = ExcelKnownColors.Green;
-                    }
-                    else if (double.Parse(elemento.IngresoCantidad) < 0)
-                    {
-                        worksheet[string.Format("C{0}", cont + 2)].CellStyle.Font.Color = ExcelKnownColors.Red;
-                    }
-
-
-                    cont = cont + 1;
-
-                };
-
-                IRange range = worksheet.Range[string.Format("A{0}:B{0}", cont + 2)];
-                range.Merge();
-                range.Text = string.Format("Balance de Ingresos: ");
-                range.CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-                range.CellStyle.Font.Bold = true;
-                worksheet[string.Format("C{0}", cont + 2)].Number = double.Parse(SumaIngreso);
-                worksheet[string.Format("C{0}", cont + 2)].CellStyle.Font.Bold = true;
-                if (double.Parse(SumaIngreso) > 0)
-                {
-                    worksheet[string.Format("C{0}", cont + 2)].CellStyle.ColorIndex = ExcelKnownColors.Green;
+                    await dialogService.ShowMessage("Error", "Se deben agregar elementos al balance");
+                    return;
                 }
-                else if (double.Parse(SumaIngreso) < 0)
+                using (ExcelEngine excelEngine = new ExcelEngine())
                 {
-                    worksheet[string.Format("C{0}", cont + 2)].CellStyle.ColorIndex = ExcelKnownColors.Red;
+
+                    cont = 0;
+                    //Seleccionar versión de Excel 2013
+                    excelEngine.Excel.DefaultVersion = ExcelVersion.Excel2013;
+
+                    //Crear workbook con una hoja de trabajo
+                    IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
+
+                    //Acceder a la primera hoja de trabajo desde la instancia de workbook
+                    IWorksheet worksheet = workbook.Worksheets[0];
+
+                    IMigrantRange migrantRange = worksheet.MigrantRange;
+
+                    foreach (var elemento in ListaIngresos.Where(x => x.Mes.Equals(MesExcel) && x.Anio.Equals(Anio)).ToList())
+                    {
+
+                        // Writing Data.
+                        //cont aumenta en 7 la posición de las filas en cada producto, las columnas dependen de los días elegidos
+
+                        migrantRange["A1"].Text = "Fecha";
+                        migrantRange["A1"].CellStyle.Font.Bold = true;
+
+                        migrantRange["B1"].Text = "Ingreso";
+                        migrantRange["B1"].CellStyle.Font.Bold = true;
+
+                        migrantRange["C1"].Text = "Monto";
+                        migrantRange["C1"].CellStyle.Font.Bold = true;
+
+
+                        //Nueva celda
+                        migrantRange.ResetRowColumn(cont + 2, 1);
+                        migrantRange.Text = string.Format("{0}/{1}/{2}", elemento.Dia, elemento.Mes, elemento.Anio);
+
+
+                        //migrantRange.CellStyle.Borders.LineStyle = ExcelLineStyle.Medium;
+
+                        //Nueva celda
+                        migrantRange.ResetRowColumn(cont + 2, 2);
+                        migrantRange.Text = elemento.IngresoNombre;
+                        //Nueva celda
+                        migrantRange.ResetRowColumn(cont + 2, 3);
+
+                        migrantRange.Number = double.Parse(elemento.IngresoCantidad);
+                        if (double.Parse(elemento.IngresoCantidad) > 0)
+                        {
+                            worksheet[string.Format("C{0}", cont + 2)].CellStyle.Font.Color = ExcelKnownColors.Green;
+                        }
+                        else if (double.Parse(elemento.IngresoCantidad) < 0)
+                        {
+                            worksheet[string.Format("C{0}", cont + 2)].CellStyle.Font.Color = ExcelKnownColors.Red;
+                        }
+
+
+                        cont = cont + 1;
+
+                    };
+
+                    IRange range = worksheet.Range[string.Format("A{0}:B{0}", cont + 2)];
+                    range.Merge();
+                    range.Text = string.Format("Balance de Ingresos: ");
+                    range.CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+                    range.CellStyle.Font.Bold = true;
+                    worksheet[string.Format("C{0}", cont + 2)].Number = double.Parse(SumaIngreso);
+                    worksheet[string.Format("C{0}", cont + 2)].CellStyle.Font.Bold = true;
+                    if (double.Parse(SumaIngreso) > 0)
+                    {
+                        worksheet[string.Format("C{0}", cont + 2)].CellStyle.ColorIndex = ExcelKnownColors.Green;
+                    }
+                    else if (double.Parse(SumaIngreso) < 0)
+                    {
+                        worksheet[string.Format("C{0}", cont + 2)].CellStyle.ColorIndex = ExcelKnownColors.Red;
+                    }
+                    worksheet.Range[string.Format("A1:C{0}", cont + 2)].BorderInside();
+                    worksheet.Range[string.Format("A1:C{0}", cont + 2)].BorderAround();
+                    worksheet.UsedRange.AutofitColumns();
+
+                    //Save the workbook to stream in xlsx format. 
+                    MemoryStream stream = new MemoryStream();
+                    workbook.SaveAs(stream);
+
+                    workbook.Close();
+
+                    //Save the stream as a file in the device and invoke it for viewing
+                    await DependencyService.Get<ISave>().SaveAndView(string.Format("Balance Mensual de Ingresos {0}-{1}", MesExcel, Anio) + ".xlsx", "application/msexcel", stream);
+
+                    await dialogService.ShowMessage("Mensaje", string.Format("El balance se guardó como archivo de nombre '{0}' en la carpeta Balances", string.Format("Balance Mensual de Ingresos {0}-{1}", MesExcel, Anio) + ".xlsx"));
                 }
-                worksheet.Range[string.Format("A1:C{0}", cont + 2)].BorderInside();
-                worksheet.Range[string.Format("A1:C{0}", cont + 2)].BorderAround();
-                worksheet.UsedRange.AutofitColumns();
-
-                //Save the workbook to stream in xlsx format. 
-                MemoryStream stream = new MemoryStream();
-                workbook.SaveAs(stream);
-
-                workbook.Close();
-
-                //Save the stream as a file in the device and invoke it for viewing
-                await DependencyService.Get<ISave>().SaveAndView(string.Format("Balance Mensual de Ingresos {0}/{1}", MesExcel, Anio) + ".xlsx", "application/msexcel", stream);
-
-                await dialogService.ShowMessage("Mensaje", string.Format("El balance se guardó como archivo de nombre '{0}' en la carpeta Balances", string.Format("Balance Mensual de Ingresos {0}-{1}", MesExcel, Anio) + ".xlsx"));
             }
         }
 
@@ -320,51 +324,51 @@ namespace ControlGastos.ViewModels
         private async void AgregarIngreso()
         {
 
-                //Crea el objeto Ingreso, lo agrego a la lista del mes, y después se hace la sumatoria de la lista
+            //Crea el objeto Ingreso, lo agrego a la lista del mes, y después se hace la sumatoria de la lista
 
-                if (MontoIngreso == "0"||string.IsNullOrEmpty(MontoIngreso) ||string.IsNullOrWhiteSpace(MontoIngreso))
-                {
-                    await dialogService.ShowMessage("Error", "Debe asignar un valor mayor que cero");
-                    return;
-                }
+            if (MontoIngreso == "0" || string.IsNullOrEmpty(MontoIngreso) || string.IsNullOrWhiteSpace(MontoIngreso))
+            {
+                await dialogService.ShowMessage("Error", "Debe asignar un valor mayor que cero");
+                return;
+            }
 
-                Ingresos = new Ingresos();
-                Ingresos.Anio = Date.ToString("yyyy", culture);
-                Ingresos.Mes = Date.ToString("MMM", culture);
-                Ingresos.Dia = Date.ToString("dd", culture);
-                Ingresos.ImagenFecha = "date";
-                if (string.IsNullOrEmpty(OrigenIngreso))
-                {
-                    OrigenIngreso = "Sin Origen";
-                }
-                Ingresos.IngresoNombre = string.Format("{0}{1}", OrigenIngreso.Substring(0, 1).ToUpper(), OrigenIngreso.Substring(1));
-                Ingresos.ImagenOrigen = "income";
-                if (MontoIngreso == null)
-                {
-                    MontoIngreso = 0.ToString();
-                }
-                if (!double.TryParse(MontoIngreso, out double result))
-                {
-                    await dialogService.ShowMessage("Error", "El contenido del monto debe ser un número");
-                    MontoIngreso = null;
-                    return;
-                }
-                if (MontoIngreso.Contains("-"))
-                {
-                    Ingresos.IngresoCantidad = MontoIngreso.Replace("-", "");
-                }
-                else
-                {
-                    Ingresos.IngresoCantidad = string.Format("{0}", MontoIngreso);
-                }
-                Ingresos.ImagenMonto = "money";
-                ListaIngresos.Add(Ingresos);
-                //Realizar la sumatoria con los ingresos pertenecientes al mes y año elegido
-                SumaIngreso = ListaIngresos.Where(x => x.Mes == Ingresos.Mes && x.Anio == Ingresos.Anio).ToList().Sum(x => double.Parse(x.IngresoCantidad)).ToString();
+            Ingresos = new Ingresos();
+            Ingresos.Anio = Date.ToString("yyyy", culture);
+            Ingresos.Mes = Date.ToString("MMM", culture);
+            Ingresos.Dia = Date.ToString("dd", culture);
+            Ingresos.ImagenFecha = "date";
+            if (string.IsNullOrEmpty(OrigenIngreso))
+            {
+                OrigenIngreso = "Sin Origen";
+            }
+            Ingresos.IngresoNombre = string.Format("{0}{1}", OrigenIngreso.Substring(0, 1).ToUpper(), OrigenIngreso.Substring(1));
+            Ingresos.ImagenOrigen = "income";
+            if (MontoIngreso == null)
+            {
+                MontoIngreso = 0.ToString();
+            }
+            if (!double.TryParse(MontoIngreso, out double result))
+            {
+                await dialogService.ShowMessage("Error", "El contenido del monto debe ser un número");
                 MontoIngreso = null;
-                OrigenIngreso = null;
-                dataService.Save(ListaIngresos, true);
-                CollectionIngresos = new ObservableCollection<Ingresos>(ListaIngresos.Where(x => x.Mes == Ingresos.Mes && x.Anio == Ingresos.Anio).OrderByDescending(x => double.Parse(x.Dia)).ToList());
+                return;
+            }
+            if (MontoIngreso.Contains("-"))
+            {
+                Ingresos.IngresoCantidad = MontoIngreso.Replace("-", "");
+            }
+            else
+            {
+                Ingresos.IngresoCantidad = string.Format("{0}", MontoIngreso);
+            }
+            Ingresos.ImagenMonto = "money";
+            ListaIngresos.Add(Ingresos);
+            //Realizar la sumatoria con los ingresos pertenecientes al mes y año elegido
+            SumaIngreso = ListaIngresos.Where(x => x.Mes == Ingresos.Mes && x.Anio == Ingresos.Anio).ToList().Sum(x => double.Parse(x.IngresoCantidad)).ToString();
+            MontoIngreso = null;
+            OrigenIngreso = null;
+            dataService.Save(ListaIngresos, true);
+            CollectionIngresos = new ObservableCollection<Ingresos>(ListaIngresos.Where(x => x.Mes == Ingresos.Mes && x.Anio == Ingresos.Anio).OrderByDescending(x => double.Parse(x.Dia)).ToList());
         }
         public ICommand DateSelectedCommand
         {
@@ -376,10 +380,10 @@ namespace ControlGastos.ViewModels
 
         private void DateSelected()
         {
-            Mes = Date.ToString("MMMM",culture);
+            Mes = Date.ToString("MMMM", culture);
             MesExcel = Date.ToString("MMM", culture);
             Anio = Date.ToString("yyyy", culture);
-            SumaIngreso = ListaIngresos.Where(x => x.Mes == Date.ToString("MMM", culture) && 
+            SumaIngreso = ListaIngresos.Where(x => x.Mes == Date.ToString("MMM", culture) &&
             x.Anio == Date.ToString("yyyy", culture)).ToList().Sum(x => double.Parse(x.IngresoCantidad)).ToString();
             CollectionIngresos = new ObservableCollection<Ingresos>(ListaIngresos.Where(x => x.Mes == Date.ToString("MMM", culture) && x.Anio == Date.ToString("yyyy", culture)).OrderByDescending(x => double.Parse(x.Dia)).ToList());
         }
@@ -422,11 +426,11 @@ namespace ControlGastos.ViewModels
             IsRefreshing = true;
             if (dataService.CheckTableIsEmpty<Ingresos>())
             {
-               ListaIngresos= dataService.Get<Ingresos>(true);
-               SumaIngreso = ListaIngresos.Where(x => x.Mes == Date.ToString("MMM", culture) && 
-               x.Anio == Date.ToString("yyyy", culture)).ToList().Sum(x => double.Parse(x.IngresoCantidad)).ToString();
-               CollectionIngresos = new ObservableCollection<Ingresos>(ListaIngresos.Where(x => x.Mes == Date.ToString("MMM", culture) && 
-               x.Anio == Date.ToString("yyyy", culture)).OrderByDescending(x => double.Parse(x.Dia)).ToList());
+                ListaIngresos = dataService.Get<Ingresos>(true);
+                SumaIngreso = ListaIngresos.Where(x => x.Mes == Date.ToString("MMM", culture) &&
+                x.Anio == Date.ToString("yyyy", culture)).ToList().Sum(x => double.Parse(x.IngresoCantidad)).ToString();
+                CollectionIngresos = new ObservableCollection<Ingresos>(ListaIngresos.Where(x => x.Mes == Date.ToString("MMM", culture) &&
+                x.Anio == Date.ToString("yyyy", culture)).OrderByDescending(x => double.Parse(x.Dia)).ToList());
             }
             else
             {

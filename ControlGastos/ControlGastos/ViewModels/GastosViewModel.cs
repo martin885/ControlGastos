@@ -19,9 +19,9 @@ using Xamarin.Forms;
 
 namespace ControlGastos.ViewModels
 {
-    public class GastosViewModel:INotifyPropertyChanged
+    public class GastosViewModel : INotifyPropertyChanged
     {
-     
+
         #region Eventos
         public event PropertyChangedEventHandler PropertyChanged;
         #endregion
@@ -205,105 +205,110 @@ namespace ControlGastos.ViewModels
 
         private async void Excel()
         {
-            Cargas();
-            if (ListaGastos.Count == 0)
-            {
-                await dialogService.ShowMessage("Error", "Se deben agregar elementos al balance");
-                return;
-            }
-            using (ExcelEngine excelEngine = new ExcelEngine())
+            var confirmacion = await dialogService.ShowMessageConfirmacion("Mensaje", "Desea exportar los gastos a una planilla de cálculo");
+            if (confirmacion)
             {
 
-                cont = 0;
-                //Seleccionar versión de Excel 2013
-                excelEngine.Excel.DefaultVersion = ExcelVersion.Excel2013;
-
-                //Crear workbook con una hoja de trabajo
-                IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
-
-                //Acceder a la primera hoja de trabajo desde la instancia de workbook
-                IWorksheet worksheet = workbook.Worksheets[0];
-
-                IMigrantRange migrantRange = worksheet.MigrantRange;
-
-                foreach (var elemento in ListaGastos.Where(x=>x.Mes.Equals(MesExcel) && x.Anio.Equals(Anio)).ToList())
+                DateSelected();
+                if (ListaGastos.Count == 0)
                 {
-
-                    // Writing Data.
-                    //cont aumenta en 7 la posición de las filas en cada producto, las columnas dependen de los días elegidos
-
-                    migrantRange["A1"].Text = "Fecha";
-                    migrantRange["A1"].CellStyle.Font.Bold = true;
-
-                    migrantRange["B1"].Text = "Gasto";
-                    migrantRange["B1"].CellStyle.Font.Bold = true;
-
-                    migrantRange["C1"].Text = "Categoría";
-                    migrantRange["C1"].CellStyle.Font.Bold = true;
-
-                    migrantRange["D1"].Text = "Monto";
-                    migrantRange["D1"].CellStyle.Font.Bold = true;
-
-                    //Nueva celda
-                    migrantRange.ResetRowColumn(cont + 2, 1);
-                    migrantRange.Text = string.Format("{0}/{1}/{2}", elemento.Dia, elemento.Mes, elemento.Anio);
-
-
-                    //migrantRange.CellStyle.Borders.LineStyle = ExcelLineStyle.Medium;
-
-                    //Nueva celda
-                    migrantRange.ResetRowColumn(cont + 2, 2);
-                    migrantRange.Text = elemento.GastoNombre;
-                    //Nueva celda
-                    migrantRange.ResetRowColumn(cont + 2, 3);
-                    migrantRange.Text = elemento.Categoria;
-                    //Nueva celda
-                    migrantRange.ResetRowColumn(cont + 2, 4);
-
-                    migrantRange.Number = double.Parse(elemento.GastosCantidad);
-                    if (double.Parse(elemento.GastosCantidad) > 0)
-                    {
-                        worksheet[string.Format("D{0}", cont + 2)].CellStyle.Font.Color = ExcelKnownColors.Green;
-                    }
-                    else if (double.Parse(elemento.GastosCantidad) < 0)
-                    {
-                        worksheet[string.Format("D{0}", cont + 2)].CellStyle.Font.Color = ExcelKnownColors.Red;
-                    }
-
-
-                    cont = cont + 1;
-
-                };
-
-                IRange range = worksheet.Range[string.Format("A{0}:C{0}", cont + 2)];
-                range.Merge();
-                range.Text = string.Format("Balance: ");
-                range.CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-                range.CellStyle.Font.Bold = true;
-                worksheet[string.Format("D{0}", cont + 2)].Number = double.Parse(SumaGasto);
-                worksheet[string.Format("D{0}", cont + 2)].CellStyle.Font.Bold = true;
-                if (double.Parse(SumaGasto) > 0)
-                {
-                    worksheet[string.Format("D{0}", cont + 2)].CellStyle.ColorIndex = ExcelKnownColors.Green;
+                    await dialogService.ShowMessage("Error", "Se deben agregar elementos al balance");
+                    return;
                 }
-                else if (double.Parse(SumaGasto) < 0)
+                using (ExcelEngine excelEngine = new ExcelEngine())
                 {
-                    worksheet[string.Format("D{0}", cont + 2)].CellStyle.ColorIndex = ExcelKnownColors.Red;
+
+                    cont = 0;
+                    //Seleccionar versión de Excel 2013
+                    excelEngine.Excel.DefaultVersion = ExcelVersion.Excel2013;
+
+                    //Crear workbook con una hoja de trabajo
+                    IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
+
+                    //Acceder a la primera hoja de trabajo desde la instancia de workbook
+                    IWorksheet worksheet = workbook.Worksheets[0];
+
+                    IMigrantRange migrantRange = worksheet.MigrantRange;
+
+                    foreach (var elemento in ListaGastos.Where(x => x.Mes.Equals(MesExcel) && x.Anio.Equals(Anio)).ToList())
+                    {
+
+                        // Writing Data.
+                        //cont aumenta en 7 la posición de las filas en cada producto, las columnas dependen de los días elegidos
+
+                        migrantRange["A1"].Text = "Fecha";
+                        migrantRange["A1"].CellStyle.Font.Bold = true;
+
+                        migrantRange["B1"].Text = "Gasto";
+                        migrantRange["B1"].CellStyle.Font.Bold = true;
+
+                        migrantRange["C1"].Text = "Categoría";
+                        migrantRange["C1"].CellStyle.Font.Bold = true;
+
+                        migrantRange["D1"].Text = "Monto";
+                        migrantRange["D1"].CellStyle.Font.Bold = true;
+
+                        //Nueva celda
+                        migrantRange.ResetRowColumn(cont + 2, 1);
+                        migrantRange.Text = string.Format("{0}/{1}/{2}", elemento.Dia, elemento.Mes, elemento.Anio);
+
+
+                        //migrantRange.CellStyle.Borders.LineStyle = ExcelLineStyle.Medium;
+
+                        //Nueva celda
+                        migrantRange.ResetRowColumn(cont + 2, 2);
+                        migrantRange.Text = elemento.GastoNombre;
+                        //Nueva celda
+                        migrantRange.ResetRowColumn(cont + 2, 3);
+                        migrantRange.Text = elemento.Categoria;
+                        //Nueva celda
+                        migrantRange.ResetRowColumn(cont + 2, 4);
+
+                        migrantRange.Number = double.Parse(elemento.GastosCantidad);
+                        if (double.Parse(elemento.GastosCantidad) > 0)
+                        {
+                            worksheet[string.Format("D{0}", cont + 2)].CellStyle.Font.Color = ExcelKnownColors.Green;
+                        }
+                        else if (double.Parse(elemento.GastosCantidad) < 0)
+                        {
+                            worksheet[string.Format("D{0}", cont + 2)].CellStyle.Font.Color = ExcelKnownColors.Red;
+                        }
+
+
+                        cont = cont + 1;
+
+                    };
+
+                    IRange range = worksheet.Range[string.Format("A{0}:C{0}", cont + 2)];
+                    range.Merge();
+                    range.Text = string.Format("Balance: ");
+                    range.CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+                    range.CellStyle.Font.Bold = true;
+                    worksheet[string.Format("D{0}", cont + 2)].Number = double.Parse(SumaGasto);
+                    worksheet[string.Format("D{0}", cont + 2)].CellStyle.Font.Bold = true;
+                    if (double.Parse(SumaGasto) > 0)
+                    {
+                        worksheet[string.Format("D{0}", cont + 2)].CellStyle.ColorIndex = ExcelKnownColors.Green;
+                    }
+                    else if (double.Parse(SumaGasto) < 0)
+                    {
+                        worksheet[string.Format("D{0}", cont + 2)].CellStyle.ColorIndex = ExcelKnownColors.Red;
+                    }
+                    worksheet.Range[string.Format("A1:D{0}", cont + 2)].BorderInside();
+                    worksheet.Range[string.Format("A1:D{0}", cont + 2)].BorderAround();
+                    worksheet.UsedRange.AutofitColumns();
+
+                    //Save the workbook to stream in xlsx format. 
+                    MemoryStream stream = new MemoryStream();
+                    workbook.SaveAs(stream);
+
+                    workbook.Close();
+
+                    //Save the stream as a file in the device and invoke it for viewing
+                    await DependencyService.Get<ISave>().SaveAndView(string.Format("Balance Mensual de Gastos {0}-{1}", MesExcel, Anio) + ".xlsx", "application/msexcel", stream);
+
+                    await dialogService.ShowMessage("Mensaje", string.Format("El balance se guardó como archivo de nombre '{0}' en la carpeta Balances", string.Format("Balance Mensual de Gastos {0}-{1}", MesExcel, Anio) + ".xlsx"));
                 }
-                worksheet.Range[string.Format("A1:D{0}", cont + 2)].BorderInside();
-                worksheet.Range[string.Format("A1:D{0}", cont + 2)].BorderAround();
-                worksheet.UsedRange.AutofitColumns();
-
-                //Save the workbook to stream in xlsx format. 
-                MemoryStream stream = new MemoryStream();
-                workbook.SaveAs(stream);
-
-                workbook.Close();
-
-                //Save the stream as a file in the device and invoke it for viewing
-                await DependencyService.Get<ISave>().SaveAndView(string.Format("Balance Mensual de Gastos {0}/{1}", MesExcel, Anio) + ".xlsx", "application/msexcel", stream);
-
-                await dialogService.ShowMessage("Mensaje", string.Format("El balance se guardó como archivo de nombre '{0}' en la carpeta Balances", string.Format("Balance Mensual de Gastos {0}-{1}", MesExcel, Anio) + ".xlsx"));
             }
         }
 
@@ -365,14 +370,14 @@ namespace ControlGastos.ViewModels
 
             if (SelectedItem == null)
             {
-               await dialogService.ShowMessage("Error", 
-                   "Se debe seleccionar una categoría");
+                await dialogService.ShowMessage("Error",
+                    "Se debe seleccionar una categoría");
                 return;
             }
             Gastos = new Gastos();
-            Gastos.Anio = Date.ToString("yyyy",culture);
-            Gastos.Mes = Date.ToString("MMM",culture);
-            Gastos.Dia = Date.ToString("dd",culture);
+            Gastos.Anio = Date.ToString("yyyy", culture);
+            Gastos.Mes = Date.ToString("MMM", culture);
+            Gastos.Dia = Date.ToString("dd", culture);
             Gastos.ImagenFecha = "date";
             if (string.IsNullOrEmpty(OrigenGasto))
             {
@@ -403,15 +408,15 @@ namespace ControlGastos.ViewModels
             {
                 MontoGasto = 0.ToString();
             }
-            if(!double.TryParse(MontoGasto,out double result))
+            if (!double.TryParse(MontoGasto, out double result))
             {
                 await dialogService.ShowMessage("Error", "El contenido del monto debe ser un número");
                 MontoGasto = null;
                 return;
             }
             if (!MontoGasto.Contains("-"))
-            { 
-            Gastos.GastosCantidad =string.Format("-{0}",MontoGasto);
+            {
+                Gastos.GastosCantidad = string.Format("-{0}", MontoGasto);
             }
             else
             {
@@ -421,7 +426,7 @@ namespace ControlGastos.ViewModels
             ListaGastos.Add(Gastos);
             //Realizar la sumatoria con los ingresos pertenecientes al mes y año elegido
             SumaGasto = ListaGastos.Where(x => x.Mes == Gastos.Mes && x.Anio == Gastos.Anio).ToList().Sum(x => double.Parse(x.GastosCantidad)).ToString();
-            SumaGastoCategoria = ListaGastos.Where(x => x.Mes == Gastos.Mes && x.Anio == Gastos.Anio&&x.Categoria== SelectedItem).ToList().Sum(x => double.Parse(x.GastosCantidad)).ToString();
+            SumaGastoCategoria = ListaGastos.Where(x => x.Mes == Gastos.Mes && x.Anio == Gastos.Anio && x.Categoria == SelectedItem).ToList().Sum(x => double.Parse(x.GastosCantidad)).ToString();
             MontoGasto = null;
             OrigenGasto = null;
             dataService.Save(ListaGastos, true);
@@ -437,17 +442,25 @@ namespace ControlGastos.ViewModels
 
         private void DateSelected()
         {
-            Mes = Date.ToString("MMMM",culture);
+            Mes = Date.ToString("MMMM", culture);
             MesExcel = Date.ToString("MMM", culture);
             Anio = Date.ToString("yyyy", culture);
-            SumaGasto = ListaGastos.Where(x => x.Mes == Date.ToString("MMM",culture) &&
-            x.Anio == Date.ToString("yyyy",culture)).ToList().Sum(x => double.Parse(x.GastosCantidad)).ToString();
-            SumaGastoCategoria = ListaGastos.Where(x => x.Mes == Date.ToString("MMM", culture) && 
-            x.Anio == Date.ToString("yyyy", culture) && 
+            SumaGasto = ListaGastos.Where(x => x.Mes == Date.ToString("MMM", culture) &&
+            x.Anio == Date.ToString("yyyy", culture)).ToList().Sum(x => double.Parse(x.GastosCantidad)).ToString();
+            SumaGastoCategoria = ListaGastos.Where(x => x.Mes == Date.ToString("MMM", culture) &&
+            x.Anio == Date.ToString("yyyy", culture) &&
             x.Categoria == SelectedItem).ToList().Sum(x => int.Parse(x.GastosCantidad)).ToString();
-            CollectionGastos = new ObservableCollection<Gastos>(ListaGastos.Where(x => x.Mes == Date.ToString("MMM", culture) &&
-            x.Anio == Date.ToString("yyyy", culture) && 
-            x.Categoria == SelectedItem).OrderByDescending(x => double.Parse(x.Dia)).ToList());
+            if (string.IsNullOrEmpty(Categoria) || Categoria.Equals("SIN SELECCIONAR"))
+            {
+                CollectionGastos = new ObservableCollection<Gastos>(ListaGastos.Where(x => x.Mes == Date.ToString("MMM", culture) &&
+x.Anio == Date.ToString("yyyy", culture)).OrderByDescending(x => double.Parse(x.Dia)).ToList());
+            }
+            else
+            {
+                CollectionGastos = new ObservableCollection<Gastos>(ListaGastos.Where(x => x.Mes == Date.ToString("MMM", culture) &&
+x.Anio == Date.ToString("yyyy", culture) && x.Categoria.Equals(Categoria)).OrderByDescending(x => double.Parse(x.Dia)).ToList());
+            }
+
         }
         public ICommand SelectedItemChangedCommand
         {
@@ -460,8 +473,8 @@ namespace ControlGastos.ViewModels
         private void SelectedItemChanged()
         {
             Categoria = SelectedItem;
-            SumaGastoCategoria = ListaGastos.Where(x => x.Mes == Date.ToString("MMM",culture) &&
-            x.Anio == Date.ToString("yyyy",culture) && 
+            SumaGastoCategoria = ListaGastos.Where(x => x.Mes == Date.ToString("MMM", culture) &&
+            x.Anio == Date.ToString("yyyy", culture) &&
             x.Categoria == SelectedItem).ToList().Sum(x => int.Parse(x.GastosCantidad)).ToString();
             CollectionGastos = new ObservableCollection<Gastos>(ListaGastos.Where(x => x.Mes == Date.ToString("MMM", culture) &&
             x.Anio == Date.ToString("yyyy", culture) &&
@@ -500,29 +513,30 @@ namespace ControlGastos.ViewModels
         #region Métodos
         private void Cargas()
         {
-         
+
             Categoria = "SIN SELECCIONAR";
             PickerCategorias = new ObservableCollection<string>();
             PickerCategorias.Add("Ocio");
             PickerCategorias.Add("Servicios");
             PickerCategorias.Add("Provisiones");
             PickerCategorias.Add("Impuestos");
-            Mes = DateTime.Now.ToString("MMMM",culture);
+            Mes = DateTime.Now.ToString("MMMM", culture);
             Date = DateTime.Now;
             ListaGastos = new List<Gastos>();
             IsRefreshing = true;
             if (dataService.CheckTableIsEmpty<Gastos>())
             {
                 //Busco en la base de datos los gastos guardados 
-                try { 
-                ListaGastos = dataService.Get<Gastos>(true);
-                SumaGastoCategoria = ListaGastos.Where(x => x.Mes == Date.ToString("MMM",culture) && 
-                x.Anio == Date.ToString("yyyy",culture)&&
-                x.Categoria==SelectedItem).ToList().Sum(x => double.Parse(x.GastosCantidad)).ToString();
-                SumaGasto = ListaGastos.Where(x => x.Mes == Date.ToString("MMM",culture) &&
-                x.Anio == Date.ToString("yyyy",culture)).ToList().Sum(x => double.Parse(x.GastosCantidad)).ToString();
-                CollectionGastos = new ObservableCollection<Gastos>(ListaGastos.Where(x => x.Mes == Date.ToString("MMM", culture) &&
-                x.Anio == Date.ToString("yyyy", culture)).OrderByDescending(x => double.Parse(x.Dia)).ToList());
+                try
+                {
+                    ListaGastos = dataService.Get<Gastos>(true);
+                    SumaGastoCategoria = ListaGastos.Where(x => x.Mes == Date.ToString("MMM", culture) &&
+                    x.Anio == Date.ToString("yyyy", culture) &&
+                    x.Categoria == SelectedItem).ToList().Sum(x => double.Parse(x.GastosCantidad)).ToString();
+                    SumaGasto = ListaGastos.Where(x => x.Mes == Date.ToString("MMM", culture) &&
+                    x.Anio == Date.ToString("yyyy", culture)).ToList().Sum(x => double.Parse(x.GastosCantidad)).ToString();
+                    CollectionGastos = new ObservableCollection<Gastos>(ListaGastos.Where(x => x.Mes == Date.ToString("MMM", culture) &&
+                    x.Anio == Date.ToString("yyyy", culture)).OrderByDescending(x => double.Parse(x.Dia)).ToList());
 
                 }
                 catch
@@ -532,9 +546,9 @@ namespace ControlGastos.ViewModels
             }
             else
             {
-              
-                 SumaGasto = "0";
-               
+
+                SumaGasto = "0";
+
             }
             IsRefreshing = false;
         }
@@ -542,7 +556,7 @@ namespace ControlGastos.ViewModels
         public void Editar(Gastos gastos)
         {
             //Busco el gasto antiguo en la lista actual y después se lo reemplaza por el nuevo editado
-            var gastoAntiguo = ListaGastos.Find(x =>  x.GastosId == gastos.GastosId);
+            var gastoAntiguo = ListaGastos.Find(x => x.GastosId == gastos.GastosId);
             gastoAntiguo = gastos;
             dataService.Update(gastoAntiguo, true);
             SumaGastoCategoria = ListaGastos.Where(x => x.Mes == Date.ToString("MMM", culture) &&
@@ -556,12 +570,12 @@ namespace ControlGastos.ViewModels
         public async void Delete(Gastos gastos)
         {
             var confirmacion = await dialogService.ShowMessageConfirmacion("Mensaje", "Desea borrar este elemento");
-        
+
             if (confirmacion)
             {
 
-                var GastoAntiguo = ListaGastos.Find(x => x.GastosId.Equals( gastos.GastosId));
-                    dataService.Delete(GastoAntiguo);
+                var GastoAntiguo = ListaGastos.Find(x => x.GastosId.Equals(gastos.GastosId));
+                dataService.Delete(GastoAntiguo);
                 ListaGastos.Remove(GastoAntiguo);
                 SumaGastoCategoria = ListaGastos.Where(x => x.Mes == Date.ToString("MMM", culture) &&
                x.Anio == Date.ToString("yyyy", culture) &&

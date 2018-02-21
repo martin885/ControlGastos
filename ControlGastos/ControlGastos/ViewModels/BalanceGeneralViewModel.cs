@@ -132,32 +132,6 @@ namespace ControlGastos.ViewModels
 
         #region Commands
 
-        //public ICommand SelectedItemMesesCommand
-        //{
-        //    get
-        //    {
-        //        return new RelayCommand(SelectedItemMeses);
-        //    }
-        //}
-
-        //private void SelectedItemMeses()
-        //{
-        //    CargarLaObservableCollection(SelectedItemMes, SelectedItemAño);
-        //}
-
-        //public ICommand SelectedItemAñosCommand
-        //{
-        //    get
-        //    {
-        //        return new RelayCommand(SelectedItemAños);
-        //    }
-        //}
-
-        //private void SelectedItemAños()
-        //{
-        //    CargarLaObservableCollection(SelectedItemMes, SelectedItemAño);
-        //}
-
         public ICommand EmailCommand
         {
             get
@@ -187,105 +161,109 @@ namespace ControlGastos.ViewModels
 
         private async void Excel()
         {
-            Cargas();
-            if (ListaBalanceGeneral.Count == 0)
+            var confirmacion = await dialogService.ShowMessageConfirmacion("Mensaje", "Desea exportar el balance a una planilla de cálculo");
+            if (confirmacion)
             {
-                await dialogService.ShowMessage("Error", "Se deben agregar elementos al balance");
-                return;
-            }
-            using (ExcelEngine excelEngine = new ExcelEngine())
-            {
-
-                cont = 0;
-                //Seleccionar versión de Excel 2013
-                excelEngine.Excel.DefaultVersion = ExcelVersion.Excel2013;
-
-                //Crear workbook con una hoja de trabajo
-                IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
-
-                //Acceder a la primera hoja de trabajo desde la instancia de workbook
-                IWorksheet worksheet = workbook.Worksheets[0];
-
-                IMigrantRange migrantRange = worksheet.MigrantRange;
-
-                foreach (var elemento in ListaBalanceGeneral)
+                Cargas();
+                if (ListaBalanceGeneral.Count == 0)
                 {
-
-                    // Writing Data.
-                    //cont aumenta en 7 la posición de las filas en cada producto, las columnas dependen de los días elegidos
-
-                    migrantRange["A1"].Text = "Fecha";
-                    migrantRange["A1"].CellStyle.Font.Bold = true;
-
-                    migrantRange["B1"].Text = "Gastos";
-                    migrantRange["B1"].CellStyle.Font.Bold = true;
-
-                    migrantRange["C1"].Text = "Ingresos";
-                    migrantRange["C1"].CellStyle.Font.Bold = true;
-
-                    migrantRange["D1"].Text = "Monto";
-                    migrantRange["D1"].CellStyle.Font.Bold = true;
-
-                    //Nueva celda
-                    migrantRange.ResetRowColumn(cont + 2, 1);
-                    migrantRange.Text = string.Format("{0}/{1}/{2}", elemento.Dia, elemento.Mes, elemento.Anio);
-
-
-                    //migrantRange.CellStyle.Borders.LineStyle = ExcelLineStyle.Medium;
-
-                    //Nueva celda
-                    migrantRange.ResetRowColumn(cont + 2, 2);
-                    migrantRange.Text = elemento.CantidadGasto;
-                    //Nueva celda
-                    migrantRange.ResetRowColumn(cont + 2, 3);
-                    migrantRange.Text = elemento.CantidadIngreso;
-                    //Nueva celda
-                    migrantRange.ResetRowColumn(cont + 2, 4);
-
-                    migrantRange.Number = double.Parse(elemento.Cantidad);
-                    if (double.Parse(elemento.Cantidad) > 0)
-                    {
-                        worksheet[string.Format("D{0}", cont + 2)].CellStyle.Font.Color = ExcelKnownColors.Green;
-                    }
-                    else if (double.Parse(elemento.Cantidad) < 0)
-                    {
-                        worksheet[string.Format("D{0}", cont + 2)].CellStyle.Font.Color = ExcelKnownColors.Red;
-                    }
-
-
-                    cont = cont + 1;
-
-                };
-
-                IRange range = worksheet.Range[string.Format("A{0}:C{0}", cont + 2)];
-                range.Merge();
-                range.Text = string.Format("Balance General: ");
-                range.CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-                range.CellStyle.Font.Bold = true;
-                worksheet[string.Format("D{0}", cont + 2)].Number = double.Parse(BalanceTotal);
-                worksheet[string.Format("D{0}", cont + 2)].CellStyle.Font.Bold = true;
-                if (double.Parse(BalanceTotal) > 0)
-                {
-                    worksheet[string.Format("D{0}", cont + 2)].CellStyle.ColorIndex = ExcelKnownColors.Green;
+                    await dialogService.ShowMessage("Error", "Se deben agregar elementos al balance");
+                    return;
                 }
-                else if (double.Parse(BalanceTotal) < 0)
+                using (ExcelEngine excelEngine = new ExcelEngine())
                 {
-                    worksheet[string.Format("D{0}", cont + 2)].CellStyle.ColorIndex = ExcelKnownColors.Red;
+
+                    cont = 0;
+                    //Seleccionar versión de Excel 2013
+                    excelEngine.Excel.DefaultVersion = ExcelVersion.Excel2013;
+
+                    //Crear workbook con una hoja de trabajo
+                    IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
+
+                    //Acceder a la primera hoja de trabajo desde la instancia de workbook
+                    IWorksheet worksheet = workbook.Worksheets[0];
+
+                    IMigrantRange migrantRange = worksheet.MigrantRange;
+
+                    foreach (var elemento in ListaBalanceGeneral)
+                    {
+
+                        // Writing Data.
+                        //cont aumenta en 7 la posición de las filas en cada producto, las columnas dependen de los días elegidos
+
+                        migrantRange["A1"].Text = "Fecha";
+                        migrantRange["A1"].CellStyle.Font.Bold = true;
+
+                        migrantRange["B1"].Text = "Gastos";
+                        migrantRange["B1"].CellStyle.Font.Bold = true;
+
+                        migrantRange["C1"].Text = "Ingresos";
+                        migrantRange["C1"].CellStyle.Font.Bold = true;
+
+                        migrantRange["D1"].Text = "Monto";
+                        migrantRange["D1"].CellStyle.Font.Bold = true;
+
+                        //Nueva celda
+                        migrantRange.ResetRowColumn(cont + 2, 1);
+                        migrantRange.Text = string.Format("{0}/{1}/{2}", elemento.Dia, elemento.Mes, elemento.Anio);
+
+
+                        //migrantRange.CellStyle.Borders.LineStyle = ExcelLineStyle.Medium;
+
+                        //Nueva celda
+                        migrantRange.ResetRowColumn(cont + 2, 2);
+                        migrantRange.Text = elemento.CantidadGasto;
+                        //Nueva celda
+                        migrantRange.ResetRowColumn(cont + 2, 3);
+                        migrantRange.Text = elemento.CantidadIngreso;
+                        //Nueva celda
+                        migrantRange.ResetRowColumn(cont + 2, 4);
+
+                        migrantRange.Number = double.Parse(elemento.Cantidad);
+                        if (double.Parse(elemento.Cantidad) > 0)
+                        {
+                            worksheet[string.Format("D{0}", cont + 2)].CellStyle.Font.Color = ExcelKnownColors.Green;
+                        }
+                        else if (double.Parse(elemento.Cantidad) < 0)
+                        {
+                            worksheet[string.Format("D{0}", cont + 2)].CellStyle.Font.Color = ExcelKnownColors.Red;
+                        }
+
+
+                        cont = cont + 1;
+
+                    };
+
+                    IRange range = worksheet.Range[string.Format("A{0}:C{0}", cont + 2)];
+                    range.Merge();
+                    range.Text = string.Format("Balance General: ");
+                    range.CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+                    range.CellStyle.Font.Bold = true;
+                    worksheet[string.Format("D{0}", cont + 2)].Number = double.Parse(BalanceTotal);
+                    worksheet[string.Format("D{0}", cont + 2)].CellStyle.Font.Bold = true;
+                    if (double.Parse(BalanceTotal) > 0)
+                    {
+                        worksheet[string.Format("D{0}", cont + 2)].CellStyle.ColorIndex = ExcelKnownColors.Green;
+                    }
+                    else if (double.Parse(BalanceTotal) < 0)
+                    {
+                        worksheet[string.Format("D{0}", cont + 2)].CellStyle.ColorIndex = ExcelKnownColors.Red;
+                    }
+                    worksheet.Range[string.Format("A1:D{0}", cont + 2)].BorderInside();
+                    worksheet.Range[string.Format("A1:D{0}", cont + 2)].BorderAround();
+                    worksheet.UsedRange.AutofitColumns();
+
+                    //Save the workbook to stream in xlsx format. 
+                    MemoryStream stream = new MemoryStream();
+                    workbook.SaveAs(stream);
+
+                    workbook.Close();
+
+                    //Save the stream as a file in the device and invoke it for viewing
+                    await DependencyService.Get<ISave>().SaveAndView(string.Format("Balance General") + ".xlsx", "application/msexcel", stream);
+
+                    await dialogService.ShowMessage("Mensaje", string.Format("El balance se guardó como archivo de nombre '{0}' en la carpeta Balances", string.Format("Balance General") + ".xlsx"));
                 }
-                worksheet.Range[string.Format("A1:D{0}", cont + 2)].BorderInside();
-                worksheet.Range[string.Format("A1:D{0}", cont + 2)].BorderAround();
-                worksheet.UsedRange.AutofitColumns();
-
-                //Save the workbook to stream in xlsx format. 
-                MemoryStream stream = new MemoryStream();
-                workbook.SaveAs(stream);
-
-                workbook.Close();
-
-                //Save the stream as a file in the device and invoke it for viewing
-                await DependencyService.Get<ISave>().SaveAndView(string.Format("Balance General") + ".xlsx", "application/msexcel", stream);
-
-                await dialogService.ShowMessage("Mensaje", string.Format("El balance se guardó como archivo de nombre '{0}' en la carpeta Balances", string.Format("Balance General") + ".xlsx"));
             }
         }
 
