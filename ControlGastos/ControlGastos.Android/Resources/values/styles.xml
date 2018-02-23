@@ -55,8 +55,8 @@
   </style>
 
   <!--selección de colores para la listview-->
-  <color name="ListViewSelected">#CCC</color>
-  <color name="ListViewHighlighted">#CCC</color>
+  <color name="ListViewSelected">#e3e3e3</color>
+  <color name="ListViewHighlighted">#e3e3e3</color>
 
 
   <!--cambio de spinner a calendar datepicker-->

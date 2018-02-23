@@ -161,6 +161,8 @@ namespace ControlGastos.ViewModels
 
         private async void Excel()
         {
+            var balanceGeneralView = BalanceGeneralView.GetInstance();
+
             var confirmacion = await dialogService.ShowMessageConfirmacion("Mensaje", "Desea exportar el balance a una planilla de cálculo");
             if (confirmacion)
             {
@@ -265,6 +267,7 @@ namespace ControlGastos.ViewModels
                     await dialogService.ShowMessage("Mensaje", string.Format("El balance se guardó como archivo de nombre '{0}' en la carpeta Balances", string.Format("Balance General") + ".xlsx"));
                 }
             }
+            balanceGeneralView.excelUnTapped();
         }
 
         public ICommand InfoCommand

@@ -16,7 +16,7 @@
             <Image Source="logotipoGG"/>
             <StackLayout  Spacing="20"
                           HorizontalOptions="Center">
-            <Label Text="Versión : 3.5"
+            <Label Text="Versión : 3.31"
                    HorizontalOptions="Center"/>
             <Label Text="Desarrolladores : Sumo Sistemas"
                    HorizontalOptions="Center"/>

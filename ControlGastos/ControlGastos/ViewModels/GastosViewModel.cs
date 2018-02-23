@@ -205,6 +205,7 @@ namespace ControlGastos.ViewModels
 
         private async void Excel()
         {
+            var gastosView = GastosView.GetInstance();
             var confirmacion = await dialogService.ShowMessageConfirmacion("Mensaje", "Desea exportar los gastos a una planilla de cálculo");
             if (confirmacion)
             {
@@ -310,6 +311,7 @@ namespace ControlGastos.ViewModels
                     await dialogService.ShowMessage("Mensaje", string.Format("El balance se guardó como archivo de nombre '{0}' en la carpeta Balances", string.Format("Balance Mensual de Gastos {0}-{1}", MesExcel, Anio) + ".xlsx"));
                 }
             }
+            gastosView.excelUnTapped();
         }
 
         public ICommand InfoCommand
