@@ -188,7 +188,7 @@ namespace ControlGastos.ViewModels
         {
             var balanceView = BalanceView.GetInstance();
 
-            var confirmacion = await dialogService.ShowMessageConfirmacion("Mensaje", "Desea exportar el balance a una planilla de cálculo");
+            var confirmacion = await dialogService.ShowMessageConfirmacion("Mensaje", "¿Desea exportar el balance a una planilla de cálculo?");
 
             if (confirmacion)
             {
@@ -568,7 +568,7 @@ namespace ControlGastos.ViewModels
         }
         public async void Delete(Balance balance)
         {
-            var confirmacion = await dialogService.ShowMessageConfirmacion("Mensaje", "Desea borrar este elemento");
+            var confirmacion = await dialogService.ShowMessageConfirmacion("Mensaje", "¿Desea borrar este elemento?");
             SelectedItemMes = balance.Mes;
             SelectedItemAño = balance.Anio;
             if (confirmacion)

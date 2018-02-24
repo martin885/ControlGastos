@@ -359,7 +359,7 @@ namespace ControlGastos.ViewModels
 
         public async Task Delete(Notification notification)
         {
-            var confirmacion = await dialogService.ShowMessageConfirmacion("Mensaje", "Desea borrar este elemento?");
+            var confirmacion = await dialogService.ShowMessageConfirmacion("Mensaje", "¿Desea borrar este elemento?");
 
             if (confirmacion)
             {

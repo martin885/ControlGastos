@@ -175,7 +175,7 @@ namespace ControlGastos.ViewModels
         private async void Excel()
         {
             var ingresosView = IngresosView.GetInstance();
-            var confirmacion = await dialogService.ShowMessageConfirmacion("Mensaje", "Desea exportar los ingresos a una planilla de cálculo");
+            var confirmacion = await dialogService.ShowMessageConfirmacion("Mensaje", "¿Desea exportar los ingresos a una planilla de cálculo?");
             if (confirmacion)
             {
                 DateSelected();
@@ -453,7 +453,7 @@ namespace ControlGastos.ViewModels
 
         public async void Delete(Ingresos ingresos)
         {
-            var confirmacion = await dialogService.ShowMessageConfirmacion("Mensaje", "Desea borrar este elemento?");
+            var confirmacion = await dialogService.ShowMessageConfirmacion("Mensaje", "¿Desea borrar este elemento?");
 
             if (confirmacion)
             {
