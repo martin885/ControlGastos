@@ -2,8 +2,10 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ControlGastos.Views.EditView"
-              BindingContext="{Binding Main,Source={StaticResource Key=Locator}}"
-             NavigationPage.HasNavigationBar="False">
+             BindingContext="{Binding Main,Source={StaticResource Key=Locator}}"
+             xmlns:controls="clr-namespace:ControlGastos.Views;assembly=ControlGastos"
+             NavigationPage.HasNavigationBar="True"
+             Title="Editar Balance Mensual">
     <ContentPage.Content>
         <StackLayout  BindingContext="{Binding Edit}">
             <StackLayout Orientation="Horizontal">
@@ -59,6 +61,16 @@
                     VerticalOptions="EndAndExpand"
                     HorizontalOptions="Center"
                     BackgroundColor="#f18121"/>
+            <Grid RowSpacing="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <controls:AdControlView Grid.Row="0" 
+                                        Grid.Column="0"/>
+            </Grid>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

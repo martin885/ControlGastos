@@ -220,7 +220,7 @@ namespace ControlGastos.ViewModels
 
                 Notificacion.Title = string.Format("{0}{1}", TituloNotification.Substring(0, 1).ToUpper(), TituloNotification.Substring(1)); ;
             }
-            Notificacion.Message = string.Format("{0},{1}",MensajeNotification.Substring(0,1).ToUpper(),MensajeNotification.Substring(1));
+            Notificacion.Message = string.Format("{0}{1}",MensajeNotification.Substring(0,1).ToUpper(),MensajeNotification.Substring(1));
             ListaNotifications.Add(Notificacion);
             TituloNotification = null;
             MensajeNotification = null;

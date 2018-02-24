@@ -4,6 +4,7 @@
              x:Class="ControlGastos.Views.EditarNotificationView"
              BindingContext="{Binding Main,Source={StaticResource Key=Locator}}"
              NavigationPage.HasNavigationBar="True"
+             xmlns:controls="clr-namespace:ControlGastos.Views;assembly=ControlGastos"
              Title="Editar Notificaciones">
     <ContentPage.Content>
         <StackLayout  BindingContext="{Binding EditarNotification}">
@@ -20,7 +21,7 @@
                        FontSize="Medium"
                        FontAttributes="Bold"
                        VerticalOptions="Center"
-                       Keyboard="Numeric"
+                       Keyboard="Text"
                        HorizontalOptions="FillAndExpand"/>
 
             <Button  Text="Guardar Cambio" 
@@ -28,6 +29,16 @@
                     VerticalOptions="EndAndExpand"
                     HorizontalOptions="CenterAndExpand"
                      BackgroundColor="#f18121"/>
+            <Grid RowSpacing="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <controls:AdControlView Grid.Row="0" 
+                                        Grid.Column="0"/>
+            </Grid>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
