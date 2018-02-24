@@ -101,8 +101,7 @@ namespace ControlGastos.ViewModels
                     notification.Title = string.Format("{0}{1}",Title.Substring(0, 1).ToUpper(), Title.Substring(1)); ;
                 }
 
-                notification.Title = Title;
-                notification.Message = Message;
+                notification.Message = string.Format("{0}{1}",Message.Substring(0,1).ToUpper(),Message.Substring(1));
 
                 var notificationViewModel = NotificationViewModel.GetInstance();
                 await notificationViewModel.Editar(notification);
