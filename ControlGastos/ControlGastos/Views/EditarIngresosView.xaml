@@ -8,6 +8,7 @@
              Title="Editar Ingresos">
     <ContentPage.Content>
         <StackLayout  BindingContext="{Binding EditarIngresos}">
+            <StackLayout Margin="20">
             <StackLayout Orientation="Horizontal">
                 <Label Text="Dia: "
                        VerticalOptions="Center"/>
@@ -54,11 +55,12 @@
                        Keyboard="Numeric"
                        HorizontalOptions="FillAndExpand"/>
             </StackLayout>
-            <Button  Text="Guardar Cambio" 
+            <Button  Text="Guardar Cambios" 
                     Command="{Binding GuardarCambioCommand}"
-                    VerticalOptions="EndAndExpand"
-                    HorizontalOptions="Center"
+                    VerticalOptions="CenterAndExpand"
+                    HorizontalOptions="EndAndExpand"
                      BackgroundColor="#f18121"/>
+            </StackLayout>
             <Grid RowSpacing="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>

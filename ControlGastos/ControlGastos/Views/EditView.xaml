@@ -8,6 +8,7 @@
              Title="Editar Balance Mensual">
     <ContentPage.Content>
         <StackLayout  BindingContext="{Binding Edit}">
+            <StackLayout Margin="20">
             <StackLayout Orientation="Horizontal">
                 <Label Text="Dia: "
                        VerticalOptions="Center"/>
@@ -56,11 +57,12 @@
                        HorizontalOptions="FillAndExpand"/>
             </StackLayout>
             <Button x:Name="BotonGuardar" 
-                Text="Guardar Cambio" 
+                Text="Guardar Cambios" 
                   Command="{Binding GuardarCambioCommand}"
-                    VerticalOptions="EndAndExpand"
-                    HorizontalOptions="Center"
+                    VerticalOptions="CenterAndExpand"
+                    HorizontalOptions="EndAndExpand"
                     BackgroundColor="#f18121"/>
+            </StackLayout>
             <Grid RowSpacing="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>

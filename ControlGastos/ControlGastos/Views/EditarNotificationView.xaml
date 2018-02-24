@@ -8,6 +8,7 @@
              Title="Editar Notificaciones">
     <ContentPage.Content>
         <StackLayout  BindingContext="{Binding EditarNotification}">
+            <StackLayout Margin="20">
             <DatePicker Date="{Binding Date}"
                          MinimumDate="{Binding MinimuDate}"/>
             <TimePicker Time="{Binding Time}"/>
@@ -24,11 +25,12 @@
                        Keyboard="Text"
                        HorizontalOptions="FillAndExpand"/>
 
-            <Button  Text="Guardar Cambio" 
+            <Button  Text="Guardar Cambios" 
                     Command="{Binding GuardarCambioCommand}"
-                    VerticalOptions="EndAndExpand"
-                    HorizontalOptions="CenterAndExpand"
+                    VerticalOptions="CenterAndExpand"
+                    HorizontalOptions="EndAndExpand"
                      BackgroundColor="#f18121"/>
+            </StackLayout>
             <Grid RowSpacing="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
