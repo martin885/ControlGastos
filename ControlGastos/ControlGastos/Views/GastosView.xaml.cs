@@ -40,31 +40,26 @@ namespace ControlGastos.Views
 
         #endregion
         #region Eventos
-        private void infoTapped(object sender, EventArgs e)
+        public void infoTapped(object sender, EventArgs e)
         {
-            info.Scale = 0.7;
-            info.Source = "info2";
+            info.Opacity = 0.5;
         }
 
         private void correoTapped(object sender, EventArgs e)
         {
-            correo.Scale = 0.7;
-            correo.Source = "correo2";
+            correo.Opacity = 0.5;
         }
         private void excelTapped(object sender, EventArgs e)
         {
-            excel.Scale = 0.7;
-            excel.VerticalOptions = LayoutOptions.Center;
-            excel.Source = "excel2";
+            excel.Opacity = 0.5;
         }
         public void excelUnTapped()
         {
-            excel.Scale = 1;
-            excel.Source = "excel";
+            excel.Opacity = 1;
         }
         private void notificacionTapped(object sender, EventArgs e)
         {
-            notificacion.Source = "notifiacion2";
+            notificacion.Opacity = 0.5;
         }
         #endregion
 

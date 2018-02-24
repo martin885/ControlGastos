@@ -4,6 +4,7 @@
              x:Class="ControlGastos.Views.NotificationView"
              BindingContext="{Binding Main,Source={StaticResource Key=Locator}}"
              NavigationPage.HasNavigationBar="True"
+             xmlns:controls="clr-namespace:ControlGastos.Views;assembly=ControlGastos"
              Title="Notificaciones">
     <ContentPage.Content>
         <StackLayout BindingContext="{Binding Notification}">
@@ -106,6 +107,16 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+            <Grid RowSpacing="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <controls:AdControlView Grid.Row="0" 
+                                        Grid.Column="0"/>
+            </Grid>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

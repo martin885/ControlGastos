@@ -91,9 +91,9 @@
                        VerticalOptions="Center"
                        Grid.Row="0"
                        Grid.Column="0"
-                       Scale="1" x:Name="info">
+                       Scale="1" x:Name="info" >
                     <Image.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding InfoCommand}" Tapped="infoTapped" />
+                        <TapGestureRecognizer Command="{Binding InfoCommand}" Tapped="infoTapped"/>
                     </Image.GestureRecognizers>
                 </Image>
 

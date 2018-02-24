@@ -4,35 +4,53 @@
              x:Class="ControlGastos.Views.InfoView"
              BindingContext="{Binding Main,Source={StaticResource Key=Locator}}"
              NavigationPage.HasNavigationBar="True"
+             xmlns:controls="clr-namespace:ControlGastos.Views;assembly=ControlGastos"
              Title="Información">
     <ContentPage.Content>
-        <ScrollView>
-        <StackLayout BindingContext="{Binding Info}" 
-                     Margin="10">
-            <Label Text="Gestor de Gastos"
+
+        <StackLayout BindingContext="{Binding Info}">
+            <ScrollView>
+                <StackLayout>
+                    <Label Text="Gestor de Gastos"
                    FontSize="Large"
                    HorizontalOptions="Center"
                    Margin="10,0,0,25"/>
-            <Image Source="logotipoGG"/>
-            <StackLayout  Spacing="20"
+                    <Image Source="logotipoGG"/>
+                    <StackLayout  Spacing="20"
                           HorizontalOptions="Center">
-            <Label Text="Versión : 3.31"
+                        <Label Text="Versión : 3.31"
                    HorizontalOptions="Center"/>
-            <Label Text="Desarrolladores : Sumo Sistemas"
+                        <Label Text="Desarrolladores : Sumo Sistemas"
                    HorizontalOptions="Center"/>
-                <Image Source="logotiposumo"/>
-                <Label Text="Para cualquier consulta, contactate con:"
+                        <Image Source="logotiposumo"/>
+                        <Label Text="Para cualquier consulta, contactate con:"
                    HorizontalOptions="Center"/>
-                    <Label Text="www.sumosistemas.com.ar"
+                        <Label Text="www.sumosistemas.com.ar"
                    TextColor="#f18121"
                    FontSize="Large"
                    HorizontalOptions="Center">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding BrowseCommand}"/>
-                        </Label.GestureRecognizers>
-                    </Label>
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding BrowseCommand}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </StackLayout>
                 </StackLayout>
+            </ScrollView>
+            <Grid RowSpacing="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <controls:AdControlView Grid.Row="0" 
+                                        Grid.Column="0"/>
+            
+            
+            </Grid>
         </StackLayout>
-        </ScrollView>
+
+
+
     </ContentPage.Content>
 </ContentPage>

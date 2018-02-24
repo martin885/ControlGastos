@@ -280,6 +280,7 @@ namespace ControlGastos.ViewModels
 
         private async void Info()
         {
+
             //Instanciar ViewModel
             var mainViewModel = MainViewModel.GetInstance();
             mainViewModel.Info = new InfoViewModel();
