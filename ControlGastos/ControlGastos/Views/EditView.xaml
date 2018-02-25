@@ -58,6 +58,7 @@
             </StackLayout>
             <Button x:Name="BotonGuardar" 
                 Text="Guardar Cambios" 
+                    TextColor="White"
                   Command="{Binding GuardarCambioCommand}"
                     VerticalOptions="CenterAndExpand"
                     HorizontalOptions="EndAndExpand"

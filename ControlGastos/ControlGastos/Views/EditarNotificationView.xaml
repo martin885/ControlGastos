@@ -9,9 +9,9 @@
     <ContentPage.Content>
         <StackLayout  BindingContext="{Binding EditarNotification}">
             <StackLayout Margin="20">
-            <DatePicker Date="{Binding Date}"
+                <DatePicker Date="{Binding Date}"
                          MinimumDate="{Binding MinimuDate}"/>
-            <TimePicker Time="{Binding Time}"/>
+                <TimePicker Time="{Binding Time}"/>
 
                 <Entry Text="{Binding Title,Mode=TwoWay}"
                        VerticalOptions="Center"
@@ -25,7 +25,8 @@
                        Keyboard="Text"
                        HorizontalOptions="FillAndExpand"/>
 
-            <Button  Text="Guardar Cambios" 
+                <Button  Text="Guardar Cambios" 
+                     TextColor="White"
                     Command="{Binding GuardarCambioCommand}"
                     VerticalOptions="CenterAndExpand"
                     HorizontalOptions="EndAndExpand"

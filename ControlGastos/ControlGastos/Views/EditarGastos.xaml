@@ -56,6 +56,7 @@
                        HorizontalOptions="FillAndExpand"/>
             </StackLayout>
             <Button  Text="Guardar Cambios" 
+                     TextColor="White"
                     Command="{Binding GuardarCambioCommand}"
                     VerticalOptions="CenterAndExpand"
                     HorizontalOptions="EndAndExpand"
