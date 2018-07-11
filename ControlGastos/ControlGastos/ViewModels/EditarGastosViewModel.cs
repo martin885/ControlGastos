@@ -65,16 +65,17 @@ namespace ControlGastos.ViewModels
             gastos.Anio = Anio;
             gastos.GastoNombre = string.Format("{0}{1}", Origen.Substring(0, 1).ToUpper(), Origen.Substring(1));
 
-            if (Cantidad.Contains("-"))
-            {
-                gastos.GastosCantidad = Cantidad.Replace("-", "");
-            }
-            else
-            {
-                gastos.GastosCantidad = Cantidad;
-            }
-            // Instanciar la GastosViewModel para usar el método Editar
-            var gastosViewModel = GastosViewModel.GetInstance();
+                if (!Cantidad.Contains("-"))
+                {
+                    gastos.GastosCantidad = string.Format("-{0}", Cantidad);
+                }
+                else
+                {
+                    gastos.GastosCantidad = string.Format("{0}", Cantidad);
+                }
+
+                // Instanciar la GastosViewModel para usar el método Editar
+                var gastosViewModel = GastosViewModel.GetInstance();
             gastosViewModel.Editar(gastos);
             // Instanciar la pagina de editar gastos para usar la propiedad de navegación
             var editarGastos = EditarGastos.GetInstance();

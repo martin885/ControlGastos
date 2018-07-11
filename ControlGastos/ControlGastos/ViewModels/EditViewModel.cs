@@ -71,14 +71,29 @@ namespace ControlGastos.ViewModels
             balance.Mes = Mes;
             balance.Anio = Anio;
             balance.Origen = string.Format("{0}{1}", Origen.Substring(0, 1).ToUpper(), Origen.Substring(1));
+                if (balance.GastoIngreso.Equals("Ingreso"))
+                {
+                    if (Cantidad.Contains("-"))
+                    {
+                        balance.Cantidad = Cantidad.Replace("-","");
+                    }
+                    else
+                    {
+                        balance.Cantidad = string.Format("{0}", Cantidad);
+                    }
+                }
+                else
+                {
+                    if (!Cantidad.Contains("-"))
+                    {
+                        balance.Cantidad = string.Format("-{0}", Cantidad);
+                    }
+                    else
+                    {
+                        balance.Cantidad = string.Format("{0}", Cantidad);
+                    }
+                }
 
-            if (Cantidad.Contains("-"))
-            {
-                balance.Cantidad = Cantidad.Replace("-","");
-            }
-            else { 
-            balance.Cantidad = Cantidad;
-            }
             var balanceViewModel = BalanceViewModel.GetInstance();
             balanceViewModel.Editar(balance);
             var editView = EditView.GetInstance();

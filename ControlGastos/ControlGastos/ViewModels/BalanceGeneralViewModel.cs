@@ -390,8 +390,7 @@ namespace ControlGastos.ViewModels
                             ImagenFecha = "date",
                             CantidadIngreso = TotalDelMes,
                             CantidadGasto = "0",
-                            ImagenMonto = "money",
-                            ColorGastoIngreso = Color.Green
+                            ImagenMonto = "money"
                         };
                         if (!double.TryParse(BalanceGeneral.CantidadIngreso, out double result))
                         {
@@ -441,8 +440,7 @@ namespace ControlGastos.ViewModels
                             ImagenFecha = "date",
                             CantidadGasto = string.Format("-{0}", TotalDelMes),
                             CantidadIngreso = "0",
-                            ImagenMonto = "money",
-                            ColorGastoIngreso = Color.Red
+                            ImagenMonto = "money"
                         };
                         if (BalanceGeneral.CantidadGasto.Contains("--"))
                         {
@@ -472,6 +470,14 @@ namespace ControlGastos.ViewModels
                     balanceGeneral.CantidadIngreso = "0";
                 }
                 balanceGeneral.Cantidad = string.Format("{0}", (int.Parse(balanceGeneral.CantidadGasto) + int.Parse(balanceGeneral.CantidadIngreso)));
+                if (double.Parse(balanceGeneral.Cantidad) < 0)
+                {
+                    balanceGeneral.ColorGastoIngreso = Color.Red;
+                }
+                else if(double.Parse(balanceGeneral.Cantidad) > 0)
+                {
+                    balanceGeneral.ColorGastoIngreso = Color.Green;
+                }
             }
 
             CollectionBalance = new ObservableCollection<BalanceGeneral>(ListaBalanceGeneral.OrderByDescending(x => double.Parse(x.Anio)).ToList());

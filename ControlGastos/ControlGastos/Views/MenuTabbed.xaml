@@ -8,10 +8,18 @@
 
 
 
-    <NavigationPage Title="BG" 
-                    Icon="balance2" >
+    <NavigationPage Title="Gastos" 
+                    Icon="gastos">
         <x:Arguments>
-            <local:BalanceGeneralView />
+            <local:GastosView />
+        </x:Arguments>
+    </NavigationPage>
+
+
+    <NavigationPage Title="Ingresos"
+                    Icon="ingresos">
+        <x:Arguments>
+            <local:IngresosView />
         </x:Arguments>
     </NavigationPage>
 
@@ -22,17 +30,13 @@
         </x:Arguments>
     </NavigationPage>
     
-    <NavigationPage Title="Gastos" 
-                    Icon="gastos">
+    
+    <NavigationPage Title="BG" 
+                    Icon="balance2" >
         <x:Arguments>
-    <local:GastosView />
+            <local:BalanceGeneralView />
         </x:Arguments>
     </NavigationPage>
 
-    <NavigationPage Title="Ingresos"
-                    Icon="ingresos">
-        <x:Arguments>
-    <local:IngresosView />
-        </x:Arguments>
-    </NavigationPage>
+
 </TabbedPage>
