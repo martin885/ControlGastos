@@ -19,15 +19,18 @@ namespace ControlGastos.Data
 
         public DataAccess()
         {
+             
             var config = DependencyService.Get<IConfig>();
             connection = new SQLiteConnection(config.Platform,
             Path.Combine(config.DirectoryDB, "ControlGastos.db3"));
+            
+
             //connection.DropTable<Gastos>();
             //connection.DropTable<Ingresos>();
             connection.CreateTable<Ingresos>();
             connection.CreateTable<Gastos>();
             connection.CreateTable<Notification>();
-
+            
         }
 
         public void Insert<T>(T model, bool WithChildren)
