@@ -316,7 +316,7 @@ namespace ControlGastos.ViewModels
                 }
                catch(Exception e)
                 {
-                   await dialogService.ShowMessage("Error", "No se pudo exportar a hoja de cálculo");
+                   await dialogService.ShowMessage("Error", "No se pudo exportar a hoja de cálculo. Intenta habilitando los permisos en ajustes.");
                 }
             }
             gastosView.excelUnTapped();

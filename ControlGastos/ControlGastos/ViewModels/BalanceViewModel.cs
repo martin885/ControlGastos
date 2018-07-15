@@ -298,7 +298,7 @@ namespace ControlGastos.ViewModels
             }
                 catch
                 {
-                    await dialogService.ShowMessage("Error", "No se pudo exportar a hoja de cálulo");
+                    await dialogService.ShowMessage("Error", "No se pudo exportar a hoja de cálculo. Intenta habilitando los permisos en ajustes.");
                 }
                 
             }
