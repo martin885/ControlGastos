@@ -55,9 +55,10 @@
                 <Image Source="plus"
                        Scale="0.75"
                        HorizontalOptions="End"
-                       VerticalOptions="Center">
+                       VerticalOptions="Center"
+                       x:Name="agregarGasto">
                     <Image.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding AgregarGastoCommand}"/>
+                        <TapGestureRecognizer Command="{Binding AgregarGastoCommand}" />
                     </Image.GestureRecognizers>
                 </Image>
             </StackLayout>

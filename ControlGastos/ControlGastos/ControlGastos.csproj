@@ -56,6 +56,7 @@
     <Compile Include="Services\DataService.cs" />
     <Compile Include="Services\DialogService.cs" />
     <Compile Include="Insfrastucture\InstanceLocator.cs" />
+    <Compile Include="Services\InstanciarPaginasService.cs" />
     <Compile Include="Services\NavigationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Behaviors\ToggleBehavior.cs" />

@@ -18,17 +18,18 @@ namespace ControlGastos.Views
       
         public BalanceView ()
 		{
-			InitializeComponent ();
+            initialize();
             instance = this;
         }
 
 
-        protected override void OnAppearing()
+        public void initialize()
         {
             
             var mainViewModel = MainViewModel.GetInstance();
             mainViewModel.Balance = new BalanceViewModel();
             InitializeComponent();     
+
         }
 
         #region Singleton
@@ -70,5 +71,13 @@ namespace ControlGastos.Views
             notificacion.Opacity = 0.5;
         }
         #endregion
+
+        protected override void OnAppearing()
+        {
+            info.Opacity = 1;
+            correo.Opacity = 1;
+            excel.Opacity = 1;
+            notificacion.Opacity = 1;
+        }
     }
 }

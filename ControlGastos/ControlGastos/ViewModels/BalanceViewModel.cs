@@ -28,6 +28,7 @@ namespace ControlGastos.ViewModels
         #region Services
         DataService dataService;
         DialogService dialogService;
+        InstanciarPaginasService instanciarPaginasService;
         #endregion
 
         #region Propiedades y Atributos
@@ -192,10 +193,12 @@ namespace ControlGastos.ViewModels
 
             if (confirmacion)
             {
+                try { 
                 Cargas();
                 if (ListaBalance.Count == 0)
                 {
                     await dialogService.ShowMessage("Error", "Se deben agregar elementos al balance");
+                    balanceView.excelUnTapped();
                     return;
                 }
                 using (ExcelEngine excelEngine = new ExcelEngine())
@@ -293,6 +296,12 @@ namespace ControlGastos.ViewModels
                     await dialogService.ShowMessage("Mensaje", string.Format("El balance se guardó como archivo de nombre '{0}' en la carpeta Balances", string.Format("Balance Mensual de {0}-{1}", SelectedItemMes, SelectedItemAño) + ".xlsx"));
                 }
             }
+                catch
+                {
+                    await dialogService.ShowMessage("Error", "No se pudo exportar a hoja de cálulo");
+                }
+                
+            }
             balanceView.excelUnTapped();
         }
 
@@ -342,6 +351,7 @@ namespace ControlGastos.ViewModels
             instance = this;
             dataService = new DataService();
             dialogService = new DialogService();
+            instanciarPaginasService = new InstanciarPaginasService();
 
             Cargas();
 
@@ -565,6 +575,7 @@ namespace ControlGastos.ViewModels
             }
             balanceAntiguo = balance;
             CollectionBalance = new ObservableCollection<Balance>(ListaBalance.OrderBy(x => double.Parse(x.Fecha.Substring(0, 2))).ToList());
+            instanciarPaginasService.Instanciar();
         }
         public async void Delete(Balance balance)
         {
@@ -586,6 +597,7 @@ namespace ControlGastos.ViewModels
 
 
                 CargarLaObservableCollection(SelectedItemMes, SelectedItemAño);
+                instanciarPaginasService.Instanciar();
             }
             else
             {

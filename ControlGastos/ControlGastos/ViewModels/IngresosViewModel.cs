@@ -30,6 +30,7 @@ namespace ControlGastos.ViewModels
         #region Services
         DataService dataService;
         DialogService dialogService;
+        InstanciarPaginasService instanciarPaginasService;
         #endregion
 
         #region Propiedades y Atributos
@@ -178,100 +179,108 @@ namespace ControlGastos.ViewModels
             var confirmacion = await dialogService.ShowMessageConfirmacion("Mensaje", "¿Desea exportar los ingresos a una planilla de cálculo?");
             if (confirmacion)
             {
-                DateSelected();
-                if (ListaIngresos.Count == 0)
+                try
                 {
-                    await dialogService.ShowMessage("Error", "Se deben agregar elementos al balance");
-                    return;
+                    DateSelected();
+                    if (ListaIngresos.Count == 0)
+                    {
+                        await dialogService.ShowMessage("Error", "Se deben agregar elementos al balance");
+                        ingresosView.excelUnTapped();
+                        return;
+                    }
+                    using (ExcelEngine excelEngine = new ExcelEngine())
+                    {
+
+                        cont = 0;
+                        //Seleccionar versión de Excel 2013
+                        excelEngine.Excel.DefaultVersion = ExcelVersion.Excel2013;
+
+                        //Crear workbook con una hoja de trabajo
+                        IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
+
+                        //Acceder a la primera hoja de trabajo desde la instancia de workbook
+                        IWorksheet worksheet = workbook.Worksheets[0];
+
+                        IMigrantRange migrantRange = worksheet.MigrantRange;
+
+                        foreach (var elemento in ListaIngresos.Where(x => x.Mes.Equals(MesExcel) && x.Anio.Equals(Anio)).ToList())
+                        {
+
+                            // Writing Data.
+                            //cont aumenta en 7 la posición de las filas en cada producto, las columnas dependen de los días elegidos
+
+                            migrantRange["A1"].Text = "Fecha";
+                            migrantRange["A1"].CellStyle.Font.Bold = true;
+
+                            migrantRange["B1"].Text = "Ingreso";
+                            migrantRange["B1"].CellStyle.Font.Bold = true;
+
+                            migrantRange["C1"].Text = "Monto";
+                            migrantRange["C1"].CellStyle.Font.Bold = true;
+
+
+                            //Nueva celda
+                            migrantRange.ResetRowColumn(cont + 2, 1);
+                            migrantRange.Text = string.Format("{0}/{1}/{2}", elemento.Dia, elemento.Mes, elemento.Anio);
+
+
+                            //migrantRange.CellStyle.Borders.LineStyle = ExcelLineStyle.Medium;
+
+                            //Nueva celda
+                            migrantRange.ResetRowColumn(cont + 2, 2);
+                            migrantRange.Text = elemento.IngresoNombre;
+                            //Nueva celda
+                            migrantRange.ResetRowColumn(cont + 2, 3);
+
+                            migrantRange.Number = double.Parse(elemento.IngresoCantidad);
+                            if (double.Parse(elemento.IngresoCantidad) > 0)
+                            {
+                                worksheet[string.Format("C{0}", cont + 2)].CellStyle.Font.Color = ExcelKnownColors.Green;
+                            }
+                            else if (double.Parse(elemento.IngresoCantidad) < 0)
+                            {
+                                worksheet[string.Format("C{0}", cont + 2)].CellStyle.Font.Color = ExcelKnownColors.Red;
+                            }
+
+
+                            cont = cont + 1;
+
+                        };
+
+                        IRange range = worksheet.Range[string.Format("A{0}:B{0}", cont + 2)];
+                        range.Merge();
+                        range.Text = string.Format("Balance de Ingresos: ");
+                        range.CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+                        range.CellStyle.Font.Bold = true;
+                        worksheet[string.Format("C{0}", cont + 2)].Number = double.Parse(SumaIngreso);
+                        worksheet[string.Format("C{0}", cont + 2)].CellStyle.Font.Bold = true;
+                        if (double.Parse(SumaIngreso) > 0)
+                        {
+                            worksheet[string.Format("C{0}", cont + 2)].CellStyle.ColorIndex = ExcelKnownColors.Green;
+                        }
+                        else if (double.Parse(SumaIngreso) < 0)
+                        {
+                            worksheet[string.Format("C{0}", cont + 2)].CellStyle.ColorIndex = ExcelKnownColors.Red;
+                        }
+                        worksheet.Range[string.Format("A1:C{0}", cont + 2)].BorderInside();
+                        worksheet.Range[string.Format("A1:C{0}", cont + 2)].BorderAround();
+                        worksheet.UsedRange.AutofitColumns();
+
+                        //Save the workbook to stream in xlsx format. 
+                        MemoryStream stream = new MemoryStream();
+                        workbook.SaveAs(stream);
+
+                        workbook.Close();
+
+                        //Save the stream as a file in the device and invoke it for viewing
+                        await DependencyService.Get<ISave>().SaveAndView(string.Format("Balance Mensual de Ingresos {0}-{1}", MesExcel, Anio) + ".xlsx", "application/msexcel", stream);
+
+                        await dialogService.ShowMessage("Mensaje", string.Format("El balance se guardó como archivo de nombre '{0}' en la carpeta Balances", string.Format("Balance Mensual de Ingresos {0}-{1}", MesExcel, Anio) + ".xlsx"));
+                    }
                 }
-                using (ExcelEngine excelEngine = new ExcelEngine())
+              catch(Exception e)
                 {
-
-                    cont = 0;
-                    //Seleccionar versión de Excel 2013
-                    excelEngine.Excel.DefaultVersion = ExcelVersion.Excel2013;
-
-                    //Crear workbook con una hoja de trabajo
-                    IWorkbook workbook = excelEngine.Excel.Workbooks.Create(1);
-
-                    //Acceder a la primera hoja de trabajo desde la instancia de workbook
-                    IWorksheet worksheet = workbook.Worksheets[0];
-
-                    IMigrantRange migrantRange = worksheet.MigrantRange;
-
-                    foreach (var elemento in ListaIngresos.Where(x => x.Mes.Equals(MesExcel) && x.Anio.Equals(Anio)).ToList())
-                    {
-
-                        // Writing Data.
-                        //cont aumenta en 7 la posición de las filas en cada producto, las columnas dependen de los días elegidos
-
-                        migrantRange["A1"].Text = "Fecha";
-                        migrantRange["A1"].CellStyle.Font.Bold = true;
-
-                        migrantRange["B1"].Text = "Ingreso";
-                        migrantRange["B1"].CellStyle.Font.Bold = true;
-
-                        migrantRange["C1"].Text = "Monto";
-                        migrantRange["C1"].CellStyle.Font.Bold = true;
-
-
-                        //Nueva celda
-                        migrantRange.ResetRowColumn(cont + 2, 1);
-                        migrantRange.Text = string.Format("{0}/{1}/{2}", elemento.Dia, elemento.Mes, elemento.Anio);
-
-
-                        //migrantRange.CellStyle.Borders.LineStyle = ExcelLineStyle.Medium;
-
-                        //Nueva celda
-                        migrantRange.ResetRowColumn(cont + 2, 2);
-                        migrantRange.Text = elemento.IngresoNombre;
-                        //Nueva celda
-                        migrantRange.ResetRowColumn(cont + 2, 3);
-
-                        migrantRange.Number = double.Parse(elemento.IngresoCantidad);
-                        if (double.Parse(elemento.IngresoCantidad) > 0)
-                        {
-                            worksheet[string.Format("C{0}", cont + 2)].CellStyle.Font.Color = ExcelKnownColors.Green;
-                        }
-                        else if (double.Parse(elemento.IngresoCantidad) < 0)
-                        {
-                            worksheet[string.Format("C{0}", cont + 2)].CellStyle.Font.Color = ExcelKnownColors.Red;
-                        }
-
-
-                        cont = cont + 1;
-
-                    };
-
-                    IRange range = worksheet.Range[string.Format("A{0}:B{0}", cont + 2)];
-                    range.Merge();
-                    range.Text = string.Format("Balance de Ingresos: ");
-                    range.CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-                    range.CellStyle.Font.Bold = true;
-                    worksheet[string.Format("C{0}", cont + 2)].Number = double.Parse(SumaIngreso);
-                    worksheet[string.Format("C{0}", cont + 2)].CellStyle.Font.Bold = true;
-                    if (double.Parse(SumaIngreso) > 0)
-                    {
-                        worksheet[string.Format("C{0}", cont + 2)].CellStyle.ColorIndex = ExcelKnownColors.Green;
-                    }
-                    else if (double.Parse(SumaIngreso) < 0)
-                    {
-                        worksheet[string.Format("C{0}", cont + 2)].CellStyle.ColorIndex = ExcelKnownColors.Red;
-                    }
-                    worksheet.Range[string.Format("A1:C{0}", cont + 2)].BorderInside();
-                    worksheet.Range[string.Format("A1:C{0}", cont + 2)].BorderAround();
-                    worksheet.UsedRange.AutofitColumns();
-
-                    //Save the workbook to stream in xlsx format. 
-                    MemoryStream stream = new MemoryStream();
-                    workbook.SaveAs(stream);
-
-                    workbook.Close();
-
-                    //Save the stream as a file in the device and invoke it for viewing
-                    await DependencyService.Get<ISave>().SaveAndView(string.Format("Balance Mensual de Ingresos {0}-{1}", MesExcel, Anio) + ".xlsx", "application/msexcel", stream);
-
-                    await dialogService.ShowMessage("Mensaje", string.Format("El balance se guardó como archivo de nombre '{0}' en la carpeta Balances", string.Format("Balance Mensual de Ingresos {0}-{1}", MesExcel, Anio) + ".xlsx"));
+                    await dialogService.ShowMessage("Error", "no se pudo exportar a hoja de cálculo");
                 }
             }
             ingresosView.excelUnTapped();
@@ -371,6 +380,7 @@ namespace ControlGastos.ViewModels
             OrigenIngreso = null;
             dataService.Save(ListaIngresos, true);
             CollectionIngresos = new ObservableCollection<Ingresos>(ListaIngresos.Where(x => x.Mes == Ingresos.Mes && x.Anio == Ingresos.Anio).OrderByDescending(x => double.Parse(x.Dia)).ToList());
+            instanciarPaginasService.Instanciar();
         }
         public ICommand DateSelectedCommand
         {
@@ -396,6 +406,7 @@ namespace ControlGastos.ViewModels
         {
             dataService = new DataService();
             dialogService = new DialogService();
+            instanciarPaginasService = new InstanciarPaginasService();
             Balance = MainViewModel.GetInstance().Balance;
             culture = new CultureInfo("es-ES");
             instance = this;
@@ -449,6 +460,7 @@ namespace ControlGastos.ViewModels
             SumaIngreso = ListaIngresos.Where(x => x.Mes == Date.ToString("MMM", culture) &&
                 x.Anio == Date.ToString("yyyy", culture)).ToList().Sum(x => double.Parse(x.IngresoCantidad)).ToString();
             CollectionIngresos = new ObservableCollection<Ingresos>(ListaIngresos.OrderByDescending(x => double.Parse(x.Dia)).ToList());
+            instanciarPaginasService.Instanciar();
         }
 
         public async void Delete(Ingresos ingresos)
@@ -465,6 +477,7 @@ namespace ControlGastos.ViewModels
                 x.Anio == Date.ToString("yyyy", culture)).ToList().Sum(x => double.Parse(x.IngresoCantidad)).ToString();
 
                 CollectionIngresos = new ObservableCollection<Ingresos>(ListaIngresos.OrderByDescending(x => double.Parse(x.Dia)).ToList());
+                instanciarPaginasService.Instanciar();
             }
             else
             {

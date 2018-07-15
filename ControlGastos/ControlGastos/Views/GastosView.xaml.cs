@@ -14,17 +14,20 @@ namespace ControlGastos.Views
         public GastosView()
         {
 
-            InitializeComponent();
+            initialize();
             instance = this;
 
         }
-        protected override void OnAppearing()
+
+        public void initialize()
         {
-            //Actualización de la página
+
             var mainViewModel = MainViewModel.GetInstance();
             mainViewModel.Gastos = new GastosViewModel();
             InitializeComponent();
+            
         }
+
         #region Singleton
 
         static GastosView instance;
@@ -62,6 +65,16 @@ namespace ControlGastos.Views
             notificacion.Opacity = 0.5;
         }
         #endregion
+
+
+        protected override void OnAppearing()
+        {
+            info.Opacity = 1;
+            correo.Opacity = 1;
+            excel.Opacity = 1;
+            notificacion.Opacity = 1;
+        }
+      
 
     }
 }
