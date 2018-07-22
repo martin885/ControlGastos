@@ -10,11 +10,9 @@ using Xamarin.Forms;
 
 namespace ControlGastos.ViewModels
 {
-    public class InfoViewModel:INotifyPropertyChanged
+    public class InfoViewModel
     {
-        #region Events
-        public event PropertyChangedEventHandler PropertyChanged;
-        #endregion
+
 
         #region Commands
         public ICommand BrowseCommand

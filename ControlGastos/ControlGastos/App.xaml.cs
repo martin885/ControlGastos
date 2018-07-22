@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ControlGastos.Views;
+﻿using ControlGastos.Views;
 using Xamarin.Forms;
-using ControlGastos.ViewModels;
-using ControlGastos.Services;
 using Com.OneSignal;
 
 using ControlGastos.Config;
+
+
 
 namespace ControlGastos
 {
@@ -24,7 +20,7 @@ namespace ControlGastos
             config = new configuracion();
             
             //MainPage = new NavigationPage(new PaginaInicio());
-
+            
             MainPage =new NavigationPage( new MenuTabbed());
 
 

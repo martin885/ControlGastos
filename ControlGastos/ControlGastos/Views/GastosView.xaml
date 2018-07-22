@@ -37,7 +37,8 @@
                        Scale="0.75"
                        VerticalOptions="Center"
                        Grid.Column="0" 
-                       HorizontalOptions="End"/>
+                       HorizontalOptions="End"
+                       IsOpaque="True"/>
                 </Grid>
                 <Entry Placeholder="Origen del Gasto..." 
                        PlaceholderColor="Gray"
@@ -56,7 +57,8 @@
                        Scale="0.75"
                        HorizontalOptions="End"
                        VerticalOptions="Center"
-                       x:Name="agregarGasto">
+                       x:Name="agregarGasto"
+                       IsOpaque="True">
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding AgregarGastoCommand}" />
                     </Image.GestureRecognizers>
@@ -66,7 +68,8 @@
                       HasUnevenRows="True"
                       SeparatorColor="#f18121" 
                       BackgroundColor="{Binding BackgroundColor}"
-                      IsRefreshing="{Binding IsRefreshing,Mode=TwoWay}">
+                      IsRefreshing="{Binding IsRefreshing,Mode=TwoWay}"
+                      CachingStrategy="RecycleElement">
                 <ListView.ItemTemplate>
                     <DataTemplate >
                         <ViewCell>
@@ -83,15 +86,17 @@
                                 <StackLayout Orientation="Horizontal">
                                     <Image Source="{Binding ImagenOrigen}"
                                            VerticalOptions="Center"
-                                           Scale="0.50"/>
+                                           Scale="0.50"
+                                           IsOpaque="True"/>
                                     <Label Text="{Binding GastoNombre}"
-                                           VerticalOptions="Center"/>
+                                           VerticalOptions="Center" />
                                 </StackLayout>
                             
                                 <StackLayout Orientation="Horizontal">
                                     <Image Source="{Binding ImagenFecha}"
                                            VerticalOptions="Center"
-                                           Scale="0.50"/>
+                                           Scale="0.50"
+                                           IsOpaque="True"/>
                                     <Label Text="{Binding Dia}"
                                            VerticalOptions="Center"/>
                                     <Label Text="/"
@@ -107,7 +112,8 @@
                                 <StackLayout Orientation="Horizontal">
                                     <Image Source="{Binding ImagenMonto}"
                                            VerticalOptions="Center"
-                                           Scale="0.50"/>
+                                           Scale="0.50"
+                                           IsOpaque="True"/>
                                     <Label Text="{Binding GastosCantidad}"
                                            VerticalOptions="Center"/>
                                 </StackLayout>
@@ -168,7 +174,8 @@
                        VerticalOptions="Center"
                        Grid.Row="0"
                        Grid.Column="0"
-                       Scale="1" x:Name="info" >
+                       Scale="1" x:Name="info" 
+                       IsOpaque="True">
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding InfoCommand}" Tapped="infoTapped"/>
                     </Image.GestureRecognizers>
@@ -179,7 +186,8 @@
                        VerticalOptions="Center"
                        Grid.Row="0"
                        Grid.Column="2"
-                       Scale="1" x:Name="correo">
+                       Scale="1" x:Name="correo"
+                       IsOpaque="True">
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding EmailCommand}" Tapped="correoTapped"/>
                     </Image.GestureRecognizers>
@@ -189,7 +197,8 @@
                        VerticalOptions="Center"
                        Grid.Row="0"
                        Grid.Column="3"
-                       Scale="1" x:Name="excel">
+                       Scale="1" x:Name="excel"
+                       IsOpaque="True">
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding ExcelCommand}" Tapped="excelTapped"/>
                     </Image.GestureRecognizers>
@@ -199,7 +208,8 @@
                        VerticalOptions="Center"
                        Grid.Row="0"
                        Grid.Column="1"
-                       Scale="1" x:Name="notificacion">
+                       Scale="1" x:Name="notificacion"
+                       IsOpaque="True">
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding NotificationCommand}" Tapped="notificacionTapped"/>
                     </Image.GestureRecognizers>

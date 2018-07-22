@@ -27,11 +27,12 @@ namespace ControlGastos.Droid
 
             base.OnCreate(bundle);
 
+
+
             OneSignal.Current.StartInit(config.OneSignalAndroid).EndInit();
 
             LocalNotificationsImplementation.NotificationIconId = Resource.Drawable.logotipoGGnotification;
             MobileAds.Initialize(ApplicationContext, config.MobileAds);
-
             global::Xamarin.Forms.Forms.Init(this, bundle);
             LoadApplication(new App());
         }

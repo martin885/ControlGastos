@@ -39,7 +39,8 @@
 
             <StackLayout Orientation="Horizontal">
                 <Image Source="{Binding ImagenOrigen}"
-                   VerticalOptions="Center"/>
+                   VerticalOptions="Center"
+                       IsOpaque="True"/>
                 <Entry Text="{Binding Origen,Mode=TwoWay}"
                        VerticalOptions="Center"
                        HorizontalOptions="FillAndExpand"
@@ -47,7 +48,8 @@
             </StackLayout>
             <StackLayout Orientation="Horizontal">
                 <Image Source="money"
-                       VerticalOptions="Center"/>
+                       VerticalOptions="Center"
+                       IsOpaque="True"/>
                 <Entry Text="{Binding Cantidad,Mode=TwoWay}" 
                        TextColor="{Binding ColorGastoIngreso,Mode=TwoWay}"
                        FontSize="Medium"

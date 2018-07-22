@@ -16,7 +16,8 @@
             <ListView ItemsSource="{Binding CollectionBalance}"
                       HasUnevenRows="True"
                       SeparatorColor="#f18121"
-                      IsRefreshing="{Binding IsRefreshing,Mode=TwoWay}">
+                      IsRefreshing="{Binding IsRefreshing,Mode=TwoWay}"
+                      CachingStrategy="RecycleElement">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
@@ -31,7 +32,8 @@
                                 <StackLayout Orientation="Horizontal">
                                     <Image Source="{Binding ImagenFecha}"
                                            VerticalOptions="Center"
-                                           Scale="0.75"/>
+                                           Scale="0.75"
+                                           IsOpaque="True"/>
                                     <Label Text="{Binding Mes}"
                                            VerticalOptions="Center"
                                            FontSize="Medium"/>
@@ -44,7 +46,8 @@
                                 <StackLayout Orientation="Horizontal">
                                     <Image Source="{Binding ImagenMonto}"
                                            Scale="0.75"
-                                           VerticalOptions="Center"/>
+                                           VerticalOptions="Center"
+                                           IsOpaque="True"/>
                                     <Label Text="{Binding Cantidad}" 
                                        TextColor="{Binding ColorGastoIngreso}"
                                        FontSize="Medium"
@@ -91,7 +94,8 @@
                        VerticalOptions="Center"
                        Grid.Row="0"
                        Grid.Column="0"
-                       Scale="1" x:Name="info" >
+                       Scale="1" x:Name="info" 
+                       IsOpaque="True">
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding InfoCommand}" Tapped="infoTapped"/>
                     </Image.GestureRecognizers>
@@ -102,7 +106,8 @@
                        VerticalOptions="Center"
                        Grid.Row="0"
                        Grid.Column="2"
-                       Scale="1" x:Name="correo">
+                       Scale="1" x:Name="correo"
+                       IsOpaque="True">
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding EmailCommand}" Tapped="correoTapped"/>
                     </Image.GestureRecognizers>
@@ -112,7 +117,8 @@
                        VerticalOptions="Center"
                        Grid.Row="0"
                        Grid.Column="3"
-                       Scale="1" x:Name="excel">
+                       Scale="1" x:Name="excel"
+                       IsOpaque="True">
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding ExcelCommand}" Tapped="excelTapped"/>
                     </Image.GestureRecognizers>
@@ -122,7 +128,8 @@
                        VerticalOptions="Center"
                        Grid.Row="0"
                        Grid.Column="1"
-                       Scale="1" x:Name="notificacion">
+                       Scale="1" x:Name="notificacion"
+                       IsOpaque="True">
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding NotificationCommand}" Tapped="notificacionTapped"/>
                     </Image.GestureRecognizers>
